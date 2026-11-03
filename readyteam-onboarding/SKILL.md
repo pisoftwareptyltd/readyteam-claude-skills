@@ -1,15 +1,24 @@
 ---
 name: readyteam-onboarding
-description: Onboard a company into ReadyTeam end to end by running the import skills in the right order - Cost Code, Catalogues (optional), Cost Assistant, Job Assistant, then one Readyteam estimation per estimate file. Use when the user says "onboarding", "onboard <company>", "start ReadyTeam setup", "import all my data", or gives several ReadyTeam import files at once (cost codes, catalogues, cost assistant, job template, estimates). Also use to resume an onboarding that was started earlier.
+description: Onboard a company into ReadyTeam end to end by running the import skills in the right order - Cost Code, Catalogues (optional), Cost Assistant, Job Assistant, then one Readyteam estimation per estimate file. Use when the user says "onboarding", "onboard <company>", "set up my company in ReadyTeam", "start ReadyTeam setup", "import all my data", or gives several ReadyTeam import files at once (cost codes, catalogues, cost assistant, job template, estimates). Also use to resume an onboarding that was started earlier.
 ---
 
 # ReadyTeam onboarding
 
 This skill does not import anything itself. It runs the other ReadyTeam skills one after another, in a fixed order, and keeps track of what is done. Each step's own skill holds the real instructions; follow that skill fully for its step.
 
-## Step 0: check the skills are installed
+## How to talk to the user
 
-These skills must be available. Check your skill list before doing anything else:
+The user is usually not technical. They may start with only a pasted prompt and nothing else.
+
+- Use plain words. No file paths, code, tool names or skill names unless they ask.
+- Ask **one question at a time** and wait for the answer.
+- When you need a file, ask them to attach it to the chat (or drag it in). Accept a file path too if they give one.
+- When they must do something (sign in, install the Chrome extension), tell them exactly what to click, in short numbered steps.
+
+## Step 0: get the step instructions
+
+Each step's instructions live in its own skill:
 
 | Skill | Needed for |
 |---|---|
@@ -19,21 +28,30 @@ These skills must be available. Check your skill list before doing anything else
 | `readyteam-import-job-assistant` | Step 4 |
 | `readyteam-estimation` | Step 5 |
 
-If a required skill is missing, stop and tell the user exactly which one, and ask them to install it from the ReadyTeam skills zip and start a new chat. Do not try to do a missing step from memory.
+Use the installed skill when it is in your skill list. When it is not installed, read it from GitHub instead and follow it exactly as if it were installed:
+
+`https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/<skill-name>/SKILL.md`
+
+Use any web fetch tool you have; if none works, open the URL in the Claude in Chrome tab and read the page text. Only if a step's instructions can be found neither way, stop and tell the user that part of the setup could not be loaded. Never do a step from memory.
+
+Also check that the Claude in Chrome tools are available, because every step uses them. If they are not, tell the user in simple steps to install the Claude in Chrome extension in Google Chrome, sign in to it with the same Claude account, keep Chrome open, and then reply "done". Do not continue until the tools work.
 
 ## Step 0b: collect the files
 
-Ask the user for the company name and, for each step, the file (or "none"):
+Greet the user in one line, say you will set up their company in ReadyTeam in a few steps, then ask one at a time:
 
-1. Cost codes sheet (required)
-2. Catalogues sheet (optional)
-3. Cost Assistant sheet (required unless the user says they have none)
-4. Job Assistant / job template sheet (required unless the user says they have none)
-5. Estimate files, one per project (optional, can be several)
+1. The company name.
+2. "Please attach your cost codes file." (required)
+3. "Do you have a catalogue file? Attach it, or say no." (optional)
+4. "Please attach your Cost Assistant file, or say you don't have one."
+5. "Please attach your job template (Job Assistant) file, or say you don't have one."
+6. "Do you have estimate files for projects? Attach them (one per project), or say no."
 
-Ask which site to use: **https://app.readyteam.ai/** by default, the staging site only if the user says so. Use the same site for every step.
+Use **https://app.readyteam.ai/**. Do not ask about the site; use the staging site only if the user mentions it.
 
-Then show the plan back in one short table (step, file, row count, or "skipped") and get a yes before Step 1.
+Open ReadyTeam in a new Chrome tab. If it shows a login page, ask the user to sign in there and reply "done".
+
+Then show the plan in one short table (step, file, number of rows, or "skipped") and get a yes before Step 1.
 
 ## The order and why
 

@@ -2,60 +2,43 @@
 
 Claude skills for onboarding a company into ReadyTeam. They import a client's data through ReadyTeam's **Import Your Data** screen using Claude in Chrome.
 
-## What you need
+## Start here (copy and paste)
 
-- **Claude Code** (desktop app Code tab, or the `claude` terminal app).
-- **Claude in Chrome** extension installed and connected, with Chrome open.
-- Signed in to ReadyTeam in Chrome (https://app.readyteam.ai/).
-- Your import files (.xlsx or .csv) saved on your computer.
-
-## 1. Install the skills
-
-Copy this prompt into Claude Code and send it:
+Open Claude, start a new chat, paste this, and send it. Nothing to fill in: Claude asks for everything it needs, one question at a time.
 
 ```text
-Install the ReadyTeam Claude skills for me.
+Help me set up my company in ReadyTeam.
 
-1. Download https://github.com/pisoftwareptyltd/readyteam-claude-skills (main branch) into a new temporary folder. Use git clone if git is available, otherwise download https://github.com/pisoftwareptyltd/readyteam-claude-skills/archive/refs/heads/main.zip and unzip it.
-2. Copy every top-level folder that contains a SKILL.md into ~/.claude/skills/ (create the folder if needed). If a skill with the same name already exists there, replace it with the new version.
-3. Do not copy README.md or any other files, and do not change the skill files.
-4. Delete the temporary folder.
-5. List the installed skills. These six must be there: readyteam-onboarding, readyteam-import-cost-code, readyteam-import-catalogues, readyteam-import-cost-assistant, readyteam-import-job-assistant, readyteam-estimation. Tell me if any is missing.
-6. Check whether the Claude in Chrome tools are available, and tell me if they are not.
-7. Tell me to start a new chat so the skills load.
+Read the onboarding instructions at https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-onboarding/SKILL.md and follow them exactly. Whenever they name another ReadyTeam skill that is not installed, read it from https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/<skill-name>/SKILL.md before doing that step.
+
+I am not technical. Ask me one simple question at a time, tell me exactly what to click or attach, and ask me before each import.
 ```
 
-Then start a **new chat**.
+You will need:
 
-## 2. Start onboarding
+- Google Chrome with the **Claude in Chrome** extension (Claude helps you set it up if it is missing).
+- A ReadyTeam login (https://app.readyteam.ai/).
+- Your files: cost codes, and if you have them, catalogue, Cost Assistant, job template and estimate files.
 
-In the new chat, copy this prompt, fill in the parts in `< >`, and send it. Write `none` for any file you don't have.
+If the chat stops partway, start a new chat and paste:
 
 ```text
-Use the readyteam-onboarding skill to onboard my company into ReadyTeam.
-
-Company: <company name>
-Site: https://app.readyteam.ai/
-
-Files:
-1. Cost codes: <full path to file>
-2. Catalogues (optional): <full path to file, or none>
-3. Cost Assistant: <full path to file, or none>
-4. Job Assistant: <full path to file, or none>
-5. Estimates (one per project): <full paths to files, or none>
-
-I am signed in to ReadyTeam in Chrome. Show me the plan first, then ask me before each Import Data click.
+Help me continue setting up my company in ReadyTeam. Read https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-onboarding/SKILL.md, follow it, and continue from the first step that is not done yet. I am not technical, so ask me one simple question at a time.
 ```
 
-To continue an onboarding you started earlier, send:
+## Install the skills (optional, Claude Code)
+
+The prompt above works without installing anything. To install the skills in Claude Code instead, paste:
 
 ```text
-Use the readyteam-onboarding skill to resume onboarding for <company name>. Check the progress log and continue from the first step that is not done.
+Install the ReadyTeam Claude skills: download https://github.com/pisoftwareptyltd/readyteam-claude-skills (main branch) into a temporary folder, copy every top-level folder that contains a SKILL.md into ~/.claude/skills/ (replace older versions with the same name), delete the temporary folder, and confirm these six are installed: readyteam-onboarding, readyteam-import-cost-code, readyteam-import-catalogues, readyteam-import-cost-assistant, readyteam-import-job-assistant, readyteam-estimation. Then tell me to start a new chat.
 ```
+
+After that, a new chat only needs: "Help me set up my company in ReadyTeam."
 
 ## Steps
 
-`readyteam-onboarding` checks the other skills are installed, asks for anything missing, and runs the steps in this order:
+`readyteam-onboarding` loads each step's skill (installed, or read from this repo), asks for your files, and runs the steps in this order:
 
 | # | Step | Skill |
 |---|---|---|
@@ -66,7 +49,3 @@ Use the readyteam-onboarding skill to resume onboarding for <company name>. Chec
 | 5 | Estimation, one per estimate file | `readyteam-estimation` |
 
 Each skill can also be used on its own, for example: "Use readyteam-import-cost-code to import <path to file>".
-
-## Update
-
-To get the latest version of the skills, send the install prompt again and start a new chat.
