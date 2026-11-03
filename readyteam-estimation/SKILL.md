@@ -16,8 +16,8 @@ One document = ONE project (not a project list; for lists use project-import). D
    - **Project Name** (required)
    - **Home Address** (required). If it is not in the document, ASK the user. Do not invent one.
    - **Client** (optional). If the document has a client, note the name. If none, create the project without a client; the user adds it later.
-3. Extract the **estimate lines** (cost items: description, code/category, qty, unit, rate, totals, whatever the document has).
-4. Tell the user a short summary: project name, address, client (or "none"), number of estimate lines, then get a yes before clicking Create Project, unless they already said go ahead.
+3. Extract the **estimate lines** (cost items: description, code/category, qty, unit, rate, totals, whatever the document has). Then remove the document's own item numbers from them (see **Item numbers** below).
+4. Tell the user a short summary: project name, address, client (or "none"), number of estimate lines, how many category and item names had a number removed (with two examples, before and after), then get a yes before clicking Create Project, unless they already said go ahead.
 5. Address: **https://app.readyteam.ai/** unless the user names another (test site https://ready-team-staging.web.app/dashboard only when the user says so). Load the Claude in Chrome tools in one ToolSearch call if deferred, call `tabs_context_mcp`, open a new tab and navigate there. Work in that tab.
 
 ## Part 1: Create the project
@@ -38,9 +38,20 @@ One document = ONE project (not a project list; for lists use project-import). D
 1. On the project dashboard, scroll to the **Estimations** section and click the **Cost Assistant** card. (The toolbar link "Cost Assistant", top left, also works.)
 2. The **Quick Start** page opens. Click **Import from Excel** ("Upload your custom templates"). Do not use Create a blank estimate, Copy from project, Import from data setup, or the Readyteam Template cards.
 3. The flat-file importer opens. Click **Manually enter data**. (It sometimes needs a second click; check by screenshot.) Note the grid's column headers and map the estimate lines to them by header name. Tell the user the mapping. If a required column has no source in the document, ask.
-4. Enter every estimate line into the grid. Fastest: build a tab-separated block (no header) in the grid's column order, copy it to the clipboard (`pbcopy < file.tsv` on Mac), click the first cell, and press cmd+v. Fallback: type cell by cell (click a cell, type, Tab) and use the **+** at the bottom-left to add rows. The importer is an embedded widget, so verify with screenshots/zoom, not page text.
+4. Enter every estimate line into the grid, using the names with item numbers removed. Fastest: build a tab-separated block (no header) in the grid's column order, copy it to the clipboard (`pbcopy < file.tsv` on Mac), click the first cell, and press cmd+v. Fallback: type cell by cell (click a cell, type, Tab) and use the **+** at the bottom-left to add rows. The importer is an embedded widget, so verify with screenshots/zoom, not page text.
 5. Check the "N Records" counter and the **All / Valid / Invalid** tabs. Records must equal the lines you entered. Fix invalid rows when the cause is clear; otherwise stop and report them.
 6. Click the **Import Data** button (top right of the importer). Wait for it to finish, take a screenshot, and report the result. Do not click it twice.
+
+## Item numbers
+
+ReadyTeam numbers groups and items itself, so the document's own numbering must not be imported. Estimates often put a number in front of category (group) and item names, for example "1. Preliminaries", "1.1 Site establishment", "2.03 - Excavation", "A1) Demolition", "(b) Skip bin", "Item 4: Scaffold", "#12 Downpipes".
+
+- Remove a **leading** number or code and the separator after it (space, ".", ")", ":", "-", "–") from Group and Description. Keep the rest of the name exactly as written.
+  - "1. Preliminaries" becomes "Preliminaries"; "1.1 Site establishment" becomes "Site establishment"; "2.03 - Excavation" becomes "Excavation"; "Item 4: Scaffold" becomes "Scaffold".
+- Remove it only when it is numbering: it is at the very start and the other lines follow the same pattern (1, 1.1, 1.2, 2, 2.1 ...). Do **not** remove numbers that are part of the name, for example "2 x 4 timber framing", "90mm PVC pipe", "3 Phase power", "Level 2 slab", "Stage 1 handover", "10mm plasterboard".
+- A separate item-number column (No., Item No., Ref, #, Line) is not mapped to any grid column. Leave it out.
+- Never touch numbers in Qty, Unit Cost or other number columns.
+- If you are not sure whether a number is numbering or part of the name, keep it, and list those lines for the user in the summary.
 
 ## Rules
 
