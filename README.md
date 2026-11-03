@@ -10,25 +10,20 @@ You will need:
 
 ## Start here (copy and paste)
 
-Open Claude, start a new chat, paste this, and send it. Nothing to fill in: Claude installs the skills, then asks what you want to do, one question at a time.
+Open Claude, start a new chat, paste this, and send it. Nothing to fill in: Claude installs the skills (you may need to click "Save skill" on each one), then starts the onboarding one step at a time.
 
 ```text
 Install the ReadyTeam skills for me, then help me use them. I am not technical: use plain words, ask me one simple question at a time, and tell me exactly what to click or attach.
 
-1. Install the skills from https://github.com/pisoftwareptyltd/readyteam-claude-skills
-   - If you can run commands on my computer (for example in Claude Code): download that repository (main branch) into a temporary folder, copy every top-level folder that contains a SKILL.md into ~/.claude/skills/ (replace older versions with the same name), and delete the temporary folder.
-   - If you cannot install skills yourself: tell me in simple steps how to add skills in Claude's settings, give me the download link https://github.com/pisoftwareptyltd/readyteam-claude-skills/raw/main/downloads/readyteam-all-skills.zip (or one link per skill from https://github.com/pisoftwareptyltd/readyteam-claude-skills/tree/main/downloads if one zip with several skills is not accepted), and wait until I say done.
-   - Then check these six are installed: readyteam-onboarding, readyteam-import-cost-code, readyteam-import-catalogues, readyteam-import-cost-assistant, readyteam-import-job-assistant, readyteam-estimation. Tell me if any is missing.
-   - Stop here and tell me the install is finished before doing anything else.
+1. Install these six skills: readyteam-onboarding, readyteam-import-cost-code, readyteam-import-catalogues, readyteam-import-cost-assistant, readyteam-import-job-assistant, readyteam-estimation. Each one is a file at https://github.com/pisoftwareptyltd/readyteam-claude-skills/raw/main/downloads/<skill-name>.skill
+   Use the first way that works for you:
+   a. If you can run commands on my computer and have a ~/.claude folder (Claude Code): download https://github.com/pisoftwareptyltd/readyteam-claude-skills (main branch) into a temporary folder, copy every top-level folder that contains a SKILL.md into ~/.claude/skills/ (replace older versions with the same name), and delete the temporary folder.
+   b. If you can download files and share files with me in this chat: download the six .skill files and share all six with me. Tell me to click "Save skill" on each one, and wait until I say done.
+   c. Otherwise: give me the six download links above and tell me in simple steps how to add a skill in Claude's settings. Wait until I say done.
+   Then tell me in one line that the install is finished and which skills are installed. If any is missing, say which one.
 
-2. Then ask me what I want to do now:
-   - Set up my whole company (all steps in order), or
-   - Import just one file (cost codes, catalogue, Cost Assistant, job template, or one project estimate).
-
-3. Do it. New skills may only load in a new chat, so in this chat read the instructions straight from GitHub and follow them exactly:
-   - Whole setup: https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-onboarding/SKILL.md
-   - One file: https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/<skill-name>/SKILL.md for the matching skill.
-   Do one step at a time: tell me which step it is, ask for that step's file only, show me what you found, ask me before importing, tell me the result, and ask me before starting the next step.
+2. Then start the ReadyTeam onboarding. New skills may only load in a new chat, so in this chat read https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-onboarding/SKILL.md and follow it exactly, reading any step's skill from https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/<skill-name>/SKILL.md when you reach that step.
+   Do one step at a time: tell me which step it is, ask for that step's file only, show me what you found, ask me before importing, tell me the result, and ask me before starting the next step. If I only want to import one file, do just that step.
 ```
 
 ## After the skills are installed

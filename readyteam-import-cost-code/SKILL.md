@@ -1,6 +1,6 @@
 ---
 name: readyteam-import-cost-code
-description: Import a client's COST CODES spreadsheet into ReadyTeam (Import Your Data > Contacts > Cost Code) using Claude in Chrome. Use when the user gives an Excel/CSV of cost codes (Code, Description, Category Code, Category Description) and asks to import or load them into ReadyTeam. Enters the rows into the importer grid and clicks Import Data.
+description: Import a client's COST CODES spreadsheet into ReadyTeam (Import Your Data, Contacts, Cost Code) using Claude in Chrome. Use when the user gives an Excel/CSV of cost codes (Code, Description, Category Code, Category Description) and asks to import or load them into ReadyTeam. Enters the rows into the importer grid and clicks Import Data.
 ---
 
 # ReadyTeam: import a spreadsheet through Import Your Data

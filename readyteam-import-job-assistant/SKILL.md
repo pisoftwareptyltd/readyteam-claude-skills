@@ -1,6 +1,6 @@
 ---
 name: readyteam-import-job-assistant
-description: Import a client's JOB ASSISTANT (job template / schedule tasks) spreadsheet into ReadyTeam (Import Your Data > Job Assistant > Job Assistant) using Claude in Chrome. Use when the user gives an Excel/CSV of job template tasks (Group, Description, Duration, Offset, Predecessors, Workchain, Assign Client, labels, User, Trade Types) and asks to import or load them into ReadyTeam. Enters the rows into the importer grid and clicks Import Data.
+description: Import a client's JOB ASSISTANT (job template / schedule tasks) spreadsheet into ReadyTeam (Import Your Data, Job Assistant, Job Assistant) using Claude in Chrome. Use when the user gives an Excel/CSV of job template tasks (Group, Description, Duration, Offset, Predecessors, Workchain, Assign Client, labels, User, Trade Types) and asks to import or load them into ReadyTeam. Enters the rows into the importer grid and clicks Import Data.
 ---
 
 # ReadyTeam: import Job Assistant items

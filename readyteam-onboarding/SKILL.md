@@ -1,6 +1,6 @@
 ---
 name: readyteam-onboarding
-description: Onboard a company into ReadyTeam end to end by running the import skills in the right order - Cost Code, Catalogues (optional), Cost Assistant, Job Assistant, then one Readyteam estimation per estimate file. Use when the user says "onboarding", "onboard <company>", "set up my company in ReadyTeam", "start ReadyTeam setup", "import all my data", or gives several ReadyTeam import files at once (cost codes, catalogues, cost assistant, job template, estimates). Also use to resume an onboarding that was started earlier.
+description: Onboard a company into ReadyTeam end to end by running the import skills in the right order - Cost Code, Catalogues (optional), Cost Assistant, Job Assistant, then one Readyteam estimation per estimate file. Use when the user says "onboarding", "onboard a company", "set up my company in ReadyTeam", "start ReadyTeam setup", "import all my data", or gives several ReadyTeam import files at once (cost codes, catalogues, cost assistant, job template, estimates). Also use to resume an onboarding that was started earlier.
 ---
 
 # ReadyTeam onboarding

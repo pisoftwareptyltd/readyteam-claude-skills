@@ -1,6 +1,6 @@
 ---
 name: readyteam-import-cost-assistant
-description: Import a client's COST ASSISTANT spreadsheet (estimate items with Group, Description, Type, Qty, Unit Cost, UOM) into ReadyTeam (Import Your Data > Cost Assistant > Cost Assistant) using Claude in Chrome. Use when the user gives an Excel/CSV of cost assistant items and asks to import or load them into ReadyTeam. Enters the rows into the importer grid and clicks Import Data.
+description: Import a client's COST ASSISTANT spreadsheet (estimate items with Group, Description, Type, Qty, Unit Cost, UOM) into ReadyTeam (Import Your Data, Cost Assistant, Cost Assistant) using Claude in Chrome. Use when the user gives an Excel/CSV of cost assistant items and asks to import or load them into ReadyTeam. Enters the rows into the importer grid and clicks Import Data.
 ---
 
 # ReadyTeam: import Cost Assistant items

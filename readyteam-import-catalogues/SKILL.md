@@ -1,6 +1,6 @@
 ---
 name: readyteam-import-catalogues
-description: Import a client's CATALOGUES spreadsheet (catalogue categories and their items) into ReadyTeam (Import Your Data > Optional > Catalogues) using Claude in Chrome. Use when the user gives an Excel/CSV of catalogue categories and items (Category, Description, Unit Cost, Supplier, UOM, Qty) and asks to import or load catalogues into ReadyTeam. Fills the two importer tabs and clicks Import Data.
+description: Import a client's CATALOGUES spreadsheet (catalogue categories and their items) into ReadyTeam (Import Your Data, Optional, Catalogues) using Claude in Chrome. Use when the user gives an Excel/CSV of catalogue categories and items (Category, Description, Unit Cost, Supplier, UOM, Qty) and asks to import or load catalogues into ReadyTeam. Fills the two importer tabs and clicks Import Data.
 ---
 
 # ReadyTeam: import Catalogues
