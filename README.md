@@ -19,15 +19,16 @@ Install the ReadyTeam skills for me, then help me use them. I am not technical: 
    - If you can run commands on my computer (for example in Claude Code): download that repository (main branch) into a temporary folder, copy every top-level folder that contains a SKILL.md into ~/.claude/skills/ (replace older versions with the same name), and delete the temporary folder.
    - If you cannot install skills yourself: tell me in simple steps how to add skills in Claude's settings, give me the download link https://github.com/pisoftwareptyltd/readyteam-claude-skills/raw/main/downloads/readyteam-all-skills.zip (or one link per skill from https://github.com/pisoftwareptyltd/readyteam-claude-skills/tree/main/downloads if one zip with several skills is not accepted), and wait until I say done.
    - Then check these six are installed: readyteam-onboarding, readyteam-import-cost-code, readyteam-import-catalogues, readyteam-import-cost-assistant, readyteam-import-job-assistant, readyteam-estimation. Tell me if any is missing.
+   - Stop here and tell me the install is finished before doing anything else.
 
-2. Ask me what I want to do now:
+2. Then ask me what I want to do now:
    - Set up my whole company (all steps in order), or
    - Import just one file (cost codes, catalogue, Cost Assistant, job template, or one project estimate).
 
 3. Do it. New skills may only load in a new chat, so in this chat read the instructions straight from GitHub and follow them exactly:
    - Whole setup: https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-onboarding/SKILL.md
    - One file: https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/<skill-name>/SKILL.md for the matching skill.
-   Ask me before each import.
+   Do one step at a time: tell me which step it is, ask for that step's file only, show me what you found, ask me before importing, tell me the result, and ask me before starting the next step.
 ```
 
 ## After the skills are installed
@@ -55,7 +56,7 @@ Help me set up my company in ReadyTeam.
 
 Read the onboarding instructions at https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-onboarding/SKILL.md and follow them exactly. Whenever they name another ReadyTeam skill that is not installed, read it from https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/<skill-name>/SKILL.md before doing that step.
 
-I am not technical. Ask me one simple question at a time, tell me exactly what to click or attach, and ask me before each import.
+I am not technical. Do one step at a time and tell me which step it is. Ask me one simple question at a time, tell me exactly what to click or attach, and ask me before each import and before each new step.
 ```
 
 ## Steps

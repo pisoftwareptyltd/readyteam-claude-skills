@@ -36,22 +36,27 @@ Use any web fetch tool you have; if none works, open the URL in the Claude in Ch
 
 Also check that the Claude in Chrome tools are available, because every step uses them. If they are not, tell the user in simple steps to install the Claude in Chrome extension in Google Chrome, sign in to it with the same Claude account, keep Chrome open, and then reply "done". Do not continue until the tools work.
 
-## Step 0b: collect the files
+## Step 0b: start
 
-Greet the user in one line, say you will set up their company in ReadyTeam in a few steps, then ask one at a time:
+1. Greet the user in one line and show the five steps as a short numbered list in plain words (cost codes, catalogue (optional), Cost Assistant, job template, project estimates). Say you will do them **one at a time** and check with them after each one.
+2. Ask the company name.
+3. Use **https://app.readyteam.ai/**. Do not ask about the site; use the staging site only if the user mentions it. Open ReadyTeam in a new Chrome tab. If it shows a login page, ask the user to sign in there and reply "done".
 
-1. The company name.
-2. "Please attach your cost codes file." (required)
-3. "Do you have a catalogue file? Attach it, or say no." (optional)
-4. "Please attach your Cost Assistant file, or say you don't have one."
-5. "Please attach your job template (Job Assistant) file, or say you don't have one."
-6. "Do you have estimate files for projects? Attach them (one per project), or say no."
+Do **not** ask for all the files up front. Ask for each file only when its step starts.
 
-Use **https://app.readyteam.ai/**. Do not ask about the site; use the staging site only if the user mentions it.
+## Each step, one at a time
 
-Open ReadyTeam in a new Chrome tab. If it shows a login page, ask the user to sign in there and reply "done".
+Do the steps one by one, never several together. For every step, go through this in order and wait for the user where it says so:
 
-Then show the plan in one short table (step, file, number of rows, or "skipped") and get a yes before Step 1.
+1. **Announce it:** "Step N of 5: <step name>." Say in one or two plain sentences what this step adds to ReadyTeam and why it comes now.
+2. **Ask for the file:** "Please attach your <file> file." For an optional step, add "or say skip". Wait. If they skip, mark it skipped and go to the next step.
+3. **Check the file:** read it and tell them what you found: number of rows, two or three example rows, and anything you had to change or could not use. Ask any question the step's skill needs answered.
+4. **Get a yes:** "I will now import N rows into <step name>. Shall I go ahead?" Wait for a yes.
+5. **Import:** follow the step's skill. While it runs, give a short update at each stage (opening Import Your Data, entering the rows, checking for errors, importing).
+6. **Report:** say what was imported (rows, and the "Completed" status) or what went wrong, in plain words. Update the progress log.
+7. **Move on:** show progress (for example "Done: 1, 2. Next: 3 of 5, Cost Assistant") and ask "Ready for the next step?" Wait for a yes before announcing the next step.
+
+For Estimation, treat each estimate file as its own round of items 2 to 6 (one project at a time), then ask whether there is another estimate.
 
 ## The order and why
 
@@ -66,7 +71,7 @@ Run the steps strictly in this order. Later steps use what earlier steps created
 ## Rules between steps
 
 - Finish one step completely (import done and confirmed) before starting the next. The import skills each handle one module per run.
-- Each import skill asks for a yes before clicking Import Data. Keep that, unless the user said at the start to go ahead for all steps.
+- Get a yes before every Import Data click and before every new step, even if the user said "go ahead" earlier. The user should always know which step is running.
 - **Stop on failure.** If a required step fails or its Invalid tab cannot be cleared, stop the flow, report what happened, and ask the user. Do not continue to later steps on top of a failed one. A failed optional step (Catalogues) may be skipped if the user agrees.
 - Never re-run a step that already imported, unless the user asks: importing twice creates duplicates.
 - Use the same browser tab and site throughout; if a login page appears, ask the user to sign in.
