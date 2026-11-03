@@ -6,7 +6,7 @@ You will need:
 
 - Google Chrome with the **Claude in Chrome** extension (Claude helps you set it up if it is missing).
 - A ReadyTeam login (https://app.readyteam.ai/).
-- Your files: cost codes, and if you have them, catalogue, Cost Assistant, job template and estimate files.
+- Your files: cost codes, and if you have them, catalogue, Cost Assistant and job template files. Estimate files are imported separately with readyteam-estimation.
 
 ## Start here (copy and paste)
 
@@ -15,11 +15,11 @@ Open Claude, start a new chat, paste this, and send it. Nothing to fill in: Clau
 ```text
 Install the ReadyTeam skills for me, then help me use them. I am not technical: use plain words, ask me one simple question at a time, and tell me exactly what to click or attach.
 
-1. Install these six skills: readyteam-onboarding, readyteam-import-cost-code, readyteam-import-catalogues, readyteam-import-cost-assistant, readyteam-import-job-assistant, readyteam-estimation. Each one is a file at https://github.com/pisoftwareptyltd/readyteam-claude-skills/raw/main/downloads/<skill-name>.skill
+1. Install these seven skills: readyteam-onboarding, readyteam-import-cost-code, readyteam-import-catalogues, readyteam-import-cost-assistant, readyteam-import-job-assistant, readyteam-estimation, readyteam-create-project-guide. Each one is a file at https://github.com/pisoftwareptyltd/readyteam-claude-skills/raw/main/downloads/<skill-name>.skill
    Use the first way that works for you:
    a. If you can run commands on my computer and have a ~/.claude folder (Claude Code): download https://github.com/pisoftwareptyltd/readyteam-claude-skills (main branch) into a temporary folder, copy every top-level folder that contains a SKILL.md into ~/.claude/skills/ (replace older versions with the same name), and delete the temporary folder.
-   b. If you can download files and share files with me in this chat: download the six .skill files and share all six with me. Tell me to click "Save skill" on each one, and wait until I say done.
-   c. Otherwise: give me the six download links above and tell me in simple steps how to add a skill in Claude's settings. Wait until I say done.
+   b. If you can download files and share files with me in this chat: download the seven .skill files and share all seven with me. Tell me to click "Save skill" on each one, and wait until I say done.
+   c. Otherwise: give me the seven download links above and tell me in simple steps how to add a skill in Claude's settings. Wait until I say done.
    Then tell me in one line that the install is finished and which skills are installed. If any is missing, say which one.
 
 2. Then start the ReadyTeam onboarding. New skills may only load in a new chat, so in this chat read https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-onboarding/SKILL.md and follow it exactly, reading any step's skill from https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/<skill-name>/SKILL.md when you reach that step.
@@ -38,6 +38,7 @@ Start a new chat and just say what you want. No links needed:
 | Import a catalogue only | Import my catalogue into ReadyTeam. |
 | Import Cost Assistant items only | Import my Cost Assistant items into ReadyTeam. |
 | Import a job template only | Import my job template into ReadyTeam. |
+| Show me how to create a project | Show me how to create a project in ReadyTeam. |
 | Create one project from an estimate | Readyteam estimation: create a project from my estimate. |
 
 Then attach your file when Claude asks for it.
@@ -64,7 +65,6 @@ I am not technical. Do one step at a time and tell me which step it is. Ask me o
 | 2 | Catalogues (optional) | `readyteam-import-catalogues` |
 | 3 | Cost Assistant | `readyteam-import-cost-assistant` |
 | 4 | Job Assistant | `readyteam-import-job-assistant` |
-| 5 | Estimation, one per estimate file | `readyteam-estimation` |
 
 ## For maintainers
 

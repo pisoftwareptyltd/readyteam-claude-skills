@@ -1,6 +1,6 @@
 ---
 name: readyteam-onboarding
-description: Onboard a company into ReadyTeam end to end by running the import skills in the right order - Cost Code, Catalogues (optional), Cost Assistant, Job Assistant, then one Readyteam estimation per estimate file. Use when the user says "onboarding", "onboard a company", "set up my company in ReadyTeam", "start ReadyTeam setup", "import all my data", or gives several ReadyTeam import files at once (cost codes, catalogues, cost assistant, job template, estimates). Also use to resume an onboarding that was started earlier.
+description: Onboard a company into ReadyTeam end to end by running the import skills in the right order - Cost Code, Catalogues (optional), then Job Assistant. Use when the user says "onboarding", "onboard a company", "set up my company in ReadyTeam", "start ReadyTeam setup", "import all my data", or gives several ReadyTeam import files at once (cost codes, catalogues, cost assistant, job template). Also use to resume an onboarding that was started earlier.
 ---
 
 # ReadyTeam onboarding
@@ -26,7 +26,6 @@ Each step's instructions live in its own skill:
 | `readyteam-import-catalogues` | Step 2 |
 | `readyteam-import-cost-assistant` | Step 3 |
 | `readyteam-import-job-assistant` | Step 4 |
-| `readyteam-estimation` | Step 5 |
 
 Use the installed skill when it is in your skill list. When it is not installed, read it from GitHub instead and follow it exactly as if it were installed:
 
@@ -38,7 +37,7 @@ Also check that the Claude in Chrome tools are available, because every step use
 
 ## Step 0b: start
 
-1. Greet the user in one line and show the five steps as a short numbered list in plain words (cost codes, catalogue (optional), Cost Assistant, job template, project estimates). Say you will do them **one at a time** and check with them after each one.
+1. Greet the user in one line and show the four steps as a short numbered list in plain words (cost codes, catalogue (optional), Cost Assistant, job template). Say you will do them **one at a time** and check with them after each one.
 2. Use **https://app.readyteam.ai/**. Do not ask about the site; use the staging site only if the user mentions it. Open ReadyTeam in a new Chrome tab. If it shows a login page, ask the user to sign in there and reply "done".
 
 Do **not** ask for the company name. The imports go into the company the user is signed in to. Read its name from ReadyTeam (for example the "<Company> / Import Your Data" title) and use it only for the progress log.
@@ -49,15 +48,13 @@ Do **not** ask for all the files up front. Ask for each file only when its step 
 
 Do the steps one by one, never several together. For every step, go through this in order and wait for the user where it says so:
 
-1. **Announce it:** "Step N of 5: <step name>." Say in one or two plain sentences what this step adds to ReadyTeam and why it comes now.
+1. **Announce it:** "Step N of 4: <step name>." Say in one or two plain sentences what this step adds to ReadyTeam and why it comes now.
 2. **Ask for the file:** "Please attach your <file> file." For an optional step, add "or say skip". Wait. If they skip, mark it skipped and go to the next step.
 3. **Check the file:** read it and tell them what you found: number of rows, two or three example rows, and anything you had to change or could not use. Ask any question the step's skill needs answered.
 4. **Get a yes:** "I will now import N rows into <step name>. Shall I go ahead?" Wait for a yes.
 5. **Import:** follow the step's skill. While it runs, give a short update at each stage (opening Import Your Data, entering the rows, checking for errors, importing).
 6. **Report:** say what was imported (rows, and the "Completed" status) or what went wrong, in plain words. Update the progress log.
-7. **Move on:** show progress (for example "Done: 1, 2. Next: 3 of 5, Cost Assistant") and ask "Ready for the next step?" Wait for a yes before announcing the next step.
-
-For Estimation, treat each estimate file as its own round of items 2 to 6 (one project at a time), then ask whether there is another estimate.
+7. **Move on:** show progress (for example "Done: 1, 2. Next: 3 of 4, Cost Assistant") and ask "Ready for the next step?" Wait for a yes before announcing the next step.
 
 ## The order and why
 
@@ -67,7 +64,6 @@ Run the steps strictly in this order. Later steps use what earlier steps created
 2. **Catalogues** (optional) - `readyteam-import-catalogues`. Skip when the user has no catalogue file.
 3. **Cost Assistant** - `readyteam-import-cost-assistant`. After cost codes (and catalogues, if any).
 4. **Job Assistant** - `readyteam-import-job-assistant`. Its User, Trade Types and Label values must already exist in the company; the import skill explains how non-matching values are handled.
-5. **Estimation** - `readyteam-estimation`, once per estimate file (it creates the project and loads its estimate into the project's Cost Assistant). Last, because it needs steps 1 and 3 done.
 
 ## Rules between steps
 
@@ -87,11 +83,12 @@ Company: <name from ReadyTeam>   Site: <url>   Started: <date>
 2 Catalogues      - skipped (no file)
 3 Cost Assistant  - done, 40 rows
 4 Job Assistant   - failed: 2 invalid rows (User), waiting on user
-5 Estimation      - pending: 3 files
 ```
 
 When resuming, read the log (or ask the user for it), confirm with the user which steps are already done in ReadyTeam, and continue from the first step that is not done.
 
 ## Finish
 
-When all steps are done or skipped, give a short summary: each step with rows imported or "skipped", projects created by Estimation (name and prefix), and anything the user must follow up on (removed trade types, users left empty, items left out).
+When all steps are done or skipped, give a short summary: each step with rows imported or "skipped", and anything the user must follow up on (removed trade types, users left empty, items left out).
+
+Then ask: "Your data is in ReadyTeam. Would you like me to show you how to create your first project?" On a yes, use the `readyteam-create-project-guide` skill (or read it from `https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-create-project-guide/SKILL.md` if it is not installed) in the same ReadyTeam tab.
