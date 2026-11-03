@@ -19,9 +19,7 @@ These skills must be available. Check your skill list before doing anything else
 | `readyteam-import-job-assistant` | Step 4 |
 | `readyteam-estimation` | Step 5 |
 
-Helpers (used only when a client sheet is not in ReadyTeam's format yet): `cost-code` (converts a cost-code sheet), `readyteam-jobassistant` (converts a job/task sheet).
-
-If a required skill is missing, stop and tell the user exactly which one, and ask them to install it from the ReadyTeam skills zip and start a new chat. Do not try to do a missing step from memory. A missing helper is not a blocker: say so, and ask the user for a sheet that is already in the import format.
+If a required skill is missing, stop and tell the user exactly which one, and ask them to install it from the ReadyTeam skills zip and start a new chat. Do not try to do a missing step from memory.
 
 ## Step 0b: collect the files
 
@@ -41,10 +39,10 @@ Then show the plan back in one short table (step, file, row count, or "skipped")
 
 Run the steps strictly in this order. Later steps use what earlier steps created.
 
-1. **Cost Code** - `readyteam-import-cost-code`. Everything else refers to cost codes. If the sheet is not in the Code / Description / Category Code / Category Description format and `cost-code` is installed, convert it with `cost-code` first.
+1. **Cost Code** - `readyteam-import-cost-code`. Everything else refers to cost codes.
 2. **Catalogues** (optional) - `readyteam-import-catalogues`. Skip when the user has no catalogue file.
 3. **Cost Assistant** - `readyteam-import-cost-assistant`. After cost codes (and catalogues, if any).
-4. **Job Assistant** - `readyteam-import-job-assistant`. If the sheet is not in the job template format and `readyteam-jobassistant` is installed, convert it with that first. Its User, Trade Types and Label values must already exist in the company; the import skill explains how non-matching values are handled.
+4. **Job Assistant** - `readyteam-import-job-assistant`. Its User, Trade Types and Label values must already exist in the company; the import skill explains how non-matching values are handled.
 5. **Estimation** - `readyteam-estimation`, once per estimate file (it creates the project and loads its estimate into the project's Cost Assistant). Last, because it needs steps 1 and 3 done.
 
 ## Rules between steps

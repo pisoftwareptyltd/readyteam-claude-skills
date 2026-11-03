@@ -18,9 +18,4 @@ Say **"start onboarding"** (or "onboard <company>"). `readyteam-onboarding` chec
 | 4 | Job Assistant | `readyteam-import-job-assistant` |
 | 5 | Estimation, one per estimate file | `readyteam-estimation` |
 
-Helpers, used when a sheet is not in the import format yet:
-
-- `cost-code` converts a cost-code sheet.
-- `readyteam-jobassistant` converts a job/task sheet into the job template format.
-
 Each skill can also be used on its own.

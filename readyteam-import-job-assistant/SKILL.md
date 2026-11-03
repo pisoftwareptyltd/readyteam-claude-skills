@@ -11,7 +11,7 @@ The ReadyTeam address is **https://app.readyteam.ai/** (use the test site https:
 
 ## Before you start
 
-1. Get the sheet's file path (.xlsx or .csv). Read it. If the sheet is not already in ReadyTeam's job template format, tell the user; if the `readyteam-jobassistant` skill is available, offer to use it first to convert it (it normalises labels, users and trade types).
+1. Get the sheet's file path (.xlsx or .csv). Read it. If the sheet is not already in ReadyTeam's job template format, tell the user and map its columns by name in step 2.
 2. The importer tab is **Job Assistant Items**. Its columns, in this order, are:
    **Group, Description, Workchain, Duration (Days), Predecessors, Assign Client, Offset (Days), User, Trade Types, Label.**
    Map the sheet's headings to these by name (the sheet may use "labels" for Label, and a different column order) and tell the user the mapping. Reorder the data to the grid's order before pasting.
@@ -62,7 +62,7 @@ The ReadyTeam address is **https://app.readyteam.ai/** (use the test site https:
 
   For any other code, open the User dropdown and use the option that clearly matches; if none does, ask the user.
 - **Trade Types and Label** must match the company's existing options. For Trade Types, if a value does not match an option, **remove it (leave the cell empty)** (rule from the owner; on staging "Electrician" was accepted and "Aircon-New", "Aircon-New-Workflow" were not). Say which values you removed. For Label, "PO" and "INVOICE" were accepted; handle a non-matching label the same way and report it.
-- Open each dropdown once to read the real options before pasting, or use the `readyteam-jobassistant` skill if available. Apply the mapping when you build the tab-separated file.
+- Open each dropdown once to read the real options before pasting. Apply the mapping when you build the tab-separated file.
 - After pasting, open the **Invalid** tab, list each invalid cell and value, and report them. Only click Import Data once Invalid is 0.
 
 ## Status
