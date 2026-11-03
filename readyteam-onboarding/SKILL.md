@@ -39,8 +39,9 @@ Also check that the Claude in Chrome tools are available, because every step use
 ## Step 0b: start
 
 1. Greet the user in one line and show the five steps as a short numbered list in plain words (cost codes, catalogue (optional), Cost Assistant, job template, project estimates). Say you will do them **one at a time** and check with them after each one.
-2. Ask the company name.
-3. Use **https://app.readyteam.ai/**. Do not ask about the site; use the staging site only if the user mentions it. Open ReadyTeam in a new Chrome tab. If it shows a login page, ask the user to sign in there and reply "done".
+2. Use **https://app.readyteam.ai/**. Do not ask about the site; use the staging site only if the user mentions it. Open ReadyTeam in a new Chrome tab. If it shows a login page, ask the user to sign in there and reply "done".
+
+Do **not** ask for the company name. The imports go into the company the user is signed in to. Read its name from ReadyTeam (for example the "<Company> / Import Your Data" title) and use it only for the progress log.
 
 Do **not** ask for all the files up front. Ask for each file only when its step starts.
 
@@ -78,10 +79,10 @@ Run the steps strictly in this order. Later steps use what earlier steps created
 
 ## Progress log
 
-Keep a progress log so onboarding can resume in a later chat. If you can write files, keep `readyteam-onboarding-<company>.md` in the user's working folder; otherwise post the log in chat after each step. Update it after every step:
+Keep a progress log so onboarding can resume in a later chat. If you can write files, keep `readyteam-onboarding-<company>.md` (company name as shown in ReadyTeam) in the user's working folder; otherwise post the log in chat after each step. Update it after every step:
 
 ```
-Company: <name>   Site: <url>   Started: <date>
+Company: <name from ReadyTeam>   Site: <url>   Started: <date>
 1 Cost Code       - done, 96 rows, <date>
 2 Catalogues      - skipped (no file)
 3 Cost Assistant  - done, 40 rows
