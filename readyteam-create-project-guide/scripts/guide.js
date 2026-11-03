@@ -70,9 +70,9 @@
     { find: () => findField(/prefix/i, scope()),
       text: 'Type a short <b>Document Prefix</b>, for example the project initials. Up to 20 letters, no spaces, and different from your other projects.', next: true },
     { find: () => findField(/address/i, scope()),
-      text: 'Type the <b>Home Address</b> of the job. If a list of addresses appears, pick the right one.', next: true },
+      text: 'Type the <b>Home Address</b> of the job. If a list of addresses appears, pick the right one.', next: true, side: 'left' },
     { find: () => findField(/client/i, scope()),
-      text: 'Optional: choose the <b>Client</b> for this project, or click Next to skip.', next: true },
+      text: 'Optional: choose the <b>Client</b> for this project, or click Next to skip.', next: true, side: 'left' },
     { find: () => findButton(/^create project$/i, scope()),
       text: 'Click <b>Create Project</b>.' },
   ];
@@ -122,10 +122,21 @@
     }
   }
 
-  function place(target) {
+  // side 'left' keeps the tip beside the field, so a dropdown opening below it stays visible.
+  function place(target, side) {
     const t = tip.getBoundingClientRect();
     const vw = innerWidth, vh = innerHeight, gap = 12;
     let top, left;
+    if (target && side === 'left') {
+      const r = target.getBoundingClientRect();
+      top = Math.max(gap, Math.min(r.top, vh - t.height - gap));
+      if (r.left - gap - t.width >= gap) left = r.left - gap - t.width;
+      else if (r.right + gap + t.width <= vw - gap) left = r.right + gap;
+      else return place(target);
+      tip.style.top = top + 'px';
+      tip.style.left = left + 'px';
+      return;
+    }
     if (target) {
       const r = target.getBoundingClientRect();
       top = r.bottom + gap + t.height < vh ? r.bottom + gap : r.top - gap - t.height;
@@ -190,10 +201,12 @@
       Object.assign(spot.style, {
         display: 'block', top: r.top - 4 + 'px', left: r.left - 4 + 'px',
         width: r.width + 8 + 'px', height: r.height + 8 + 'px',
+        // No dimming on dropdown steps, so the open list stays easy to read.
+        boxShadow: s.side === 'left' ? 'none' : '0 0 0 9999px rgba(0,0,0,0.35)',
       });
       if (r.top < 0 || r.bottom > innerHeight) target.scrollIntoView({ block: 'center', behavior: 'smooth' });
       render(head + s.text, buttons);
-      place(target);
+      place(target, s.side);
     } else {
       missingSince = missingSince || Date.now();
       spot.style.display = 'none';
