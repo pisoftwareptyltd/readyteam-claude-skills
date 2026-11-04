@@ -1,11 +1,11 @@
 ---
 name: readyteam-estimation-guide
-description: Show the user how to start the estimate for a ReadyTeam project with an on-screen guide in their Chrome tab - open the project's Cost Assistant and choose Copy from project (pick a project in the popup), Import from Excel, or Import from data setup. The user does the clicking; the guide moves on by itself. Use after a project has been created (for example right after readyteam-create-project-guide or in onboarding), or when the user asks how to start, copy or import an estimate for a project.
+description: Show the user how to start the estimate for a ReadyTeam project with an on-screen guide in their Chrome tab - open the project's Cost Assistant (by itself right after a project is created) and ask on screen to choose Copy from project (pick a project in the popup), Import from Excel, or Import from data setup. The user does the clicking; the guide moves on by itself. Use after a project has been created (for example right after readyteam-create-project-guide or in onboarding), or when the user asks how to start, copy or import an estimate for a project.
 ---
 
 # ReadyTeam: guide the user to start a project's estimate
 
-The user starts the estimate themselves. You ask which way they want to start it, then put a guide on their ReadyTeam page. The guide is one script (in the "Guide script" section at the end of this skill) that highlights each control and moves on by itself as the user clicks. **Do not take screenshots step by step and do not click for the user.**
+The user starts the estimate themselves. You put a guide on their ReadyTeam page; it asks them on screen which way to start, then walks them through it. The guide is one script (in the "Guide script" section at the end of this skill) that highlights each control and moves on by itself as the user clicks. **Do not take screenshots step by step and do not click for the user.**
 
 Where it lives: open the project, then **Estimations > Cost Assistant**. A new project's Cost Assistant shows **Quick Start** with these options:
 
@@ -17,22 +17,21 @@ Where it lives: open the project, then **Estimations > Cost Assistant**. A new p
 
 ## Steps
 
-1. Load the Claude in Chrome tools in one ToolSearch call if they are deferred, including `javascript_tool`. Use the ReadyTeam tab that is already open (for example from the create-project guide). If a login page shows, ask the user to sign in and reply "done".
-2. Make sure the tab shows the project (its page with the **Estimations** section) or that project's Cost Assistant. If it is on another page, ask the user which project, or open the project they just created. No popup should be open.
-3. Ask the user, in plain words, one question:
-   "How would you like to start this project's estimate?
-   1. **Copy from another project**: reuse an estimate you already have in ReadyTeam.
-   2. **Import from Excel**: upload your estimate spreadsheet.
-   3. **Import from data setup**: pick items from your company's Cost Assistant list."
-   Wait for the answer.
-4. Run the full text of the guide script below, unchanged, in that tab with `javascript_tool`, then run `window.__rtEstGuide.choose('copy')` (or `'excel'` or `'datasetup'`, matching their answer). The guide highlights that option; if the user clicks a different one, it follows them.
-5. Tell the user in two or three plain lines, without waiting for anything else:
-   "I've put a guide on your ReadyTeam screen. Follow the orange highlight: it shows you where to click, one step at a time. Tell me when your estimate is in, or if you get stuck."
-   For Excel, add: "When the importer opens, upload your file there and click Import Data at the top right. Or attach the file here and I can do the import for you."
+**Right after the Create Project guide** (the usual way, also in onboarding): `readyteam-create-project-guide` loads this guide together with its own and calls `window.__rtEstGuide.afterProject()`. This guide then waits, hidden, until the project is created; opens the new project's **Cost Assistant** by itself (or, if ReadyTeam is not on the new project, points to it in the project list); and shows the choice on screen. Nothing else to do here until the user replies: go to step 7.
+
+**On its own** (the project already exists):
+
+1. Load the Claude in Chrome tools in one ToolSearch call if they are deferred, including `javascript_tool`. Use the ReadyTeam tab that is already open. If a login page shows, ask the user to sign in and reply "done".
+2. Make sure the tab shows the project (its page with the **Estimations** section) or that project's Cost Assistant. If it is on another page, ask the user which project and open it. No popup should be open.
+3. Run the full text of the guide script below, unchanged, in that tab with `javascript_tool`. Do not ask in chat which option they want: on Quick Start the guide shows the question on screen, with a button for each option (**Copy from project**, **Import from Excel**, **Import from data setup**) and the three cards highlighted. (If the user already told you which option they want, run `window.__rtEstGuide.choose('copy')`, `'excel'` or `'datasetup'` to point straight at it.)
+4. Tell the user in two or three plain lines, without waiting for anything else:
+   "I've put a guide on your ReadyTeam screen. Choose how you'd like to start the estimate, then follow the orange highlight one step at a time. Tell me when your estimate is in, or if you get stuck."
+5. If they pick **Import from Excel**, you may add: "When the importer opens, upload your file and click Import Data at the top right. Or attach the file here and I can do the import for you."
 6. Wait for the user. Do not poll or take screenshots while they work.
 7. When they reply, run `window.__rtEstGuide && window.__rtEstGuide.status()` once with `javascript_tool`:
    - `finished: true`: take one screenshot to confirm the estimate is showing in Cost Assistant, and tell the user in a line what came in (for example "Your estimate was copied from P1004").
    - `unsure: true`: the popup or importer closed after Continue / Add / Import, but the page did not change as expected. Take one screenshot, tell the user what you see, and help from there.
+   - `waitingForProject: true`: the project isn't created yet; help with the Create Project guide.
    - not finished: ask what they see, or take one screenshot, and explain the next step in plain words. Run the script again if they want the guide back (it restarts cleanly).
 
 ## If the user wants you to do it
@@ -58,7 +57,7 @@ If `javascript_tool` is not available or is refused, do not keep retrying. Give 
 
 Tested live on a project (Nov 2026), up to but not including the final click: from the project page the guide points at Estimations > Cost Assistant; on Quick Start it points at the chosen option; it follows the user into each option (Copy From Project popup: Project dropdown, then the copy checkboxes, then Continue; data setup popup: item list, then Add; Excel importer: a tip in the bottom-left corner, since the importer is an embedded Flatfile window the guide cannot point inside); Cancel, Close or closing the importer goes back to the choice. Popup selectors: `lib-cost-assistant-project-copy` and `lib-template-map-dialogue` (their boxes are `display: contents`, so the guide checks the surrounding `mat-dialog-container`), `iframe#flatfile_iframe` for the importer.
 
-**Not yet seen:** what Cost Assistant shows after Continue / Add / Import Data. The guide treats "Quick Start is gone" as done and points at **Continue Estimate** if that button turns on. On the first real run, note what happens after each option and update the guide script if needed. `window.__rtEstGuide.check()` lists which controls the guide can see on the current screen.
+**Not yet tested live:** the hand-off from the Create Project guide (`afterProject()`: wait hidden, open the new project's Cost Assistant by clicking its card, or point to the project in the list; then the on-screen choice with one button per option). **Not yet seen:** what Cost Assistant shows after Continue / Add / Import Data. The guide treats "Quick Start is gone" as done and points at **Continue Estimate** if that button turns on. On the first real run, note what happens after each option and update the guide script if needed. `window.__rtEstGuide.check()` lists which controls the guide can see on the current screen.
 
 ## Guide script
 
@@ -116,6 +115,29 @@ Tested live on a project (Nov 2026), up to but not including the final click: fr
     return t;
   }
 
+  const costAssistantLeaf = () => leaf(/^cost assistant$/i, document, 120);
+
+  // The new project in the left project list, by the name typed in the Create Project guide.
+  function findProjectInList() {
+    if (!projectName) return null;
+    const name = projectName.toLowerCase();
+    const hit = [...document.querySelectorAll('a, li, p, span, div')].find((e) => visible(e) &&
+      e.getBoundingClientRect().left < 400 && e.getBoundingClientRect().top > 100 &&
+      clean(e.innerText).toLowerCase().includes(name) && clean(e.innerText).length < name.length + 40 &&
+      ![...e.children].some((c) => clean(c.innerText).toLowerCase().includes(name)));
+    return hit ? (hit.closest('a, li, [class*=cursor-pointer]') || hit) : null;
+  }
+
+  // Click a Quick Start option for the user when they press its button in the tip.
+  function pickOption(k) {
+    const t = leaf(CARD[k]);
+    if (!t) return;
+    choice = k;
+    if (k === 'excel') excelClickedAt = Date.now();
+    shownKey = '';
+    t.click();
+  }
+
   function findCard(key) {
     const t = leaf(CARD[key]);
     return t ? (t.closest('.group, [class*=rounded-lg]') || t) : null;
@@ -156,14 +178,22 @@ Tested live on a project (Nov 2026), up to but not including the final click: fr
 
   // Steps: each has an id, a finder and a text.
   const S = {
-    open: { find: findCostAssistantCard,
-      text: () => 'Click <b>Cost Assistant</b> under Estimations to start this project\'s estimate.' },
+    open: { find: findCostAssistantCard, light: () => autoOpen,
+      text: () => autoOpen
+        ? '<b>Your project is created.</b> Opening <b>Cost Assistant</b> to start its estimate...'
+        : 'Click <b>Cost Assistant</b> under Estimations to start this project\'s estimate.' },
+    openProject: { find: findProjectInList,
+      text: () => '<b>Your project is created.</b> Click <b>' + projectName.replace(/</g, '&lt;') + '</b> in the project list to open it.' },
     choose: { find: () => (choice ? findCard(choice) : findChoices()), light: () => !choice,
       text: () => choice === 'excel' && Date.now() - excelClickedAt < 20000
         ? 'Opening the Excel importer. This can take a few seconds...'
         : choice
         ? 'Click <b>' + NAME[choice] + '</b>.'
-        : 'Choose how to start the estimate: <b>Copy from project</b>, <b>Import from Excel</b> or <b>Import from data setup</b>.' },
+        : '<b>Your project is ready.</b> How would you like to start its estimate? Choose one option:' +
+          '<ul style="margin:6px 0 0 18px;padding:0">' +
+          '<li><b>Copy from project</b>: reuse the estimate of another project</li>' +
+          '<li><b>Import from Excel</b>: upload your estimate spreadsheet</li>' +
+          '<li><b>Import from data setup</b>: pick items from your company Cost Assistant</li></ul>' },
     copyProject: { find: () => { const d = copyDialog(); return d && (d.querySelector('ng-select') || null); }, light: () => true, beside: copyDialog,
       text: () => 'Choose the <b>Project</b> whose estimate you want to copy. You can type to search.' },
     copyWhat: { find: () => checkboxList(copyDialog()), next: true, beside: copyDialog,
@@ -220,12 +250,17 @@ Tested live on a project (Nov 2026), up to but not including the final click: fr
   let excelClickedAt = 0;
   let focusedStep = '';
   let focusUntil = 0;
+  let waitingForProject = false;  // set by afterProject(): sleep until the Create Project guide finishes
+  let projectName = '';
+  let autoOpen = false;           // after the project is created, open Cost Assistant for the user
+  let autoSince = 0;
+  let openClickedAt = 0;
 
   function render(html, buttons) {
     const key = html + '|' + buttons.map((b) => b.label).join(',');
     if (key === shownKey) return;
     shownKey = key;
-    tip.innerHTML = html + '<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:10px"></div>';
+    tip.innerHTML = html + '<div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;margin-top:10px"></div>';
     const row = tip.lastChild;
     for (const b of buttons) {
       const el = document.createElement('button');
@@ -233,6 +268,7 @@ Tested live on a project (Nov 2026), up to but not including the final click: fr
       Object.assign(el.style, b.primary
         ? { background: ORANGE, color: '#fff', border: '1px solid ' + ORANGE }
         : { background: '#fff', color: '#1f2328', border: '1px solid #d0d7de' });
+      if (b.block) Object.assign(el.style, { width: '100%', textAlign: 'left', fontWeight: '600' });
       el.onclick = (e) => { e.preventDefault(); e.stopPropagation(); b.onClick(); };
       row.append(el);
     }
@@ -317,6 +353,24 @@ Tested live on a project (Nov 2026), up to but not including the final click: fr
 
   function tick() {
     if (finished) return;
+
+    // afterProject(): stay hidden until the Create Project guide reports the project created.
+    if (waitingForProject) {
+      const g = window.__rtGuide;
+      const st = g && g.status ? g.status() : null;
+      if (!st || st.closedByUser) return stop();  // project guide closed: nothing to follow on from
+      tip.style.display = 'none';
+      spot.style.display = 'none';
+      if (!st.finished) return;
+      projectName = st.projectName || '';
+      try { g.stop(); } catch (e) { /* already gone */ }
+      waitingForProject = false;
+      autoOpen = true;
+      autoSince = Date.now();
+      tip.style.display = '';
+      go('open');
+    }
+
     const open = copyDialog() ? 'copy' : setupDialog() ? 'datasetup' : importer() ? 'excel' : null;
 
     if (open) {
@@ -349,8 +403,22 @@ Tested live on a project (Nov 2026), up to but not including the final click: fr
           // Importer closed but Quick Start is still there: nothing imported, back to the choice.
           confirmedAt = 0; closedImporter = false; go('choose');
         } else if (!closedImporter && waited > 10000) return finish(false);
+      } else if (quickStart()) {
+        autoOpen = false;
+        go('choose');
+      } else if (autoOpen) {
+        // Open the new project's Cost Assistant for the user; if the project page isn't showing, point to the project.
+        const lf = costAssistantLeaf();
+        if (lf) {
+          go('open');
+          if (Date.now() - openClickedAt > 4000) { openClickedAt = Date.now(); lf.click(); }
+        } else if (Date.now() - autoSince > 3000 && findProjectInList()) {
+          go('openProject');
+        } else {
+          go('open');
+        }
       } else {
-        go(quickStart() ? 'choose' : 'open');
+        go('open');
       }
     }
 
@@ -364,6 +432,9 @@ Tested live on a project (Nov 2026), up to but not including the final click: fr
     if (s.next) {
       const nextId = list[n + 1];
       buttons.push({ label: 'Next', primary: true, onClick: () => nextId && go(nextId) });
+    }
+    if (step === 'choose' && !choice) {
+      for (const k of Object.keys(CARD)) buttons.push({ label: NAME[k], block: true, onClick: () => pickOption(k) });
     }
     buttons.push({ label: 'Close guide', onClick: stop });
 
@@ -415,7 +486,14 @@ Tested live on a project (Nov 2026), up to but not including the final click: fr
     stop,
     closedByUser: false,
     choose: (c) => { if (CARD[c]) { choice = c; shownKey = ''; } return 'Guide set to ' + (NAME[c] || 'any option'); },
-    status: () => ({ step, choice, finished, unsure, closedByUser: window.__rtEstGuide.closedByUser, url: location.href }),
+    // Run right after the Create Project guide: wait for the project, then open its Cost Assistant by itself.
+    afterProject: () => {
+      waitingForProject = true;
+      tip.style.display = 'none';
+      spot.style.display = 'none';
+      return 'Estimate guide waiting for the project to be created';
+    },
+    status: () => ({ step, choice, finished, unsure, waitingForProject, projectName, closedByUser: window.__rtEstGuide.closedByUser, url: location.href }),
     check: () => Object.keys(S).map((k) => k + ':' + (S[k].find() ? 'found' : '-')).join(' '),
   };
   tick();

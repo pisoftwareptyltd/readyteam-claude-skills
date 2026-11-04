@@ -70,8 +70,8 @@ Run the steps strictly in this order. Later steps use what earlier steps created
 3. **Catalogues** (optional) - `readyteam-import-catalogues`. Skip when the user has no catalogue file.
 4. **Cost Assistant** - `readyteam-import-cost-assistant`. After cost codes (and catalogues, if any).
 5. **Job Assistant** - `readyteam-import-job-assistant`. Its User, Trade Types and Label values must already exist in the company; the import skill explains how non-matching values are handled.
-6. **Create Project** (guide) - `readyteam-create-project-guide`. The user creates their first project with the on-screen guide. Ask: "Shall I show you how to create your first project?" If they say skip, also skip step 7.
-7. **Estimation** (guide) - `readyteam-estimation-guide`. In the project just created, open Cost Assistant and ask how they want to start the estimate: Copy from project, Import from Excel, or Import from data setup (the Cost Assistant items from step 4). The guide then walks them through it. Last, because it uses the project from step 6 and the data from steps 2 to 4.
+6. **Create Project** (guide) - `readyteam-create-project-guide`. The user creates their first project with the on-screen guide. Ask: "Shall I show you how to create your first project and start its estimate?" If they say skip, also skip step 7.
+7. **Estimation** (guide) - `readyteam-estimation-guide`. Runs straight on from step 6 with no stop in between: the create-project skill loads both guides together, and once the project is created the estimation guide opens its Cost Assistant by itself and asks on screen how to start the estimate: Copy from project, Import from Excel, or Import from data setup (the Cost Assistant items from step 4). Announce steps 6 and 7 together, and report both when the user replies. Last, because it uses the project from step 6 and the data from steps 2 to 4.
 
 ## Rules between steps
 
