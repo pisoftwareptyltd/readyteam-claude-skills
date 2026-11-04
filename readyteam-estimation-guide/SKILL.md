@@ -52,6 +52,7 @@ If `javascript_tool` is not available or is refused, do not keep retrying. Give 
 - Do not change anything else in ReadyTeam.
 - Starting an estimate twice adds the items twice. If Cost Assistant already shows an estimate (no Quick Start), tell the user and ask before adding more.
 - The guide closes with the Close guide button or Escape, and removes itself 15 seconds after the estimate is in.
+- On a dropdown or typing step the guide puts the cursor in the field and keeps its tip to the left (or above), so the list stays visible.
 
 ## Status
 
@@ -124,6 +125,19 @@ Tested live on a project (Nov 2026), up to but not including the final click: fr
     const cards = Object.keys(CARD).map(findCard).filter(Boolean);
     if (!cards.length) return null;
     return cards[0].closest('.grid, [class*=grid]') || cards[0].parentElement.parentElement;
+  }
+
+  // Dropdowns and text fields: the tip goes beside them, and the cursor goes into them.
+  const DROPDOWN_SEL = 'ng-select, mat-select, select, [role=combobox], [aria-autocomplete], [aria-haspopup=listbox]';
+  const isDropdown = (el) => !!el && (el.matches(DROPDOWN_SEL) || !!el.querySelector(DROPDOWN_SEL));
+  const TYPE_SEL = 'input:not([type=hidden]):not([type=checkbox]):not([type=radio]):not([type=file]):not([type=color]), textarea, select';
+  function focusField(target) {
+    const i = target.matches(TYPE_SEL) ? target : [...target.querySelectorAll(TYPE_SEL)].find(visible);
+    if (!i || i.disabled || i.readOnly || document.activeElement === i) return;
+    try {
+      i.focus({ preventScroll: true });
+      if (i.setSelectionRange && /^(text|search|)$/.test(i.type || '')) i.setSelectionRange(i.value.length, i.value.length);
+    } catch (e) { /* field cannot take focus */ }
   }
 
   // The box around all the checkboxes in a popup.
@@ -204,6 +218,8 @@ Tested live on a project (Nov 2026), up to but not including the final click: fr
   let shownKey = '';
   let lastButton = '';
   let excelClickedAt = 0;
+  let focusedStep = '';
+  let focusUntil = 0;
 
   function render(html, buttons) {
     const key = html + '|' + buttons.map((b) => b.label).join(',');
@@ -222,21 +238,28 @@ Tested live on a project (Nov 2026), up to but not including the final click: fr
     }
   }
 
+  function placeAside(target, box) {
+    const t = tip.getBoundingClientRect();
+    const r = target.getBoundingClientRect();
+    const b = (box || target).getBoundingClientRect();
+    const vw = innerWidth, vh = innerHeight, gap = 12;
+    const clampTop = (y) => Math.max(gap, Math.min(y, vh - t.height - gap));
+    let top, left;
+    if (b.left - gap - t.width >= gap) { top = clampTop(r.top); left = b.left - gap - t.width; }
+    else if (r.top - gap - t.height >= gap) { top = r.top - gap - t.height; left = Math.max(gap, Math.min(r.left, vw - t.width - gap)); }
+    else if (b.right + gap + t.width <= vw - gap) { top = clampTop(r.top); left = b.right + gap; }
+    else return false;
+    tip.style.top = top + 'px';
+    tip.style.left = left + 'px';
+    return true;
+  }
+
   function place(target, corner, beside) {
+    // Dropdowns and popup steps: tip to the left of the popup (or above), never over the list.
+    if (target && (beside || isDropdown(target)) && placeAside(target, beside && (beside.closest('mat-dialog-container') || beside))) return;
     const t = tip.getBoundingClientRect();
     const vw = innerWidth, vh = innerHeight, gap = 12;
     let top, left;
-    if (target && beside) {  // next to the popup, so the tip never covers it or its dropdown
-      const b = (beside.closest('mat-dialog-container') || beside).getBoundingClientRect();
-      const r = target.getBoundingClientRect();
-      top = Math.max(gap, Math.min(r.top, vh - t.height - gap));
-      if (b.left - gap - t.width >= gap) left = b.left - gap - t.width;
-      else if (b.right + gap + t.width <= vw - gap) left = b.right + gap;
-      else return place(target);
-      tip.style.top = top + 'px';
-      tip.style.left = left + 'px';
-      return;
-    }
     if (corner) {  // over the importer: bottom left, out of the way of its buttons
       tip.style.top = vh - t.height - 56 + 'px';
       tip.style.left = '24px';
@@ -352,8 +375,12 @@ Tested live on a project (Nov 2026), up to but not including the final click: fr
         display: 'block', top: r.top - 4 + 'px', left: r.left - 4 + 'px',
         width: r.width + 8 + 'px', height: r.height + 8 + 'px',
         // No dimming on lists and dropdowns, so they stay easy to read.
-        boxShadow: s.light && s.light() ? 'none' : '0 0 0 9999px rgba(0,0,0,0.35)',
+        boxShadow: (s.light && s.light()) || isDropdown(target) ? 'none' : '0 0 0 9999px rgba(0,0,0,0.35)',
       });
+      // Put the cursor in a dropdown or text field when the step starts, so the user can type straight away.
+      // Keep trying for a moment (popups move focus themselves when they open), then leave it to the user.
+      if (focusedStep !== step) { focusedStep = step; focusUntil = Date.now() + 1500; }
+      if (Date.now() < focusUntil && !target.contains(document.activeElement)) focusField(target);
       if (r.top < 0 || r.bottom > innerHeight) target.scrollIntoView({ block: 'center', behavior: 'smooth' });
       render(head + s.text(), buttons);
       place(target, false, s.beside && s.beside());

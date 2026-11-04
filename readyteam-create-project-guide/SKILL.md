@@ -39,10 +39,11 @@ If `javascript_tool` is not available or is refused, do not keep retrying. Give 
 - Never type into the form or click Create Project for the user, unless they ask you to.
 - Do not change anything else in ReadyTeam.
 - The guide closes with the Close guide button or Escape, and removes itself 15 seconds after the project is created.
+- On a typing step the guide puts the cursor in the field; on a dropdown step its tip sits to the left (or above), so the list stays visible.
 
 ## Status
 
-Tested only on a mock page that mimics the Create New Project dialog. On the first real run, note whether each step found its button or field (a step that cannot find its control shows "I can't point to it right now"), and update the selectors in the guide script if needed.
+Checked on the live Create New Project dialog (Nov 2026), up to but not including Create Project: every step finds its control; each typing step puts the cursor in its field (Project Name, Document Prefix, Home Address, Client); the tip sits left of the dialog, or above the field when there is no room, so the address suggestions and the Client list open below it unobstructed; Cancel sends the guide back to step 1. Not yet run with a real Create Project click: on the first real run, note whether the guide reaches "Done" and the project dashboard opens.
 
 ## Guide script
 
@@ -72,6 +73,19 @@ Tested only on a mock page that mimics the Create New Project dialog. On the fir
       .filter(visible)
       .find((d) => /create new project/i.test(d.innerText)) || null;
   const scope = () => dialog() || document;
+
+  // Dropdowns and text fields: the tip goes beside them, and the cursor goes into them.
+  const DROPDOWN_SEL = 'ng-select, mat-select, select, [role=combobox], [aria-autocomplete], [aria-haspopup=listbox]';
+  const isDropdown = (el) => !!el && (el.matches(DROPDOWN_SEL) || !!el.querySelector(DROPDOWN_SEL));
+  const TYPE_SEL = 'input:not([type=hidden]):not([type=checkbox]):not([type=radio]):not([type=file]):not([type=color]), textarea, select';
+  function focusField(target) {
+    const i = target.matches(TYPE_SEL) ? target : [...target.querySelectorAll(TYPE_SEL)].find(visible);
+    if (!i || i.disabled || i.readOnly || document.activeElement === i) return;
+    try {
+      i.focus({ preventScroll: true });
+      if (i.setSelectionRange && /^(text|search|)$/.test(i.type || '')) i.setSelectionRange(i.value.length, i.value.length);
+    } catch (e) { /* field cannot take focus */ }
+  }
 
   const FIELD_SEL =
     'input:not([type=hidden]):not([type=checkbox]):not([type=radio]), textarea, select, mat-select, [role=combobox], ng-select';
@@ -153,6 +167,8 @@ Tested only on a mock page that mimics the Create New Project dialog. On the fir
   let urlAtOpen = '';
   let closedSince = 0;
   let shownKey = '';
+  let focusedStep = -1;
+  let focusUntil = 0;
 
   function render(html, buttons) {
     const key = html + '|' + buttons.map((b) => b.label).join(',');
@@ -171,21 +187,28 @@ Tested only on a mock page that mimics the Create New Project dialog. On the fir
     }
   }
 
-  // side 'left' keeps the tip beside the field, so a dropdown opening below it stays visible.
+  function placeAside(target, box) {
+    const t = tip.getBoundingClientRect();
+    const r = target.getBoundingClientRect();
+    const b = (box || target).getBoundingClientRect();
+    const vw = innerWidth, vh = innerHeight, gap = 12;
+    const clampTop = (y) => Math.max(gap, Math.min(y, vh - t.height - gap));
+    let top, left;
+    if (b.left - gap - t.width >= gap) { top = clampTop(r.top); left = b.left - gap - t.width; }
+    else if (r.top - gap - t.height >= gap) { top = r.top - gap - t.height; left = Math.max(gap, Math.min(r.left, vw - t.width - gap)); }
+    else if (b.right + gap + t.width <= vw - gap) { top = clampTop(r.top); left = b.right + gap; }
+    else return false;
+    tip.style.top = top + 'px';
+    tip.style.left = left + 'px';
+    return true;
+  }
+
+  // Dropdowns and side 'left' steps: tip beside the dialog, so an open list stays visible.
   function place(target, side) {
+    if (target && (side === 'left' || isDropdown(target)) && placeAside(target, dialog())) return;
     const t = tip.getBoundingClientRect();
     const vw = innerWidth, vh = innerHeight, gap = 12;
     let top, left;
-    if (target && side === 'left') {
-      const r = target.getBoundingClientRect();
-      top = Math.max(gap, Math.min(r.top, vh - t.height - gap));
-      if (r.left - gap - t.width >= gap) left = r.left - gap - t.width;
-      else if (r.right + gap + t.width <= vw - gap) left = r.right + gap;
-      else return place(target);
-      tip.style.top = top + 'px';
-      tip.style.left = left + 'px';
-      return;
-    }
     if (target) {
       const r = target.getBoundingClientRect();
       top = r.bottom + gap + t.height < vh ? r.bottom + gap : r.top - gap - t.height;
@@ -251,11 +274,17 @@ Tested only on a mock page that mimics the Create New Project dialog. On the fir
         display: 'block', top: r.top - 4 + 'px', left: r.left - 4 + 'px',
         width: r.width + 8 + 'px', height: r.height + 8 + 'px',
         // No dimming on dropdown steps, so the open list stays easy to read.
-        boxShadow: s.side === 'left' ? 'none' : '0 0 0 9999px rgba(0,0,0,0.35)',
+        boxShadow: s.side === 'left' || isDropdown(target) ? 'none' : '0 0 0 9999px rgba(0,0,0,0.35)',
       });
+      // Put the cursor in the field when the step starts, so the user can type straight away.
+      // Keep trying for a moment (the dialog moves focus itself when it opens), then leave it to the user.
+      if (s.next) {
+        if (focusedStep !== step) { focusedStep = step; focusUntil = Date.now() + 1500; }
+        if (Date.now() < focusUntil && !target.contains(document.activeElement)) focusField(target);
+      }
       if (r.top < 0 || r.bottom > innerHeight) target.scrollIntoView({ block: 'center', behavior: 'smooth' });
       render(head + s.text, buttons);
-      place(target, s.side);
+      place(target, s.next ? 'left' : s.side);  // typing steps: tip beside or above, never over the next field
     } else {
       missingSince = missingSince || Date.now();
       spot.style.display = 'none';
