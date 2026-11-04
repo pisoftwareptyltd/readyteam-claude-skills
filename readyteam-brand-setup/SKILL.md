@@ -1,6 +1,6 @@
 ---
 name: readyteam-brand-setup
-description: Set up a company's branding in ReadyTeam from its logo using Claude in Chrome - upload the logo the user attaches and set the Primary Color and Secondary Color taken from that logo (System Setting > Company Profile > Company Branding), then save after the user says yes. Use when the user wants to add their logo or brand colours, set up branding or brand setup in ReadyTeam, gives a logo for ReadyTeam, or after ReadyTeam onboarding imports are finished.
+description: Set up a company's branding in ReadyTeam from its logo using Claude in Chrome - upload the logo the user attaches and set the Primary Color and Secondary Color taken from that logo (System Setting > Company Profile > Company Branding), then save after the user says yes. Use when the user wants to add their logo or brand colours, set up branding or brand setup in ReadyTeam, gives a logo for ReadyTeam, or as the first step of ReadyTeam onboarding.
 ---
 
 # ReadyTeam: brand setup from the company logo

@@ -1,6 +1,6 @@
 ---
 name: readyteam-create-project-guide
-description: Show the user how to create a project in ReadyTeam with an on-screen guide that highlights each button and field in their Chrome tab (Add Project, Project Name, Document Prefix, Home Address, Client, Create Project). The user does the clicking and typing; the guide moves on by itself. Use when the user asks how to create a project, wants to be shown or walked through creating a project, or after ReadyTeam onboarding imports are finished.
+description: Show the user how to create a project in ReadyTeam with an on-screen guide that highlights each button and field in their Chrome tab (Add Project, Project Name, Document Prefix, Home Address, Client, Create Project). The user does the clicking and typing; the guide moves on by itself. Use when the user asks how to create a project, or wants to be shown or walked through creating a project without an estimate file.
 ---
 
 # ReadyTeam: guide the user to create a project

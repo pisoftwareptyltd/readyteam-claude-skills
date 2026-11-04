@@ -6,8 +6,8 @@ You will need:
 
 - Google Chrome with the **Claude in Chrome** extension (Claude helps you set it up if it is missing).
 - A ReadyTeam login (https://app.readyteam.ai/).
-- Your files: cost codes, and if you have them, catalogue, Cost Assistant and job template files. Estimate files are imported separately with readyteam-estimation.
-- For branding: your company logo as an image file. Claude uploads it and sets your Primary and Secondary colours from it.
+- Your files: your company logo, cost codes, and if you have them, catalogue, Cost Assistant, job template and estimate files.
+- For branding, Claude uploads your logo and sets your Primary and Secondary colours from it.
 
 ## Start here (copy and paste)
 
@@ -63,12 +63,14 @@ I am not technical. Do one step at a time and tell me which step it is. Ask me o
 
 | # | Step | Skill |
 |---|---|---|
-| 1 | Cost Code | `readyteam-import-cost-code` |
-| 2 | Catalogues (optional) | `readyteam-import-catalogues` |
-| 3 | Cost Assistant | `readyteam-import-cost-assistant` |
-| 4 | Job Assistant | `readyteam-import-job-assistant` |
+| 1 | Brand setup: logo and colours (skip if no logo) | `readyteam-brand-setup` |
+| 2 | Cost Code | `readyteam-import-cost-code` |
+| 3 | Catalogues (optional) | `readyteam-import-catalogues` |
+| 4 | Cost Assistant | `readyteam-import-cost-assistant` |
+| 5 | Job Assistant | `readyteam-import-job-assistant` |
+| 6 | Estimation: first project from an estimate (skip if no estimate) | `readyteam-estimation` |
 
-When the steps are finished, onboarding offers to set up your branding from your logo (`readyteam-brand-setup`) and then shows you how to create your first project (`readyteam-create-project-guide`).
+`readyteam-create-project-guide` is not part of onboarding: use it on its own to show someone how to create a project by hand.
 
 ## For maintainers
 

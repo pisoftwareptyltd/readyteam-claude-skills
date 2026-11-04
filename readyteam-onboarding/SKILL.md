@@ -1,6 +1,6 @@
 ---
 name: readyteam-onboarding
-description: Onboard a company into ReadyTeam end to end by running the import skills in the right order - Cost Code, Catalogues (optional), then Job Assistant. Use when the user says "onboarding", "onboard a company", "set up my company in ReadyTeam", "start ReadyTeam setup", "import all my data", or gives several ReadyTeam import files at once (cost codes, catalogues, cost assistant, job template). Also use to resume an onboarding that was started earlier.
+description: Onboard a company into ReadyTeam end to end by running the ReadyTeam skills in the right order - Brand setup (logo and colours), Cost Code, Catalogues (optional), Cost Assistant, Job Assistant, then Estimation (first project from an estimate). Use when the user says "onboarding", "onboard a company", "set up my company in ReadyTeam", "start ReadyTeam setup", "import all my data", or gives several ReadyTeam files at once (logo, cost codes, catalogues, cost assistant, job template, estimate). Also use to resume an onboarding that was started earlier.
 ---
 
 # ReadyTeam onboarding
@@ -22,10 +22,12 @@ Each step's instructions live in its own skill:
 
 | Skill | Needed for |
 |---|---|
-| `readyteam-import-cost-code` | Step 1 |
-| `readyteam-import-catalogues` | Step 2 |
-| `readyteam-import-cost-assistant` | Step 3 |
-| `readyteam-import-job-assistant` | Step 4 |
+| `readyteam-brand-setup` | Step 1 |
+| `readyteam-import-cost-code` | Step 2 |
+| `readyteam-import-catalogues` | Step 3 |
+| `readyteam-import-cost-assistant` | Step 4 |
+| `readyteam-import-job-assistant` | Step 5 |
+| `readyteam-estimation` | Step 6 |
 
 Use the installed skill when it is in your skill list. When it is not installed, read it from GitHub instead and follow it exactly as if it were installed:
 
@@ -37,10 +39,10 @@ Also check that the Claude in Chrome tools are available, because every step use
 
 ## Step 0b: start
 
-1. Greet the user in one line and show the four steps as a short numbered list in plain words (cost codes, catalogue (optional), Cost Assistant, job template). Say you will do them **one at a time** and check with them after each one.
+1. Greet the user in one line and show the six steps as a short numbered list in plain words (your logo and brand colours, cost codes, catalogue (optional), Cost Assistant, job template, your first project from an estimate). Say you will do them **one at a time** and check with them after each one.
 2. Use **https://app.readyteam.ai/**. Do not ask about the site; use the staging site only if the user mentions it. Open ReadyTeam in a new Chrome tab. If it shows a login page, ask the user to sign in there and reply "done".
 
-Do **not** ask for the company name. The imports go into the company the user is signed in to. Read its name from ReadyTeam (for example the "<Company> / Import Your Data" title) and use it only for the progress log.
+Do **not** ask for the company name. Everything goes into the company the user is signed in to. Read its name from ReadyTeam (for example the "<Company> / Import Your Data" title) and use it only for the progress log.
 
 Do **not** ask for all the files up front. Ask for each file only when its step starts.
 
@@ -48,29 +50,33 @@ Do **not** ask for all the files up front. Ask for each file only when its step 
 
 Do the steps one by one, never several together. For every step, go through this in order and wait for the user where it says so:
 
-1. **Announce it:** "Step N of 4: <step name>." Say in one or two plain sentences what this step adds to ReadyTeam and why it comes now.
+1. **Announce it:** "Step N of 6: <step name>." Say in one or two plain sentences what this step adds to ReadyTeam and why it comes now.
 2. **Ask for the file:** "Please attach your <file> file." For an optional step, add "or say skip". Wait. If they skip, mark it skipped and go to the next step.
 3. **Check the file:** read it and tell them what you found: number of rows, two or three example rows, and anything you had to change or could not use. Ask any question the step's skill needs answered.
 4. **Get a yes:** "I will now import N rows into <step name>. Shall I go ahead?" Wait for a yes.
 5. **Import:** follow the step's skill. While it runs, give a short update at each stage (opening Import Your Data, entering the rows, checking for errors, importing).
 6. **Report:** say what was imported (rows, and the "Completed" status) or what went wrong, in plain words. Update the progress log.
-7. **Move on:** show progress (for example "Done: 1, 2. Next: 3 of 4, Cost Assistant") and ask "Ready for the next step?" Wait for a yes before announcing the next step.
+7. **Move on:** show progress (for example "Done: 1, 2. Next: 3 of 6, Catalogues") and ask "Ready for the next step?" Wait for a yes before announcing the next step.
+
+Steps 1 and 6 are not imports, so for points 3 to 6 follow their own skills instead: Brand setup shows the colours it picked from the logo and asks before saving; Estimation reads the estimate, creates the project and loads the estimate, asking before each change. Points 1, 2 and 7 still apply.
 
 ## The order and why
 
 Run the steps strictly in this order. Later steps use what earlier steps created.
 
-1. **Cost Code** - `readyteam-import-cost-code`. Everything else refers to cost codes.
-2. **Catalogues** (optional) - `readyteam-import-catalogues`. Skip when the user has no catalogue file.
-3. **Cost Assistant** - `readyteam-import-cost-assistant`. After cost codes (and catalogues, if any).
-4. **Job Assistant** - `readyteam-import-job-assistant`. Its User, Trade Types and Label values must already exist in the company; the import skill explains how non-matching values are handled.
+1. **Brand setup** (skip if no logo) - `readyteam-brand-setup`. The company's logo and colours go on first, so everything made later (documents, estimates, the first project) already carries the brand. Ask for the logo; if the user has none to hand, skip it and offer it again at the end.
+2. **Cost Code** - `readyteam-import-cost-code`. Everything after it refers to cost codes.
+3. **Catalogues** (optional) - `readyteam-import-catalogues`. Skip when the user has no catalogue file.
+4. **Cost Assistant** - `readyteam-import-cost-assistant`. After cost codes (and catalogues, if any).
+5. **Job Assistant** - `readyteam-import-job-assistant`. Its User, Trade Types and Label values must already exist in the company; the import skill explains how non-matching values are handled.
+6. **Estimation** (skip if no estimate) - `readyteam-estimation`. Creates the first project from an estimate file and loads that estimate into the project's Cost Assistant. Last, because it uses the cost codes and Cost Assistant set up before it. Ask: "Do you have an estimate for a job you'd like to set up as your first project? Attach it, or say skip."
 
 ## Rules between steps
 
-- Finish one step completely (import done and confirmed) before starting the next. The import skills each handle one module per run.
-- Get a yes before every Import Data click and before every new step, even if the user said "go ahead" earlier. The user should always know which step is running.
-- **Stop on failure.** If a required step fails or its Invalid tab cannot be cleared, stop the flow, report what happened, and ask the user. Do not continue to later steps on top of a failed one. A failed optional step (Catalogues) may be skipped if the user agrees.
-- Never re-run a step that already imported, unless the user asks: importing twice creates duplicates.
+- Finish one step completely (import done and confirmed) before starting the next. The skills each handle one thing per run.
+- Get a yes before every Import Data click, every save, and before every new step, even if the user said "go ahead" earlier. The user should always know which step is running.
+- **Stop on failure.** If a required step fails or its Invalid tab cannot be cleared, stop the flow, report what happened, and ask the user. Do not continue to later steps on top of a failed one. A failed optional step (Brand setup, Catalogues, Estimation) may be skipped if the user agrees.
+- Never re-run a step that already imported, unless the user asks: importing twice creates duplicates, and running Estimation twice creates two projects.
 - Use the same browser tab and site throughout; if a login page appears, ask the user to sign in.
 
 ## Progress log
@@ -79,21 +85,18 @@ Keep a progress log so onboarding can resume in a later chat. If you can write f
 
 ```
 Company: <name from ReadyTeam>   Site: <url>   Started: <date>
-1 Cost Code       - done, 96 rows, <date>
-2 Catalogues      - skipped (no file)
-3 Cost Assistant  - done, 40 rows
-4 Job Assistant   - failed: 2 invalid rows (User), waiting on user
+1 Brand setup     - done, logo + #ff7a00 / #1b2a4b, <date>
+2 Cost Code       - done, 96 rows, <date>
+3 Catalogues      - skipped (no file)
+4 Cost Assistant  - done, 40 rows
+5 Job Assistant   - failed: 2 invalid rows (User), waiting on user
+6 Estimation      - not started
 ```
 
 When resuming, read the log (or ask the user for it), confirm with the user which steps are already done in ReadyTeam, and continue from the first step that is not done.
 
 ## Finish
 
-When all steps are done or skipped, give a short summary: each step with rows imported or "skipped", and anything the user must follow up on (removed trade types, users left empty, items left out).
+When all steps are done or skipped, give a short summary: each step with what was done (rows imported, colours set, project created) or "skipped", and anything the user must follow up on (removed trade types, users left empty, items left out).
 
-Then offer the two follow-ups, one at a time, in the same ReadyTeam tab. For each, use the installed skill, or read it from `https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/<skill-name>/SKILL.md` if it is not installed.
-
-1. Ask: "Your data is in ReadyTeam. Would you like to set up your company branding next? Send me your logo and I'll add it and set your brand colours from it." On a yes, use `readyteam-brand-setup`. If they say no, move on.
-2. Then ask: "Would you like me to show you how to create your first project?" On a yes, use `readyteam-create-project-guide`.
-
-Add both to the progress log as done or skipped.
+If Brand setup was skipped, offer it once more: "Would you like to add your logo and brand colours now?" On a yes, use `readyteam-brand-setup` in the same tab.
