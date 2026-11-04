@@ -22,12 +22,12 @@ Where it lives: the project's **Cost Assistant** grid.
 
 1. Load the Claude in Chrome tools in one ToolSearch call if they are deferred, including `javascript_tool`. Use the ReadyTeam tab that is already open. If a login page shows, ask the user to sign in and reply "done".
 2. Make sure the tab shows the project's **Cost Assistant** with estimate rows (not Quick Start). If not, ask which project and open its Cost Assistant.
-3. Run the full text of the guide script below, unchanged, in that tab with `javascript_tool`.
+3. Run the full text of the guide script below, unchanged, in that tab with `javascript_tool`. Then load the specification guide so it follows on when the user clicks Done: get the guide script from `readyteam-specification-guide` (or read it from `https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-specification-guide/SKILL.md`), run it unchanged in the same tab, then run `window.__rtSpecGuide.afterAllowances()`.
 4. Tell the user in two or three plain lines:
    "I've put a guide on your ReadyTeam screen. It opens a category and scrolls to the Allowance column for you. Double-click an item's Allowance cell and choose PC (Prime Cost) or PS (Provisional Sum). Click Done in the guide when you've finished, or tell me if you get stuck."
 5. Wait for the user. Do not poll or take screenshots while they work.
 6. When they reply, run `window.__rtAllowGuide && window.__rtAllowGuide.status()` once with `javascript_tool`:
-   - `finished: true`: tell the user how many allowances are set (`setCount`, counting the rows on screen) and that they can change any of them later the same way.
+   - `finished: true`: tell the user how many allowances are set (`setCount`, counting the rows on screen) and that they can change any of them later the same way. If the specification guide was loaded, also run `window.__rtSpecGuide && window.__rtSpecGuide.status()` and follow step 6 of `readyteam-specification-guide`.
    - `waitingForEstimate: true`: the estimate isn't in yet; help with the estimate guide first.
    - not finished: ask what they see, or take one screenshot, and explain the next step in plain words. Run the script again if they want the guide back (it restarts cleanly).
 
