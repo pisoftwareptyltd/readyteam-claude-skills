@@ -23,12 +23,12 @@ Where it lives: the project's **Cost Assistant** grid.
 
 1. Load the Claude in Chrome tools in one ToolSearch call if they are deferred, including `javascript_tool`. Use the ReadyTeam tab that is already open. If a login page shows, ask the user to sign in and reply "done".
 2. Make sure the tab shows the project's **Cost Assistant** with estimate rows. If not, ask which project and open its Cost Assistant.
-3. Run the full text of the guide script below, unchanged, in that tab with `javascript_tool`.
+3. Run the full text of the guide script below, unchanged, in that tab with `javascript_tool`. Then load the selection guide so it follows on when the user clicks Done: get the guide script from `readyteam-selection-guide` (or read it from `https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-selection-guide/SKILL.md`), run it unchanged in the same tab, then run `window.__rtSelGuide.afterSpecifications()`.
 4. Tell the user in two or three plain lines:
    "I've put a guide on your ReadyTeam screen. Click the + on an item, choose Specification, pick a note such as Inclusions, and type it. It saves by itself when you close it. Click Done in the guide when you've finished, or tell me if you get stuck."
 5. Wait for the user. Do not poll or take screenshots while they work.
 6. When they reply, run `window.__rtSpecGuide && window.__rtSpecGuide.status()` once with `javascript_tool`:
-   - `finished: true`: tell the user how many items got a specification (`savedCount`, items closed with text in a note) and that they can open any item's + > Specification to change it.
+   - `finished: true`: tell the user how many items got a specification (`savedCount`, items closed with text in a note) and that they can open any item's + > Specification to change it. If the selection guide was loaded, also run `window.__rtSelGuide && window.__rtSelGuide.status()` and follow step 6 of `readyteam-selection-guide`.
    - `waitingForAllowances: true`: the allowance step isn't finished yet; help with that first (the user clicks Done in the allowance guide).
    - not finished: ask what they see, or take one screenshot, and explain the next step in plain words. Run the script again if they want the guide back (it restarts cleanly).
 
