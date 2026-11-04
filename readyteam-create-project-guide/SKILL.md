@@ -9,19 +9,19 @@ The user creates the project themselves. You only put a guide on their ReadyTeam
 
 ## Steps
 
-The project guide and the estimate guide run back to back on screen: once the project is created, the estimate guide opens the project's **Cost Assistant** by itself and asks the user, on screen, how to start the estimate. The user does not have to come back to the chat in between.
+The project guide, the estimate guide and the allowance guide run back to back on screen: once the project is created, the estimate guide opens the project's **Cost Assistant** by itself and asks the user, on screen, how to start the estimate; once the estimate is in, the allowance guide takes over to set allowances (PC / PS). The user does not have to come back to the chat in between.
 
 1. Load the Claude in Chrome tools in one ToolSearch call if they are deferred, including `javascript_tool`. Use the ReadyTeam tab that is already open (for example from onboarding); otherwise call `tabs_context_mcp`, open a new tab and go to **https://app.readyteam.ai/** (the staging site only if the user says so). If a login page shows, ask the user to sign in and reply "done".
 2. Make sure the tab is on the ReadyTeam dashboard (the page with the orange **+ Add Project** button in the left sidebar). Navigate there if needed. No Create Project dialog should be open.
 3. Run the full text of the guide script below, unchanged, in that tab with `javascript_tool`. It returns "ReadyTeam guide started: ...".
-4. Unless the user asked only for a project with no estimate, also load the estimate guide so it follows on by itself: get the guide script from the `readyteam-estimation-guide` skill (or read it from `https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-estimation-guide/SKILL.md` if that skill is not installed), run its full text unchanged in the same tab, then run `window.__rtEstGuide.afterProject()`. It stays hidden until the project is created.
+4. Unless the user asked only for a project with no estimate, also load the estimate guide so it follows on by itself: get the guide script from the `readyteam-estimation-guide` skill (or read it from `https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-estimation-guide/SKILL.md` if that skill is not installed), run its full text unchanged in the same tab, then run `window.__rtEstGuide.afterProject()`. It stays hidden until the project is created. Then do the same with the allowance guide: get the guide script from `readyteam-allowance-guide` (or read it from `https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-allowance-guide/SKILL.md`), run it unchanged in the same tab, then run `window.__rtAllowGuide.afterEstimate()`. It stays hidden until the estimate is in.
 5. Tell the user in two or three plain lines, without waiting for anything else:
-   "I've put a guide on your ReadyTeam screen. Follow the orange highlight: it shows you where to click and what to type, one step at a time. Once your project is created, it opens Cost Assistant and asks how you'd like to start the estimate. Tell me when you're done, or if you get stuck."
+   "I've put a guide on your ReadyTeam screen. Follow the orange highlight: it shows you where to click and what to type, one step at a time. Once your project is created, it opens Cost Assistant, asks how you'd like to start the estimate, and then helps you set allowances. Tell me when you're done, or if you get stuck."
    (Without the estimate guide, say "Tell me when your project is created" instead of the last two sentences.)
 6. Wait for the user. Do not poll or take screenshots while they work.
-7. When they reply, run `JSON.stringify({project: window.__rtGuide && window.__rtGuide.status(), estimate: window.__rtEstGuide && window.__rtEstGuide.status()})` once with `javascript_tool`:
+7. When they reply, run `JSON.stringify({project: window.__rtGuide && window.__rtGuide.status(), estimate: window.__rtEstGuide && window.__rtEstGuide.status(), allowance: window.__rtAllowGuide && window.__rtAllowGuide.status()})` once with `javascript_tool`:
    - project not finished (`estimate.waitingForProject: true`, or `project.finished: false`): ask what they see, or take one screenshot, and explain the next step in plain words. Run both scripts again (and `afterProject()`) if they want the guide back; they restart cleanly.
-   - project created (`estimate.waitingForProject: false`, or `project.finished: true`): the project name is in `estimate.projectName`. From here, follow step 7 of `readyteam-estimation-guide` on the `estimate` status (estimate in, unsure, or still in progress).
+   - project created (`estimate.waitingForProject: false`, or `project.finished: true`): the project name is in `estimate.projectName`. From here, follow step 7 of `readyteam-estimation-guide` on the `estimate` status (estimate in, unsure, or still in progress). Once the estimate is in (`allowance.waitingForEstimate: false`), follow step 6 of `readyteam-allowance-guide` on the `allowance` status.
    - only the project guide was run and it is `finished: true`: take one screenshot to confirm the project page opened and tell the user the project name. Then, unless onboarding is running this step (it does the next step itself), offer: "Would you like help starting this project's estimate?" On a yes, use `readyteam-estimation-guide` in the same tab.
 
 ## The steps the guide shows
@@ -306,7 +306,12 @@ Checked on the live Create New Project dialog (Nov 2026), up to but not includin
     }
   }
 
-  const onKey = (e) => { if (e.key === 'Escape') stop(); };
+  // Escape closes the guide, but not when it is closing a dropdown or list in the dialog.
+  const onKey = (e) => {
+    if (e.key !== 'Escape') return;
+    if (e.target && e.target.closest && e.target.closest('mat-dialog-container, .cdk-overlay-pane, .ng-dropdown-panel, .pac-container, input, textarea')) return;
+    stop();
+  };
   const timer = setInterval(tick, 150);
   addEventListener('keydown', onKey, true);
 

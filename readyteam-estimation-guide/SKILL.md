@@ -23,13 +23,13 @@ Where it lives: open the project, then **Estimations > Cost Assistant**. A new p
 
 1. Load the Claude in Chrome tools in one ToolSearch call if they are deferred, including `javascript_tool`. Use the ReadyTeam tab that is already open. If a login page shows, ask the user to sign in and reply "done".
 2. Make sure the tab shows the project (its page with the **Estimations** section) or that project's Cost Assistant. If it is on another page, ask the user which project and open it. No popup should be open.
-3. Run the full text of the guide script below, unchanged, in that tab with `javascript_tool`. Do not ask in chat which option they want: on Quick Start the guide shows the question on screen, with a button for each option (**Copy from project**, **Import from Excel**, **Import from data setup**) and the three cards highlighted. (If the user already told you which option they want, run `window.__rtEstGuide.choose('copy')`, `'excel'` or `'datasetup'` to point straight at it.)
+3. Run the full text of the guide script below, unchanged, in that tab with `javascript_tool`. Then load the allowance guide so it follows on once the estimate is in: get the guide script from `readyteam-allowance-guide` (or read it from `https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-allowance-guide/SKILL.md`), run it unchanged in the same tab, then run `window.__rtAllowGuide.afterEstimate()`. Do not ask in chat which option they want: on Quick Start the guide shows the question on screen, with a button for each option (**Copy from project**, **Import from Excel**, **Import from data setup**) and the three cards highlighted. (If the user already told you which option they want, run `window.__rtEstGuide.choose('copy')`, `'excel'` or `'datasetup'` to point straight at it.)
 4. Tell the user in two or three plain lines, without waiting for anything else:
-   "I've put a guide on your ReadyTeam screen. Choose how you'd like to start the estimate, then follow the orange highlight one step at a time. Tell me when your estimate is in, or if you get stuck."
+   "I've put a guide on your ReadyTeam screen. Choose how you'd like to start the estimate, then follow the orange highlight one step at a time. Once the estimate is in, it helps you set allowances. Tell me when you're done, or if you get stuck."
 5. If they pick **Import from Excel**, you may add: "When the importer opens, upload your file and click Import Data at the top right. Or attach the file here and I can do the import for you."
 6. Wait for the user. Do not poll or take screenshots while they work.
 7. When they reply, run `window.__rtEstGuide && window.__rtEstGuide.status()` once with `javascript_tool`:
-   - `finished: true`: take one screenshot to confirm the estimate is showing in Cost Assistant, and tell the user in a line what came in (for example "Your estimate was copied from P1004").
+   - `finished: true`: take one screenshot to confirm the estimate is showing in Cost Assistant, and tell the user in a line what came in (for example "Your estimate was copied from P1004"). If the allowance guide was loaded, also run `window.__rtAllowGuide && window.__rtAllowGuide.status()` and follow step 6 of `readyteam-allowance-guide`.
    - `unsure: true`: the popup or importer closed after Continue / Add / Import, but the page did not change as expected. Take one screenshot, tell the user what you see, and help from there.
    - `waitingForProject: true`: the project isn't created yet; help with the Create Project guide.
    - not finished: ask what they see, or take one screenshot, and explain the next step in plain words. Run the script again if they want the guide back (it restarts cleanly).
@@ -171,6 +171,32 @@ Tested live on a project (Nov 2026), up to but not including the final click: fr
     return box;
   }
 
+  // Allowances: in the Cost Assistant grid (ag-grid), column "Allowance" (col-id allowance_type_id).
+  const allowanceHeader = () => [...document.querySelectorAll('.ag-header-cell[col-id=allowance_type_id]')].find(visible) || null;
+  const hasEstimateGrid = () => !!document.querySelector('.ag-header-cell[col-id=allowance_type_id]') && !quickStart();
+  const itemRows = () => [...document.querySelectorAll('.ag-center-cols-container .ag-row:not(.ag-row-group)')].filter(visible);
+  const findCollapsed = () => {
+    const icon = [...document.querySelectorAll('.ag-group-contracted')].find(visible);
+    return icon ? (icon.closest('.ag-cell') || icon) : null;
+  };
+  const editingCell = () => document.querySelector('.ag-cell-inline-editing[col-id=allowance_type_id], .ag-cell-popup-editing[col-id=allowance_type_id]');
+  function allowanceCell() {
+    for (const r of itemRows()) {
+      const c = r.querySelector('[col-id=allowance_type_id]');
+      if (c && visible(c)) return c;
+    }
+    return null;
+  }
+  // Scroll the grid sideways so the Allowance column is in view (the column is far to the right).
+  function scrollToAllowance() {
+    const h = document.querySelector('.ag-header-cell[col-id=allowance_type_id]');
+    if (!h) return;
+    const left = parseFloat(h.style.left) || 0;
+    for (const v of document.querySelectorAll('.ag-body-horizontal-scroll-viewport, .ag-center-cols-viewport')) {
+      v.scrollLeft = Math.max(0, left - 300);
+    }
+  }
+
   const continueEstimate = () => {
     const b = findButton(/^continue estimate$/i);
     return b && !b.disabled && !/pointer-events-none|disabled/.test(b.className) ? b : null;
@@ -210,11 +236,20 @@ Tested live on a project (Nov 2026), up to but not including the final click: fr
       text: () => 'Click <b>Continue Estimate</b>.' },
     wait: { find: () => null,
       text: () => 'Loading your estimate...' },
+    allowExpand: { find: findCollapsed,
+      text: () => '<b>Your estimate is in.</b> Now set your <b>allowances</b>. Click the arrow next to a category to open it and see its items.' },
+    allowCell: { find: () => editingCell() || (allowanceSet ? allowanceHeader() : allowanceCell() || allowanceHeader()), light: () => true, aside: true,
+      text: () => editingCell()
+        ? 'Choose <b>PC (Prime Cost)</b> or <b>PS (Provisional Sum)</b> for this item. Choose the empty line if it is not an allowance.'
+        : allowanceSet
+        ? 'Saved. Do the same for any other item that is an allowance: <b>double-click</b> its Allowance cell. Open other categories with their arrows. Click <b>Done</b> when you have finished.'
+        : 'This is the <b>Allowance</b> column. For each item that is an allowance, <b>double-click</b> its cell and choose PC (Prime Cost) or PS (Provisional Sum).' },
   };
   const ORDER = {
     copy: ['open', 'choose', 'copyProject', 'copyWhat', 'copyGo'],
     datasetup: ['open', 'choose', 'setupPick', 'setupGo'],
     excel: ['open', 'choose', 'excel'],
+    allow: ['allowExpand', 'allowCell'],
   };
 
   // Overlay elements.
@@ -255,6 +290,10 @@ Tested live on a project (Nov 2026), up to but not including the final click: fr
   let autoOpen = false;           // after the project is created, open Cost Assistant for the user
   let autoSince = 0;
   let openClickedAt = 0;
+  let allowStage = false;         // estimate is in: guide the allowances
+  let allowanceSet = false;       // the user has set at least one allowance
+  let allowancesDone = false;
+  let wasEditing = false;
 
   function render(html, buttons) {
     const key = html + '|' + buttons.map((b) => b.label).join(',');
@@ -330,7 +369,9 @@ Tested live on a project (Nov 2026), up to but not including the final click: fr
     unsure = !sure;
     spot.style.display = 'none';
     render(sure
-      ? '<b>Done.</b> Your estimate is in Cost Assistant. You can now review the items, quantities and prices.'
+      ? (allowStage
+        ? '<b>Done.</b> Your estimate is in Cost Assistant' + (allowancesDone ? ' and your allowances are set.' : '. You can set allowances any time in the Allowance column.')
+        : '<b>Done.</b> Your estimate is in Cost Assistant. You can now review the items, quantities and prices.')
       : '<b>Nearly there.</b> If your estimate isn\'t showing yet, tell Claude what you see.',
       [{ label: 'Close', primary: true, onClick: stop }]);
     place(null);
@@ -371,6 +412,17 @@ Tested live on a project (Nov 2026), up to but not including the final click: fr
       go('open');
     }
 
+    if (allowStage) {
+      // Allowances: open a category, then the Allowance column (scrolled into view for the user).
+      const editing = !!editingCell();
+      if (wasEditing && !editing) allowanceSet = true;
+      wasEditing = editing;
+      if (itemRows().length) {
+        if (step !== 'allowCell') { go('allowCell'); scrollToAllowance(); }
+      } else {
+        go('allowExpand');
+      }
+    } else {
     const open = copyDialog() ? 'copy' : setupDialog() ? 'datasetup' : importer() ? 'excel' : null;
 
     if (open) {
@@ -398,7 +450,7 @@ Tested live on a project (Nov 2026), up to but not including the final click: fr
       if (confirmedAt) {
         const waited = Date.now() - confirmedAt;
         if (continueEstimate()) go('continueEst');
-        else if (!quickStart()) { if (waited > 800) return finish(true); }
+        else if (!quickStart()) { if (waited > 800) { allowStage = true; confirmedAt = 0; closedImporter = false; } }
         else if (closedImporter && waited > 3000) {
           // Importer closed but Quick Start is still there: nothing imported, back to the choice.
           confirmedAt = 0; closedImporter = false; go('choose');
@@ -406,6 +458,9 @@ Tested live on a project (Nov 2026), up to but not including the final click: fr
       } else if (quickStart()) {
         autoOpen = false;
         go('choose');
+      } else if (hasEstimateGrid()) {
+        // The project already has an estimate: go straight to allowances.
+        allowStage = true;
       } else if (autoOpen) {
         // Open the new project's Cost Assistant for the user; if the project page isn't showing, point to the project.
         const lf = costAssistantLeaf();
@@ -421,18 +476,21 @@ Tested live on a project (Nov 2026), up to but not including the final click: fr
         go('open');
       }
     }
+    }
 
     const s = S[step];
-    const list = ORDER[choice || 'copy'];
+    const list = step.startsWith('allow') ? ORDER.allow : ORDER[choice || 'copy'];
     const n = list.indexOf(step);
     const head = n >= 0
-      ? '<div style="font-size:12px;color:#57606a;margin-bottom:4px">Step ' + (n + 1) + ' of ' + list.length + (choice ? ' · ' + NAME[choice] : '') + '</div>'
+      ? '<div style="font-size:12px;color:#57606a;margin-bottom:4px">Step ' + (n + 1) + ' of ' + list.length + (step.startsWith('allow') ? ' · Allowances' : choice ? ' · ' + NAME[choice] : '') + '</div>'
       : '';
     const buttons = [];
     if (s.next) {
       const nextId = list[n + 1];
       buttons.push({ label: 'Next', primary: true, onClick: () => nextId && go(nextId) });
     }
+    if (step === 'allowCell') buttons.push({ label: 'Done', primary: true, onClick: () => { allowancesDone = true; finish(true); } });
+    if (step === 'allowExpand') buttons.push({ label: 'Skip allowances', onClick: () => finish(true) });
     if (step === 'choose' && !choice) {
       for (const k of Object.keys(CARD)) buttons.push({ label: NAME[k], block: true, onClick: () => pickOption(k) });
     }
@@ -454,7 +512,7 @@ Tested live on a project (Nov 2026), up to but not including the final click: fr
       if (Date.now() < focusUntil && !target.contains(document.activeElement)) focusField(target);
       if (r.top < 0 || r.bottom > innerHeight) target.scrollIntoView({ block: 'center', behavior: 'smooth' });
       render(head + s.text(), buttons);
-      place(target, false, s.beside && s.beside());
+      place(target, false, s.beside ? s.beside() : s.aside ? target : null);
     } else {
       spot.style.display = 'none';
       if (s.corner) {
@@ -469,7 +527,14 @@ Tested live on a project (Nov 2026), up to but not including the final click: fr
     }
   }
 
-  const onKey = (e) => { if (e.key === 'Escape') stop(); };
+  // Escape closes the guide, but not when it is closing something in ReadyTeam (a dropdown, grid editor or popup).
+  const onKey = (e) => {
+    if (e.key !== 'Escape') return;
+    const t = e.target && e.target.closest ? e.target : null;
+    if (t && t.closest('.ag-root-wrapper, .ag-popup, .ag-rich-select-list, mat-dialog-container, .ng-dropdown-panel, ng-select, input, textarea')) return;
+    if (editingCell() || copyDialog() || setupDialog()) return;
+    stop();
+  };
   const timer = setInterval(tick, 150);
   addEventListener('keydown', onKey, true);
   document.addEventListener('click', onClick, true);
@@ -487,13 +552,15 @@ Tested live on a project (Nov 2026), up to but not including the final click: fr
     closedByUser: false,
     choose: (c) => { if (CARD[c]) { choice = c; shownKey = ''; } return 'Guide set to ' + (NAME[c] || 'any option'); },
     // Run right after the Create Project guide: wait for the project, then open its Cost Assistant by itself.
+    // Start at the allowances (the project's estimate is already in).
+    allowances: () => { allowStage = true; shownKey = ''; return 'Guide set to allowances'; },
     afterProject: () => {
       waitingForProject = true;
       tip.style.display = 'none';
       spot.style.display = 'none';
       return 'Estimate guide waiting for the project to be created';
     },
-    status: () => ({ step, choice, finished, unsure, waitingForProject, projectName, closedByUser: window.__rtEstGuide.closedByUser, url: location.href }),
+    status: () => ({ step, choice, finished, unsure, waitingForProject, projectName, allowStage, allowanceSet, allowancesDone, closedByUser: window.__rtEstGuide.closedByUser, url: location.href }),
     check: () => Object.keys(S).map((k) => k + ':' + (S[k].find() ? 'found' : '-')).join(' '),
   };
   tick();
