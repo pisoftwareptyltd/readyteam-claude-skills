@@ -1,6 +1,6 @@
 ---
 name: readyteam-create-project-guide
-description: Show the user how to create a project in ReadyTeam with an on-screen guide that highlights each button and field in their Chrome tab (Add Project, Project Name, Document Prefix, Home Address, Client, Create Project). The user does the clicking and typing; the guide moves on by itself. Use when the user asks how to create a project, or wants to be shown or walked through creating a project without an estimate file.
+description: Show the user how to create a project in ReadyTeam with an on-screen guide that highlights each button and field in their Chrome tab (Add Project, Project Name, Document Prefix, Home Address, Client, Create Project). The user does the clicking and typing; the guide moves on by itself. Use when the user asks how to create a project, or wants to be shown or walked through creating a project, or as part of ReadyTeam onboarding.
 ---
 
 # ReadyTeam: guide the user to create a project
@@ -16,7 +16,7 @@ The user creates the project themselves. You only put a guide on their ReadyTeam
    "I've put a guide on your ReadyTeam screen. Follow the orange highlight: it shows you where to click and what to type, one step at a time. Tell me when your project is created, or if you get stuck."
 5. Wait for the user. Do not poll or take screenshots while they work.
 6. When they reply, run `window.__rtGuide && window.__rtGuide.status()` once with `javascript_tool`:
-   - `finished: true`: the project was created. Take one screenshot to confirm the project page opened, and tell the user the project name shown.
+   - `finished: true`: the project was created. Take one screenshot to confirm the project page opened, and tell the user the project name shown. Then, unless onboarding is running this step (it does the next step itself), ask: "Would you like help starting this project's estimate?" On a yes, use `readyteam-estimation-guide` (or read it from `https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-estimation-guide/SKILL.md` if it is not installed) in the same tab.
    - not finished: ask what they see, or take one screenshot to understand where they are, and explain the next step in plain words. Run the script again if they want the guide back (it restarts cleanly).
 
 ## The steps the guide shows
