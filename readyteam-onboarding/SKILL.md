@@ -91,4 +91,9 @@ When resuming, read the log (or ask the user for it), confirm with the user whic
 
 When all steps are done or skipped, give a short summary: each step with rows imported or "skipped", and anything the user must follow up on (removed trade types, users left empty, items left out).
 
-Then ask: "Your data is in ReadyTeam. Would you like me to show you how to create your first project?" On a yes, use the `readyteam-create-project-guide` skill (or read it from `https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-create-project-guide/SKILL.md` if it is not installed) in the same ReadyTeam tab.
+Then offer the two follow-ups, one at a time, in the same ReadyTeam tab. For each, use the installed skill, or read it from `https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/<skill-name>/SKILL.md` if it is not installed.
+
+1. Ask: "Your data is in ReadyTeam. Would you like to set up your company branding next? Send me your logo and I'll add it and set your brand colours from it." On a yes, use `readyteam-brand-setup`. If they say no, move on.
+2. Then ask: "Would you like me to show you how to create your first project?" On a yes, use `readyteam-create-project-guide`.
+
+Add both to the progress log as done or skipped.
