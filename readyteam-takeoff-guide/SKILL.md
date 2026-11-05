@@ -17,6 +17,13 @@ Where it lives: the project's **Cost Assistant** grid.
 - **Close** returns to the grid; the item's Qty follows the measurement.
 - **Process** in Takeoff Measurement opens the takeoff screen for the ticked measurements (an item's own measurement is ticked when it has one).
 
+## Asking the user
+
+- **Buttons for every question with set answers.** When this chat has a multiple-choice question tool (for example `AskUserQuestion`, or an "ask the user" tool that shows options), use it for every question whose answers you can list: one question per call, 2 to 4 short options (a few words each, the recommended one first), each with a one-line description. The user can still type their own answer. Without such a tool, end the message with a short numbered list of the same options and say they can reply with the number.
+- **Files: say exactly what and how.** When you need a file, say which file, what it looks like, and how to attach it: "Tap **+** below the message box, then **Upload a file**, and choose your <file> (.xlsx or .csv)." Ask it as a button question with options such as **I've attached it**, **I don't have one** and **Skip**. Claude cannot show an upload button in the chat; the **+** is the upload.
+- **Do the work yourself.** Once the user has given a file or a choice, do every ReadyTeam click, upload, typing and navigation yourself. Reuse what you already have in this chat (the logo, the brand colours, the company name, earlier answers) instead of asking again. Ask only for what you cannot get or decide: files only the user has, real choices, and one yes before anything is saved, imported or uploaded.
+- **One yes, as a button.** Before a save, import or upload, show what will change and ask once, with options such as **Go ahead**, **Show me first** and **Not now**.
+
 ## Steps
 
 **Right after the selection guide** (the usual way, also in onboarding): the create-project, estimation, allowance, specification or selection skill loads this guide too and calls `window.__rtTakeoffGuide.afterSelections()`. It waits, hidden, until the selection guide is finished (the user clicks Done or Skip there), then takes over by itself. Nothing else to do here until the user replies: go to step 5.
@@ -28,7 +35,7 @@ Where it lives: the project's **Cost Assistant** grid.
 3. Run the full text of the guide script below, unchanged, in that tab with `javascript_tool`.
 4. Tell the user in two or three plain lines:
    "I've put a guide on your ReadyTeam screen. Click the ruler icon in an item's Qty, add a measurement, upload your plan PDF, then choose Area and draw on the plan. Have your plan PDF ready. Tell me when you've finished, or if you get stuck."
-5. Wait for the user. Do not poll or take screenshots while they work. Uploading and drawing take time.
+5. Then ask, as buttons: "Tell me when you've finished." Options: **I'm done** · **I'm stuck** · **Skip this part**. Wait for the user. Do not poll or take screenshots while they work. Uploading and drawing take time.
 6. When they reply, run `window.__rtTakeoffGuide && window.__rtTakeoffGuide.status()` once with `javascript_tool`:
    - `finished: true`: tell the user the measured total (`total` and `uom`) and that the item's Qty now follows it; they can open the ruler icon again to add or change measurements.
    - `waitingForSelections: true`: the selection step isn't finished yet; help with that first.

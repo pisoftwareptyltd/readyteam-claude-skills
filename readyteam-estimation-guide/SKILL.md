@@ -15,6 +15,13 @@ Where it lives: open the project, then **Estimations > Cost Assistant**. A new p
 
 (Quick Start also has Create a blank estimate and the ReadyTeam templates. Mention them only if the user asks for something else.)
 
+## Asking the user
+
+- **Buttons for every question with set answers.** When this chat has a multiple-choice question tool (for example `AskUserQuestion`, or an "ask the user" tool that shows options), use it for every question whose answers you can list: one question per call, 2 to 4 short options (a few words each, the recommended one first), each with a one-line description. The user can still type their own answer. Without such a tool, end the message with a short numbered list of the same options and say they can reply with the number.
+- **Files: say exactly what and how.** When you need a file, say which file, what it looks like, and how to attach it: "Tap **+** below the message box, then **Upload a file**, and choose your <file> (.xlsx or .csv)." Ask it as a button question with options such as **I've attached it**, **I don't have one** and **Skip**. Claude cannot show an upload button in the chat; the **+** is the upload.
+- **Do the work yourself.** Once the user has given a file or a choice, do every ReadyTeam click, upload, typing and navigation yourself. Reuse what you already have in this chat (the logo, the brand colours, the company name, earlier answers) instead of asking again. Ask only for what you cannot get or decide: files only the user has, real choices, and one yes before anything is saved, imported or uploaded.
+- **One yes, as a button.** Before a save, import or upload, show what will change and ask once, with options such as **Go ahead**, **Show me first** and **Not now**.
+
 ## Steps
 
 **Right after the Create Project guide** (the usual way, also in onboarding): `readyteam-create-project-guide` loads this guide together with its own and calls `window.__rtEstGuide.afterProject()`. This guide then waits, hidden, until the project is created; opens the new project's **Cost Assistant** by itself (or, if ReadyTeam is not on the new project, points to it in the project list); and shows the choice on screen. Nothing else to do here until the user replies: go to step 7.
@@ -27,7 +34,7 @@ Where it lives: open the project, then **Estimations > Cost Assistant**. A new p
 4. Tell the user in two or three plain lines, without waiting for anything else:
    "I've put a guide on your ReadyTeam screen. Choose how you'd like to start the estimate, then follow the orange highlight one step at a time. Once the estimate is in, it helps you set allowances, add specifications and selections, and measure from your plan. Tell me when you're done, or if you get stuck."
 5. If they pick **Import from Excel**, you may add: "When the importer opens, upload your file and click Import Data at the top right. Or attach the file here and I can do the import for you."
-6. Wait for the user. Do not poll or take screenshots while they work.
+6. Then ask, as buttons: "Tell me when you've finished." Options: **I'm done** · **I'm stuck** · **Skip this part**. Wait for the user. Do not poll or take screenshots while they work.
 7. When they reply, run `window.__rtEstGuide && window.__rtEstGuide.status()` once with `javascript_tool`:
    - `finished: true`: take one screenshot to confirm the estimate is showing in Cost Assistant, and tell the user in a line what came in (for example "Your estimate was copied from P1004"). If the allowance guide was loaded, also run `window.__rtAllowGuide && window.__rtAllowGuide.status()` and follow step 6 of `readyteam-allowance-guide`.
    - `unsure: true`: the popup or importer closed after Continue / Add / Import, but the page did not change as expected. Take one screenshot, tell the user what you see, and help from there.

@@ -1,0 +1,224 @@
+<title>ReadyTeam Setup Progress</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: fixed dark rail on the left (logo, company, phase list), the step list on a flat light ground. Rail becomes a top band on phones. */
+:root {
+  --ground: #FFFFFF;
+  --surface: #F4F4F4;
+  --line: #E5E5E5;
+  --ink: #151515;
+  --muted: #6F6F6F;
+  --faint: #B1B1B1;
+  --done: #000000;
+  --rail: #0D0D0D;
+  --rail-ink: #FFFFFF;
+  --rail-muted: rgba(255,255,255,.56);
+  --rail-line: rgba(255,255,255,.16);
+  --coral: #E8604C;
+  --coral-tint: #FCEDEA;
+  --display: "Barlow Condensed", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #151515; --surface: #232323; --line: rgba(255,255,255,.14); --ink: #F4F4F4; --muted: #B1B1B1;
+    --faint: #6F6F6F; --done: #FFFFFF; --coral-tint: rgba(232,96,76,.14); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #151515; --surface: #232323; --line: rgba(255,255,255,.14); --ink: #F4F4F4; --muted: #B1B1B1;
+  --faint: #6F6F6F; --done: #FFFFFF; --coral-tint: rgba(232,96,76,.14); color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { min-height: 100%; }
+body { background: var(--ground); color: var(--ink); font: 400 14px/1.5 var(--body); }
+
+.app { display: grid; grid-template-columns: 236px minmax(0, 1fr); min-height: 100vh; }
+
+/* Rail */
+.rail { background: var(--rail); color: var(--rail-ink); padding: 28px 24px; display: flex; flex-direction: column; gap: 28px; }
+.rail .logo { width: 150px; height: auto; display: block; color: var(--rail-ink); }
+.eyebrow { font: 600 11px/1.2 var(--body); letter-spacing: .14em; text-transform: uppercase; }
+.rail .eyebrow { color: var(--rail-muted); }
+.rail .company { font: 600 15px/1.35 var(--body); margin-top: 6px; }
+.phases { display: flex; flex-direction: column; gap: 4px; list-style: none; margin: 0; padding: 0; }
+.phases li { display: flex; justify-content: space-between; gap: 8px; padding: 8px 10px; border-radius: 2px; color: var(--rail-muted); font-weight: 500; }
+.phases li.on { background: rgba(255,255,255,.10); color: var(--rail-ink); }
+.phases .n { font-variant-numeric: tabular-nums; }
+.rail .foot { margin-top: auto; color: var(--rail-muted); font-size: 12px; border-top: 1px solid var(--rail-line); padding-top: 16px; }
+
+/* Main */
+.main { padding-block: 40px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 860px; margin: 0 auto; padding-inline: 28px; display: flex; flex-direction: column; gap: 32px; }
+
+.head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px; }
+.head .eyebrow { color: var(--muted); }
+h1 { font: 700 52px/.94 var(--display); letter-spacing: -.01em; margin: 8px 0 0; text-wrap: balance; }
+.lede { color: var(--muted); margin: 10px 0 0; max-width: 52ch; }
+.stat { text-align: right; }
+.stat .big { font: 700 64px/.9 var(--display); font-variant-numeric: tabular-nums; }
+.stat .big span { color: var(--faint); }
+.stat .cap { color: var(--muted); font-size: 12px; margin-top: 4px; }
+
+.bar { display: grid; grid-template-columns: repeat(12, 1fr); gap: 4px; }
+.bar i { height: 6px; background: var(--line); }
+.bar i.done { background: var(--done); }
+.bar i.skip { background: repeating-linear-gradient(90deg, var(--faint) 0 3px, transparent 3px 6px); }
+.bar i.now { background: var(--ink); opacity: .45; }
+
+.sample { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); padding: 3px 8px; border-radius: 2px; color: var(--muted); font-size: 12px; }
+
+section { display: flex; flex-direction: column; gap: 10px; }
+section h2 { font: 600 20px/1.2 var(--display); letter-spacing: .01em; margin: 0; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+section h2 small { font: 500 12px/1 var(--body); color: var(--muted); }
+
+.steps { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--ink); }
+.step { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 14px; align-items: start; padding: 14px 12px; border-bottom: 1px solid var(--line); }
+.step .num { font: 700 22px/1 var(--display); color: var(--faint); font-variant-numeric: tabular-nums; padding-top: 2px; }
+.step .title { font-weight: 600; }
+.step .meta { color: var(--muted); font-size: 13px; margin-top: 2px; min-width: 0; overflow-wrap: anywhere; }
+.state { font: 600 10px/1 var(--body); letter-spacing: .14em; text-transform: uppercase; padding: 5px 7px; border-radius: 2px; white-space: nowrap; border: 1px solid var(--line); color: var(--muted); }
+.step.done .num { color: var(--done); }
+.step.done .state { background: var(--done); border-color: var(--done); color: var(--ground); }
+.step.skip .title { color: var(--muted); }
+.step.skip .state { border-style: dashed; }
+.step.next .title { color: var(--ink); }
+
+/* The one coral moment: the step that is waiting on the builder. */
+.step.now { background: var(--coral-tint); box-shadow: inset 3px 0 0 var(--coral); }
+.step.now .num { color: var(--ink); }
+.step.now .state { background: var(--ink); border-color: var(--ink); color: var(--ground); }
+.wait { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; font-size: 13px; }
+.wait b { font-weight: 600; }
+.wait .who { color: var(--muted); }
+
+.aop { color: var(--muted); font-size: 13px; border-left: 2px solid var(--line); padding-left: 12px; }
+
+@media (max-width: 760px) {
+  .app { grid-template-columns: 1fr; }
+  .rail { padding: 18px max(16px, env(safe-area-inset-left, 0px)) 16px; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 14px 24px; }
+  .rail .logo { width: 128px; }
+  .phases { flex-direction: row; flex-wrap: wrap; }
+  .rail .foot { display: none; }
+  .main { padding-block: 24px 48px; }
+  .wrap { padding-inline: 0; gap: 24px; }
+  h1 { font-size: 40px; }
+  .stat { text-align: left; }
+  .stat .big { font-size: 48px; }
+  .step { grid-template-columns: 30px minmax(0, 1fr); }
+  .step .state { grid-column: 2; justify-self: start; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .step { transition: background-color 120ms cubic-bezier(.2,0,0,1); }
+}
+</style>
+
+<script id="setup-data" type="application/json">
+{
+  "company": "Superior Building Solutions",
+  "started": "5 November 2026",
+  "agent": "Ollie",
+  "sample": true,
+  "steps": [
+    {"n": 1, "title": "Logo and brand colours", "state": "done", "note": "Logo uploaded · Primary #222222 · Secondary #FF7A00"},
+    {"n": 2, "title": "Cost codes", "state": "done", "note": "96 cost codes in 12 categories imported"},
+    {"n": 3, "title": "Catalogue", "state": "skipped", "note": "No catalogue file. You can add one later."},
+    {"n": 4, "title": "Cost Assistant items", "state": "done", "note": "40 items imported"},
+    {"n": 5, "title": "Quote presentation", "state": "now", "note": "Cover page made from your logo and colours. Then a tour of each page's settings.", "waiting": "accept the cover page in the chat."},
+    {"n": 6, "title": "Job template", "state": "todo", "note": "Your job schedule tasks, users and trade types"},
+    {"n": 7, "title": "Create the project", "state": "todo", "note": "Name, document prefix, address and client"},
+    {"n": 8, "title": "Start its estimate", "state": "todo", "note": "Copy from a project, import from Excel or from your data setup"},
+    {"n": 9, "title": "Set allowances", "state": "todo", "note": "PC (Prime Cost) or PS (Provisional Sum) per item"},
+    {"n": 10, "title": "Add specifications", "state": "todo", "note": "Inclusions, exclusions and notes on each item"},
+    {"n": 11, "title": "Add selections", "state": "todo", "note": "The products your client chooses"},
+    {"n": 12, "title": "Measure from your plan", "state": "todo", "note": "Upload your plan PDF and draw the area. Have it ready."}
+  ]
+}
+</script>
+<div class="app">
+  <aside class="rail" aria-label="Setup">
+    <svg class="logo" viewBox="0 0 1086 146" role="img" aria-label="ReadyTeam">
+      <path fill="currentColor" d="M173.388 125V29.1758H214.892C222.639 29.1758 229.213 30.4154 234.615 32.8945C240.016 35.3737 244.133 38.9818 246.966 43.7188C249.799 48.4557 251.216 54.2109 251.216 60.9844V61.1172C251.216 67.2708 249.733 72.8047 246.767 77.7188C243.801 82.6328 239.838 86.1966 234.88 88.4102L254.005 125H226.579L210.177 91.9961C210.044 91.9961 209.867 91.9961 209.646 91.9961C209.469 91.9961 209.269 91.9961 209.048 91.9961H197.759V125H173.388ZM197.759 74.332H212.169C216.508 74.332 219.939 73.1367 222.462 70.7461C225.03 68.3112 226.314 65.0794 226.314 61.0508V60.918C226.314 56.8893 225.008 53.6576 222.396 51.2227C219.784 48.7878 216.331 47.5703 212.036 47.5703H197.759V74.332ZM266.155 125V29.1758H331.831V48.7656H290.526V67.6914H329.374V86.0195H290.526V105.41H331.831V125H266.155ZM342.984 125L375.258 29.1758H397.703V50.0273H389.933L368.617 125H342.984ZM361.844 104.016L367.289 86.418H413.109L418.555 104.016H361.844ZM411.781 125L390.398 50.0273V29.1758H405.14L437.414 125H411.781ZM449.298 125V29.1758H488.278C497.885 29.1758 506.12 30.9909 512.982 34.6211C519.844 38.2513 525.09 43.5859 528.72 50.625C532.35 57.6198 534.165 66.2083 534.165 76.3906V76.5234C534.165 86.7057 532.35 95.4271 528.72 102.688C525.09 109.904 519.844 115.438 512.982 119.289C506.164 123.096 497.929 125 488.278 125H449.298ZM473.669 105.344H485.025C490.293 105.344 494.742 104.281 498.372 102.156C502.002 99.987 504.725 96.7773 506.54 92.5273C508.4 88.2773 509.329 82.9648 509.329 76.5898V76.457C509.329 70.4805 508.377 65.4336 506.474 61.3164C504.57 57.1992 501.781 54.1003 498.107 52.0195C494.476 49.8945 490.116 48.832 485.025 48.832H473.669V105.344ZM570.42 125V92.1289L537.416 29.1758H563.381L582.373 69.0195H582.905L601.83 29.1758H627.862L594.791 92.1289V125H570.42ZM661.992 125V48.7656H635.562V29.1758H712.726V48.7656H686.363V125H661.992ZM725.739 125V29.1758H791.415V48.7656H750.11V67.6914H788.958V86.0195H750.11V105.41H791.415V125H725.739ZM802.569 125L834.842 29.1758H857.287V50.0273H849.518L828.201 125H802.569ZM821.428 104.016L826.873 86.418H872.694L878.139 104.016H821.428ZM871.365 125L849.983 50.0273V29.1758H864.725L896.998 125H871.365ZM908.882 125V29.1758H937.105L961.078 91.7305H961.542L985.515 29.1758H1013.67V125H992.222V65.168H980.933L1004.77 31.832L968.25 125H954.304L917.781 31.832L941.621 65.168H930.332V125H908.882Z"/>
+      <path fill="currentColor" d="M0 73V146H10.95H21.924L38.6132 129.359C47.7862 120.234 55.5905 112.43 55.9747 112.045L56.647 111.325L67.3569 121.891C73.2401 127.678 81.1885 135.482 85.0066 139.204L91.9224 146H111.829H131.712L94.1316 108.563L56.551 71.127L41.927 85.6789C32.4418 95.1401 27.375 100.039 27.4711 99.6546C27.5431 99.3184 27.6151 83.0375 27.6151 63.4428V27.8553H64.1632H100.735L86.3273 42.2632L71.9194 56.6711L81.6447 66.3964C86.9997 71.7513 91.4421 76.0977 91.5141 76.0737C91.5862 76.0257 100.711 67.0447 111.757 56.0707L131.832 36.1398V18.0819V0H65.9161H0V73Z"/>
+    </svg>
+    <div>
+      <div class="eyebrow">Setting up</div>
+      <div class="company" id="company"></div>
+    </div>
+    <ul class="phases" id="phases"></ul>
+    <div class="foot" id="foot"></div>
+  </aside>
+
+  <main class="main">
+    <div class="wrap">
+      <div class="head">
+        <div>
+          <div class="eyebrow" id="eyebrow"></div>
+          <h1 id="headline">Getting you ready</h1>
+          <p class="lede">Your data goes in first, then your first project. One step at a time, and nothing moves until you accept it.</p>
+        </div>
+        <div class="stat" id="stat"></div>
+      </div>
+      <div class="bar" id="bar" aria-hidden="true"></div>
+      <section aria-labelledby="s1">
+        <h2 id="s1">Your company <small>Steps 1 to 6</small></h2>
+        <ol class="steps" id="list1"></ol>
+      </section>
+      <section aria-labelledby="s2">
+        <h2 id="s2">Your first project <small>Steps 7 to 12 · on screen in ReadyTeam</small></h2>
+        <ol class="steps" id="list2" start="7"></ol>
+      </section>
+      <p class="aop" id="aop"></p>
+    </div>
+  </main>
+</div>
+
+<script>
+(function () {
+  var D = { steps: [] };
+  try { D = JSON.parse(document.getElementById('setup-data').textContent); } catch (e) { /* keep empty */ }
+  var esc = function (t) { var d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML; };
+  var LABEL = { done: 'Done', skipped: 'Skipped', now: 'Now', failed: 'Needs you', todo: 'To do', next: 'Next' };
+  var steps = D.steps || [];
+  var agent = D.agent || 'Ollie';
+  var nowIdx = steps.findIndex(function (s) { return s.state === 'now' || s.state === 'failed'; });
+  steps.forEach(function (s, i) { if (s.state === 'todo' && nowIdx >= 0 && i === nowIdx + 1) s._next = true; });
+  var done = steps.filter(function (s) { return s.state === 'done'; }).length;
+  var skipped = steps.filter(function (s) { return s.state === 'skipped'; }).length;
+  var allDone = steps.length && steps.every(function (s) { return s.state === 'done' || s.state === 'skipped'; });
+
+  document.getElementById('company').textContent = D.company || '';
+  document.getElementById('eyebrow').textContent = 'Onboarding' + (D.started ? ' · ' + D.started : '');
+  if (allDone) document.getElementById('headline').textContent = 'You\u2019re ready';
+  document.getElementById('foot').textContent = agent + '\u2019s onboarding you. Every step waits for your OK in the chat.';
+  document.getElementById('stat').setAttribute('aria-label', done + ' of ' + steps.length + ' steps done');
+  document.getElementById('stat').innerHTML = '<div class="big">' + done + '<span>/' + steps.length + '</span></div><div class="cap">steps done' + (skipped ? ' · ' + skipped + ' skipped' : '') + '</div>';
+
+  var phase = function (a, b) { var p = steps.filter(function (s) { return s.n >= a && s.n <= b; }); return { all: p.length, done: p.filter(function (s) { return s.state === 'done' || s.state === 'skipped'; }).length, on: p.some(function (s) { return s.state === 'now' || s.state === 'failed'; }) }; };
+  var p1 = phase(1, 6), p2 = phase(7, 12);
+  document.getElementById('phases').innerHTML =
+    '<li class="' + (p1.on || (!p2.on && !allDone) ? 'on' : '') + '"><span>Your company</span><span class="n">' + p1.done + '/' + p1.all + '</span></li>' +
+    '<li class="' + (p2.on ? 'on' : '') + '"><span>Your first project</span><span class="n">' + p2.done + '/' + p2.all + '</span></li>';
+
+  document.getElementById('bar').innerHTML = steps.map(function (s) {
+    var c = s.state === 'done' ? 'done' : s.state === 'skipped' ? 'skip' : (s.state === 'now' || s.state === 'failed') ? 'now' : '';
+    return '<i class="' + c + '"></i>';
+  }).join('');
+
+  var row = function (s) {
+    var cls = s.state === 'done' ? 'done' : s.state === 'skipped' ? 'skip' : (s.state === 'now' || s.state === 'failed') ? 'now' : 'next';
+    var label = s._next ? LABEL.next : LABEL[s.state] || LABEL.todo;
+    var wait = (cls === 'now' && s.waiting) ? '<div class="wait"><b>Waiting on you:</b> ' + esc(s.waiting) + ' <span class="who">' + esc(agent) + '\u2019s holding here.</span></div>' : '';
+    return '<li class="step ' + cls + '"' + (cls === 'now' ? ' aria-current="step"' : '') + '><span class="num">' + esc(s.n) + '</span><div><div class="title">' + esc(s.title) +
+      '</div><div class="meta">' + esc(s.note) + '</div>' + wait + '</div><span class="state">' + esc(label) + '</span></li>';
+  };
+  document.getElementById('list1').innerHTML = steps.filter(function (s) { return s.n <= 6; }).map(row).join('');
+  document.getElementById('list2').innerHTML = steps.filter(function (s) { return s.n >= 7; }).map(row).join('');
+  document.getElementById('aop').innerHTML = 'This page follows your setup. ' + esc(agent) + ' updates it after each step, so you can come back any time and see where you\u2019re up to.' +
+    (D.sample ? ' <span class="sample">Sample data</span>' : '');
+})();
+</script>

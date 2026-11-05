@@ -16,11 +16,11 @@ Open Claude, start a new chat, paste this, and send it. Nothing to fill in: Clau
 ```text
 Install the ReadyTeam skills for me, then help me use them. I am not technical: use plain words, ask me one simple question at a time, and tell me exactly what to click or attach.
 
-1. Install these thirteen skills: readyteam-onboarding, readyteam-brand-setup, readyteam-import-cost-code, readyteam-import-catalogues, readyteam-import-cost-assistant, readyteam-import-job-assistant, readyteam-create-project-guide, readyteam-estimation-guide, readyteam-allowance-guide, readyteam-specification-guide, readyteam-selection-guide, readyteam-takeoff-guide, readyteam-estimation. Each one is a file at https://github.com/pisoftwareptyltd/readyteam-claude-skills/raw/main/downloads/<skill-name>.skill
+1. Install these fourteen skills: readyteam-onboarding, readyteam-brand-setup, readyteam-import-cost-code, readyteam-import-catalogues, readyteam-import-cost-assistant, readyteam-links-guide, readyteam-import-job-assistant, readyteam-create-project-guide, readyteam-estimation-guide, readyteam-allowance-guide, readyteam-specification-guide, readyteam-selection-guide, readyteam-takeoff-guide, readyteam-estimation. Each one is a file at https://github.com/pisoftwareptyltd/readyteam-claude-skills/raw/main/downloads/<skill-name>.skill
    Use the first way that works for you:
    a. If you can run commands on my computer and have a ~/.claude folder (Claude Code): download https://github.com/pisoftwareptyltd/readyteam-claude-skills (main branch) into a temporary folder, copy every top-level folder that contains a SKILL.md into ~/.claude/skills/ (replace older versions with the same name), and delete the temporary folder.
-   b. If you can download files and share files with me in this chat: download the thirteen .skill files and share all thirteen with me. Tell me to click "Save skill" on each one, and wait until I say done.
-   c. Otherwise: give me the thirteen download links above and tell me in simple steps how to add a skill in Claude's settings. Wait until I say done.
+   b. If you can download files and share files with me in this chat: download the fourteen .skill files and share all fourteen with me. Tell me to click "Save skill" on each one, and wait until I say done.
+   c. Otherwise: give me the fourteen download links above and tell me in simple steps how to add a skill in Claude's settings. Wait until I say done.
    Then tell me in one line that the install is finished and which skills are installed. If any is missing, say which one.
 
 2. Then start the ReadyTeam onboarding. New skills may only load in a new chat, so in this chat read https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-onboarding/SKILL.md and follow it exactly, reading any step's skill from https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/<skill-name>/SKILL.md when you reach that step.
@@ -40,6 +40,7 @@ Start a new chat and just say what you want. No links needed:
 | Import Cost Assistant items only | Import my Cost Assistant items into ReadyTeam. |
 | Import a job template only | Import my job template into ReadyTeam. |
 | Add your logo and brand colours | Set up my company branding in ReadyTeam. |
+| Set up your quote presentation and cover page | Set up my quote presentation in ReadyTeam. |
 | Show me how to create a project | Show me how to create a project in ReadyTeam. |
 | Show me how to start a project's estimate | Show me how to start the estimate for my project in ReadyTeam. |
 | Show me how to set allowances (PC / PS) | Show me how to set allowances on my project's estimate in ReadyTeam. |
@@ -72,15 +73,16 @@ I am not technical. Do one step at a time and tell me which step it is. Ask me o
 | 2 | Cost Code | `readyteam-import-cost-code` |
 | 3 | Catalogues (optional) | `readyteam-import-catalogues` |
 | 4 | Cost Assistant | `readyteam-import-cost-assistant` |
-| 5 | Job Assistant | `readyteam-import-job-assistant` |
-| 6 | Create Project (on-screen guide) | `readyteam-create-project-guide` |
-| 7 | Estimation (on-screen guide): Copy from project, Import from Excel or Import from data setup | `readyteam-estimation-guide` |
-| 8 | Allowances (on-screen guide): PC (Prime Cost) or PS (Provisional Sum) per item | `readyteam-allowance-guide` |
-| 9 | Specifications (on-screen guide): item + > Specification, notes such as Inclusions and Exclusions | `readyteam-specification-guide` |
-| 10 | Selections (on-screen guide): item + > Selection, question, then product | `readyteam-selection-guide` |
-| 11 | Takeoff (on-screen guide): Qty ruler icon, + Measurement, upload your plan, Area, draw | `readyteam-takeoff-guide` |
+| 5 | Quote Presentation (Links): cover page (yours, or one made from your logo and colours), then a tour of each page's settings | `readyteam-links-guide` |
+| 6 | Job Assistant | `readyteam-import-job-assistant` |
+| 7 | Create Project (on-screen guide) | `readyteam-create-project-guide` |
+| 8 | Estimation (on-screen guide): Copy from project, Import from Excel or Import from data setup | `readyteam-estimation-guide` |
+| 9 | Allowances (on-screen guide): PC (Prime Cost) or PS (Provisional Sum) per item | `readyteam-allowance-guide` |
+| 10 | Specifications (on-screen guide): item + > Specification, notes such as Inclusions and Exclusions | `readyteam-specification-guide` |
+| 11 | Selections (on-screen guide): item + > Selection, question, then product | `readyteam-selection-guide` |
+| 12 | Takeoff (on-screen guide): Qty ruler icon, + Measurement, upload your plan, Area, draw | `readyteam-takeoff-guide` |
 
-Steps 6 to 11 run back to back on screen: the project guide hands over to the estimate guide, then the allowance, specification, selection and takeoff guides, with no stop in between. Have your plan PDF ready for step 11.
+Steps 7 to 12 run back to back on screen: the project guide hands over to the estimate guide, then the allowance, specification, selection and takeoff guides, with no stop in between. Have your plan PDF ready for step 12.
 
 `readyteam-estimation` is not part of onboarding: use it on its own to have Claude create a project and load its estimate from one estimate file.
 

@@ -13,6 +13,13 @@ Where it lives: **Settings (gear icon, top right) > Company Profile > Company Br
 - **Primary Color** and **Secondary Color** (both required): a text field for the colour code, with a colour circle beside it;
 - the **Update Company Profile** button, which saves.
 
+## Asking the user
+
+- **Buttons for every question with set answers.** When this chat has a multiple-choice question tool (for example `AskUserQuestion`, or an "ask the user" tool that shows options), use it for every question whose answers you can list: one question per call, 2 to 4 short options (a few words each, the recommended one first), each with a one-line description. The user can still type their own answer. Without such a tool, end the message with a short numbered list of the same options and say they can reply with the number.
+- **Files: say exactly what and how.** When you need a file, say which file, what it looks like, and how to attach it: "Tap **+** below the message box, then **Upload a file**, and choose your <file> (.xlsx or .csv)." Ask it as a button question with options such as **I've attached it**, **I don't have one** and **Skip**. Claude cannot show an upload button in the chat; the **+** is the upload.
+- **Do the work yourself.** Once the user has given a file or a choice, do every ReadyTeam click, upload, typing and navigation yourself. Reuse what you already have in this chat (the logo, the brand colours, the company name, earlier answers) instead of asking again. Ask only for what you cannot get or decide: files only the user has, real choices, and one yes before anything is saved, imported or uploaded.
+- **One yes, as a button.** Before a save, import or upload, show what will change and ask once, with options such as **Go ahead**, **Show me first** and **Not now**.
+
 ## How to talk to the user
 
 The user is usually not technical. Use plain words, ask one question at a time, and never show file paths, code or tool names unless they ask.
@@ -21,7 +28,12 @@ The user is usually not technical. Use plain words, ask one question at a time, 
 
 ### 1. Get the logo
 
-Ask: "Please attach your company logo (an image file such as .png or .jpg)." Wait for it. A transparent .png gives the best result. Any common image type is fine: you convert it if needed.
+If the logo is already in this chat (attached earlier), use it and don't ask. Otherwise ask, as buttons:
+
+"Please attach your company logo: tap **+** below the message box, then **Upload a file**. A .png with a clear background works best; any image is fine."
+Options: **I've attached it** · **I don't have one** (skip branding for now) · **Use the logo already in ReadyTeam** (only colours).
+
+Wait for it.
 
 If the user can only paste a link to their logo or website, ask them to save the image and attach it instead: the upload needs a file they shared with this chat.
 
@@ -45,16 +57,9 @@ If Python cannot run, look at the logo yourself and choose the two colours the s
 
 Look at the logo yourself as well, to check the script's choice makes sense (for example, a photo-style logo can give odd colours). If it doesn't, choose better ones from `logo_colours`.
 
-### 3. Show the user and ask
+### 3. Don't ask yet
 
-Tell them in plain words, for example:
-
-"From your logo I picked these brand colours:
-- Primary: #ff7a01 (orange, the main colour of your logo)
-- Secondary: #1b2a4b (dark navy)
-Shall I use these, or would you like different ones?"
-
-When the logo has other main colours, name them too as options. If the user gives other codes or names a colour, use theirs (turn a colour name into a #rrggbb code and say which code you used). Wait for their answer.
+Go straight on: open Company Branding, upload the logo and fill in the two colours yourself (steps 4 to 6). Nothing is saved until **Update Company Profile** is clicked, so the user sees the result and answers once, in step 7.
 
 ### 4. Open Company Branding
 
@@ -77,7 +82,15 @@ Then take one screenshot and check both fields show the new codes and both colou
 
 ### 7. Save, after a yes
 
-Tell the user what is on the screen now: the logo, the Primary and Secondary codes, and what they replace. Ask: "Shall I click Update Company Profile to save this?" Wait for a yes, even if they said "go ahead" earlier.
+Tell the user in two lines what is on the screen now: the logo, and the colours you picked with their names (for example "Primary #ff7a01, orange, the main colour of your logo; Secondary #1b2a4b, dark navy"). Then ask once, as buttons:
+
+"Shall I save your logo and these colours?"
+Options: **Save it** · **Use different colours** · **Not now**.
+
+- **Use different colours**: ask, as buttons, with the logo's other main colours from `logo_colours` as options (for example **Navy and white** · **Orange and black**), or let them type codes or colour names (turn a colour name into a #rrggbb code and say which you used). Fill them in, then ask **Save it?** again.
+- **Not now**: leave the page as it is and say nothing was saved.
+
+Wait for **Save it**, even if they said "go ahead" earlier.
 
 On a yes, click **Update Company Profile**. Take one screenshot:
 
@@ -89,6 +102,7 @@ Leave the settings panel open on Company Branding so the user can see the result
 ## Rules
 
 - Only change the logo and the two colours. Do not touch Company Details, Bank Details or any other setting.
+- Keep the logo file and the two colour codes for the rest of the chat: the quote presentation step uses them for the cover page without asking again.
 - Never click Update Company Profile without the user's yes in this chat.
 - Only upload the logo the user gave in this chat (or the converted copy made from it). Never upload anything else.
 - If the user says "colours only" or "logo only", do just that part and leave the other as it is.
