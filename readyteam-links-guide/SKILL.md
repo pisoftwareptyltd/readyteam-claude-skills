@@ -5,7 +5,7 @@ description: Set up a company's quote presentation in ReadyTeam (Settings > Cost
 
 # ReadyTeam: quote presentation (Links) setup
 
-Two parts: you set the **cover page** (with the user's yes), then you put an **on-screen tour** on their ReadyTeam page that walks them through each page of the presentation and its settings. The tour is one script (in the "Tour script" section at the end of this skill); it points at each page and explains its settings, and the user does the clicking. **Do not change any setting for the user.**
+Two parts: you set the **cover page**, then you put an **on-screen tour** on their ReadyTeam page that walks them through each page of the presentation and its settings. The tour is one script (in the "Tour script" section at the end of this skill); it points at each page and explains its settings, and the user does the clicking. **Do not change any setting for the user.**
 
 ## Asking the user
 
@@ -18,8 +18,12 @@ Two parts: you set the **cover page** (with the user's yes), then you put an **o
   2. If they pick **Yes, I'll attach it**: reply in plain words, "Tap **+** below the message box, choose **Upload a file**, pick your <file>, then press **Send**. I'll wait for it." Then **end your turn and wait**. Do nothing else: no next step, no other question.
   - When the next message arrives, check that the file is really there (an attachment or uploaded file in that message or earlier in the chat). If it is not, say "I didn't get the file yet" and repeat part 2. Never move on, and never start the next step, while a file you asked for is missing.
   - If the file is already in this chat, use it and don't ask.
-- **Do the work yourself.** Once the user has given a file or a choice, do every ReadyTeam click, upload, typing and navigation yourself. Reuse what you already have in this chat (the logo, the brand colours, the company name, earlier answers) instead of asking again. Ask only for what you cannot get or decide: files only the user has, real choices, and one yes before anything is saved, imported or uploaded.
-- **One yes, as a button.** Before a save, import or upload, show what will change and ask once, with options such as **Go ahead**, **Show me first** and **Not now**.
+- **Do the work yourself.** Once the user has given a file or a choice, do every ReadyTeam click, upload, typing and navigation yourself. Reuse what you already have in this chat (the logo, the brand colours, the company name, earlier answers) instead of asking again. Ask only for what you cannot get or decide: files only the user has and real choices.
+- **Keep going; don't ask twice.** Once the user has started, carry on by yourself: no "Shall we start?", "Ready for the next step?", "Shall I import?" or "Shall I save?" questions, and never ask the same thing twice in different words. Say in one line what you are about to do and do it. Ask only when you truly cannot go on without the user:
+  - you need a file only they have (ask once, see "Files");
+  - a real choice the file or the screen cannot answer (for example rows ReadyTeam rejected);
+  - something failed, or they must act themselves (sign in, click through an on-screen guide).
+  The user can type **stop**, **pause** or a change at any time; then stop and follow what they say.
 
 ## Where it lives
 
@@ -61,15 +65,12 @@ Make it yourself first; don't start with a question.
    Only if there is no logo in this chat, ask once, as buttons: "To make your quote cover I can use your logo. Do you have it ready?" Options: **Yes, I'll attach it** · **Make it without a logo** · **I have my own cover**. For **Yes, I'll attach it** or **I have my own cover**, tell them to tap **+**, choose **Upload a file**, pick the image and press **Send**, then end your turn and wait for the message with the file (check it is really attached before going on).
 2. **Make the cover** with the **Cover script** below (Python with Pillow; `pip install pillow` if missing):
    `python3 cover.py --out cover.png --company "<name>" --primary "<#hex>" --secondary "<#hex>" --logo <logo>` (leave out `--logo` if there is none). It makes an A4 portrait page: a white strip with the company name down the left, a brand-colour block with **PROPOSAL** (change with `--title`), the logo in a corner triangle, and three hexagons in brand-colour tints with a simple house outline. Leave out `--project`, `--client` and `--date` for the company template (it is used for every project).
-3. **Show it and ask once.** Send the cover image to the user and ask, as buttons:
-   "Here's a cover for your quotes, made from your logo and colours. Shall I use it?"
-   Options: **Use this cover** · **Add my project photos** · **Use my own cover** · **No cover for now**.
-   - **Add my project photos**: "Attach up to 3 photos of your work (for example a house, a kitchen, a bathroom): tap **+**, then **Upload a file**." Options: **I've attached them** · **Use the cover without photos**. Run the script again with `--photo` for each, show it, and ask the same question again.
-   - **Use my own cover**: "Attach your cover image (ideally A4 portrait, 1414 x 2000 pixels): tap **+**, then **Upload a file**." Use it as it is; if it is a PDF, convert its first page to PNG; if it is over about 5MB, resize it to 1414 x 2000 or smaller. Show it and ask **Use this cover?** again.
-   - **No cover for now**: keep the current cover and go to the tour.
-   - Typed changes (another colour, another title such as QUOTE): make them, show it, and ask again.
+3. **Show it and carry on.** Send the cover image to the user with one line: "Here's the cover for your quotes, made from your logo and colours. I'm putting it on your quote now; tell me if you'd like your own cover, your project photos on it, or a change." Do not ask "Shall I use it?"; go straight to the upload.
+   - If they later ask for their own cover or photos: ask for the image once (see "Files"), use it as it is (a PDF: convert its first page to PNG; over about 5MB: resize to 1414 x 2000 or smaller), or run the script again with `--photo` for each photo, and upload again.
+   - If they say **no cover**: keep the current cover and go to the tour.
+   - Typed changes (another colour, another title such as QUOTE): make them and upload again.
 
-### 3. Upload the cover, after "Use this cover"
+### 3. Upload the cover
 
 On the Cover Page, the **Cover Photo** button (top right of the View) holds an image file input (`input[type=file][accept="image/*"]`). Find it with `find` or `read_page` and upload the cover with `file_upload`. **Do not click Cover Photo**: that opens a file window you cannot use. Take one screenshot and check the View shows the new cover. If it doesn't, wait a few seconds and look again; if it still doesn't, tell the user what you see.
 

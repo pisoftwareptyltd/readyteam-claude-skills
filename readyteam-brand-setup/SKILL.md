@@ -24,8 +24,12 @@ Where it lives: **Settings (gear icon, top right) > Company Profile > Company Br
   2. If they pick **Yes, I'll attach it**: reply in plain words, "Tap **+** below the message box, choose **Upload a file**, pick your <file>, then press **Send**. I'll wait for it." Then **end your turn and wait**. Do nothing else: no next step, no other question.
   - When the next message arrives, check that the file is really there (an attachment or uploaded file in that message or earlier in the chat). If it is not, say "I didn't get the file yet" and repeat part 2. Never move on, and never start the next step, while a file you asked for is missing.
   - If the file is already in this chat, use it and don't ask.
-- **Do the work yourself.** Once the user has given a file or a choice, do every ReadyTeam click, upload, typing and navigation yourself. Reuse what you already have in this chat (the logo, the brand colours, the company name, earlier answers) instead of asking again. Ask only for what you cannot get or decide: files only the user has, real choices, and one yes before anything is saved, imported or uploaded.
-- **One yes, as a button.** Before a save, import or upload, show what will change and ask once, with options such as **Go ahead**, **Show me first** and **Not now**.
+- **Do the work yourself.** Once the user has given a file or a choice, do every ReadyTeam click, upload, typing and navigation yourself. Reuse what you already have in this chat (the logo, the brand colours, the company name, earlier answers) instead of asking again. Ask only for what you cannot get or decide: files only the user has and real choices.
+- **Keep going; don't ask twice.** Once the user has started, carry on by yourself: no "Shall we start?", "Ready for the next step?", "Shall I import?" or "Shall I save?" questions, and never ask the same thing twice in different words. Say in one line what you are about to do and do it. Ask only when you truly cannot go on without the user:
+  - you need a file only they have (ask once, see "Files");
+  - a real choice the file or the screen cannot answer (for example rows ReadyTeam rejected);
+  - something failed, or they must act themselves (sign in, click through an on-screen guide).
+  The user can type **stop**, **pause** or a change at any time; then stop and follow what they say.
 
 ## How to talk to the user
 
@@ -68,9 +72,9 @@ If Python cannot run, look at the logo yourself and choose the two colours the s
 
 Look at the logo yourself as well, to check the script's choice makes sense (for example, a photo-style logo can give odd colours). If it doesn't, choose better ones from `logo_colours`.
 
-### 3. Don't ask yet
+### 3. Go straight on
 
-Go straight on: open Company Branding, upload the logo and fill in the two colours yourself (steps 4 to 6). Nothing is saved until **Update Company Profile** is clicked, so the user sees the result and answers once, in step 7.
+Do not ask anything here. Open Company Branding, upload the logo, fill in the two colours and save (steps 4 to 7).
 
 ### 4. Open Company Branding
 
@@ -91,22 +95,14 @@ Find the two colour text fields (placeholders "Pick a primary color" and "Pick a
 
 Then take one screenshot and check both fields show the new codes and both colour circles show the new colours. If a field didn't take the value, click into it, select all, type the code, and press Tab.
 
-### 7. Save, after a yes
+### 7. Save it
 
-Tell the user in two lines what is on the screen now: the logo, and the colours you picked with their names (for example "Primary #ff7a01, orange, the main colour of your logo; Secondary #1b2a4b, dark navy"). Then ask once, as buttons:
+Tell the user in two lines what is on the screen now: the logo, and the colours you picked with their names (for example "Primary #ff7a01, orange, the main colour of your logo; Secondary #1b2a4b, dark navy"). Do not ask "Shall I save?": the user gave the logo for this. Say "Saving it now" and save. After it is saved, add one line: "If you'd like different colours, just tell me." If they later ask for other colours, use the logo's other main colours from `logo_colours` (or codes or colour names they type, turning a name into a #rrggbb code), fill them in and save again.
 
-"Shall I save your logo and these colours?"
-Options: **Save it** · **Use different colours** · **Not now**.
-
-- **Use different colours**: ask, as buttons, with the logo's other main colours from `logo_colours` as options (for example **Navy and white** · **Orange and black**), or let them type codes or colour names (turn a colour name into a #rrggbb code and say which you used). Fill them in, then ask **Save it?** again.
-- **Not now**: leave the page as it is and say nothing was saved.
-
-Wait for **Save it**, even if they said "go ahead" earlier.
-
-On a yes, click **Update Company Profile**. Take one screenshot:
+Click **Update Company Profile**. Take one screenshot:
 
 - a success message, or the page shows the new logo and colours with no error: tell the user the branding is saved, with the two codes;
-- an error (red text under a field, or an error message): tell the user in plain words what ReadyTeam said, fix it, and ask again before clicking Update again.
+- an error (red text under a field, or an error message): tell the user in plain words what ReadyTeam said, fix it and click Update again once.
 
 Leave the settings panel open on Company Branding so the user can see the result, unless they ask you to close it.
 

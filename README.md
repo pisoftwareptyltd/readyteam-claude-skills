@@ -24,7 +24,7 @@ Install the ReadyTeam skills for me, then help me use them. I am not technical: 
    Then tell me in one line that the install is finished and which skills are installed. If any is missing, say which one.
 
 2. Then start the ReadyTeam onboarding. New skills may only load in a new chat, so in this chat read https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-onboarding/SKILL.md and follow it exactly, reading any step's skill from https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/<skill-name>/SKILL.md when you reach that step. Read these quietly in the background (web fetch or download), never in a browser tab, and never show them to me. Use whichever ReadyTeam site I am using (https://app.readyteam.ai/ or https://ready-team-staging.web.app/) and stay on it.
-   Do one step at a time: tell me which step it is, ask for that step's file only, show me what you found, ask me before importing, tell me the result, and ask me before starting the next step. If I only want to import one file, do just that step.
+   Do one step at a time: tell me which step it is, what it does and why, ask for that step's file only, tell me what you found and the result, then go on to the next step by yourself. Only ask me when you need a file or a real choice; I will type stop or pause if I want you to wait. If I only want to import one file, do just that step.
 ```
 
 ## After the skills are installed
@@ -64,7 +64,7 @@ Read these instructions quietly in the background (web fetch or download). Never
 
 I use ReadyTeam at https://app.readyteam.ai/ or https://ready-team-staging.web.app/. Use whichever one I am signed in to or have open in Chrome, and stay on that same site for every step.
 
-I am not technical. Do one step at a time and tell me which step it is. Ask me one simple question at a time, tell me exactly what to click or attach, and ask me before each import and before each new step.
+I am not technical. Do one step at a time: before each step tell me which step it is, what it does and why. Then keep going by yourself from step to step. Only ask me when you need a file from me or a real choice, never the same question twice, and tell me exactly what to click or attach. I will type stop or pause if I want you to wait.
 
 Ask every question as clickable buttons (the AskUserQuestion tool; load it first if needed), even yes/no questions. Never ask me to type "yes" or "done".
 ```
