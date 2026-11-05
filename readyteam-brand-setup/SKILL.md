@@ -19,7 +19,11 @@ Where it lives: **Settings (gear icon, top right) > Company Profile > Company Br
   - Never ask in plain text. Never write "Reply yes", "reply done", "tell me the right name" or "type ..." as the way to answer. Put the question in the tool, not in your message.
   - Example: "The top of your screen shows the company **Claude Testing**. Is that the company we're setting up?" Options: **Yes, that's it** · **No, it's a different company**. If they pick the second, ask them to switch company in ReadyTeam (top of the screen) and then ask, as buttons: **I've switched** · **I need help**.
   - Only if this chat truly has no such tool: end the message with a short numbered list of the options and say they can reply with the number.
-- **Files: say exactly what and how.** When you need a file, say which file, what it looks like, and how to attach it: "Tap **+** below the message box, then **Upload a file**, and choose your <file> (.xlsx or .csv)." Ask it as a button question with options such as **I've attached it**, **I don't have one** and **Skip**. Claude cannot show an upload button in the chat; the **+** is the upload.
+- **Files: the file must arrive with a message, not a button.** A button answer can never carry a file, so never offer an **I've attached it** button. Ask for a file in two parts:
+  1. Ask as buttons: "Do you have your <file> (<what it looks like>) ready?" Options such as **Yes, I'll attach it** · **I don't have one** · **Skip this step** (optional steps only).
+  2. If they pick **Yes, I'll attach it**: reply in plain words, "Tap **+** below the message box, choose **Upload a file**, pick your <file>, then press **Send**. I'll wait for it." Then **end your turn and wait**. Do nothing else: no next step, no other question.
+  - When the next message arrives, check that the file is really there (an attachment or uploaded file in that message or earlier in the chat). If it is not, say "I didn't get the file yet" and repeat part 2. Never move on, and never start the next step, while a file you asked for is missing.
+  - If the file is already in this chat, use it and don't ask.
 - **Do the work yourself.** Once the user has given a file or a choice, do every ReadyTeam click, upload, typing and navigation yourself. Reuse what you already have in this chat (the logo, the brand colours, the company name, earlier answers) instead of asking again. Ask only for what you cannot get or decide: files only the user has, real choices, and one yes before anything is saved, imported or uploaded.
 - **One yes, as a button.** Before a save, import or upload, show what will change and ask once, with options such as **Go ahead**, **Show me first** and **Not now**.
 
@@ -33,12 +37,16 @@ The user is usually not technical. Use plain words, ask one question at a time, 
 
 If the logo is already in this chat (attached earlier), use it and don't ask. Otherwise ask, as buttons:
 
-"Please attach your company logo: tap **+** below the message box, then **Upload a file**. A .png with a clear background works best; any image is fine."
-Options: **I've attached it** · **I don't have one** (skip branding for now) · **Use the logo already in ReadyTeam** (only colours).
+"Do you have your company logo ready? A .png with a clear background works best; any image is fine."
+Options: **Yes, I'll attach it** · **Use the logo already in ReadyTeam** (only colours) · **I don't have one**.
 
-Wait for it.
+- **Yes, I'll attach it**: reply in plain words, "Tap **+** below the message box, choose **Upload a file**, pick your logo, then press **Send**. I'll wait for it." Then end your turn and wait. When the next message comes, check the image is really attached; if not, say "I didn't get the logo yet" and repeat this line. Do not go on to colours, saving or any other step without it.
+- **Use the logo already in ReadyTeam**: open Company Branding (step 4), take the logo from the round picture (screenshot or its image link), and continue from step 2 with it, skipping the upload in step 5.
+- **I don't have one**: ask as buttons: **Skip branding for now** · **I'll find my logo**. Skip only on **Skip branding for now**; on **I'll find my logo**, wait for it as above.
 
 If the user can only paste a link to their logo or website, ask them to save the image and attach it instead: the upload needs a file they shared with this chat.
+
+Once you have the logo, go straight on through steps 2 to 7 without stopping: work out the colours, open Company Branding, upload, fill the colours, then ask once in step 7.
 
 ### 2. Work out the colours
 

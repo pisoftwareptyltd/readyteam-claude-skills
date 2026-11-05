@@ -13,7 +13,11 @@ This skill does not import anything itself. It runs the other ReadyTeam skills o
   - Never ask in plain text. Never write "Reply yes", "reply done", "tell me the right name" or "type ..." as the way to answer. Put the question in the tool, not in your message.
   - Example: "The top of your screen shows the company **Claude Testing**. Is that the company we're setting up?" Options: **Yes, that's it** · **No, it's a different company**. If they pick the second, ask them to switch company in ReadyTeam (top of the screen) and then ask, as buttons: **I've switched** · **I need help**.
   - Only if this chat truly has no such tool: end the message with a short numbered list of the options and say they can reply with the number.
-- **Files: say exactly what and how.** When you need a file, say which file, what it looks like, and how to attach it: "Tap **+** below the message box, then **Upload a file**, and choose your <file> (.xlsx or .csv)." Ask it as a button question with options such as **I've attached it**, **I don't have one** and **Skip**. Claude cannot show an upload button in the chat; the **+** is the upload.
+- **Files: the file must arrive with a message, not a button.** A button answer can never carry a file, so never offer an **I've attached it** button. Ask for a file in two parts:
+  1. Ask as buttons: "Do you have your <file> (<what it looks like>) ready?" Options such as **Yes, I'll attach it** · **I don't have one** · **Skip this step** (optional steps only).
+  2. If they pick **Yes, I'll attach it**: reply in plain words, "Tap **+** below the message box, choose **Upload a file**, pick your <file>, then press **Send**. I'll wait for it." Then **end your turn and wait**. Do nothing else: no next step, no other question.
+  - When the next message arrives, check that the file is really there (an attachment or uploaded file in that message or earlier in the chat). If it is not, say "I didn't get the file yet" and repeat part 2. Never move on, and never start the next step, while a file you asked for is missing.
+  - If the file is already in this chat, use it and don't ask.
 - **Do the work yourself.** Once the user has given a file or a choice, do every ReadyTeam click, upload, typing and navigation yourself. Reuse what you already have in this chat (the logo, the brand colours, the company name, earlier answers) instead of asking again. Ask only for what you cannot get or decide: files only the user has, real choices, and one yes before anything is saved, imported or uploaded.
 - **One yes, as a button.** Before a save, import or upload, show what will change and ask once, with options such as **Go ahead**, **Show me first** and **Not now**.
 
@@ -60,7 +64,7 @@ Also check that the Claude in Chrome tools are available, because every step use
 
 ## Step 0b: start
 
-1. Greet the user in one line. Make the **progress page** (below) and tell them it shows the twelve steps and where they're up to. Say you will do them **one at a time** and check with them after each one. Then ask, as buttons: "Ready to start with your logo and brand colours?" Options: **Let's start** · **Start from a later step** · **I'm continuing an earlier setup**.
+1. Greet the user in one line. Make the **progress page** (below) and tell them it shows the twelve steps and where they're up to. Then show the whole plan once, as a short numbered list of the twelve step names with the **What** line from "What to tell the user at each step" (one line each), so they know the full journey before it starts. Say you will do them **one at a time**, explain each one before it starts, and check with them after each one. Then ask, as buttons: "Ready to start with your logo and brand colours?" Options: **Let's start** · **Start from a later step** · **I'm continuing an earlier setup**.
 2. **Pick the ReadyTeam site.** ReadyTeam runs on two sites: **https://app.readyteam.ai/** (live) and **https://ready-team-staging.web.app/** (test). Use whichever one the user is using, in this order:
    - the site the user names in the chat (a link, "staging", "test site", "live");
    - otherwise a Chrome tab that already has one of the two sites open (check `tabs_context_mcp`): use that site, and that tab if it is signed in;
@@ -74,23 +78,57 @@ Do **not** ask for all the files up front. Ask for each file only when its step 
 
 ## Each step, one at a time
 
-Do the steps one by one, never several together. For every step, go through this in order and wait for the user where it says so:
+Do the steps one by one, never several together. For every step, go through this in order and wait for the user where it says so (hard rule):
 
-1. **Announce it:** "Step N of 12: <step name>." Say in one or two plain sentences what this step adds to ReadyTeam and why it comes now. Mark the step **now** on the progress page.
-2. **Ask for the file, as buttons:** "Please attach your <file> (<what it looks like, for example .xlsx or .csv with Code and Description columns>): tap **+** below the message box, then **Upload a file**." Options: **I've attached it** · **I don't have one** · **Skip this step** (optional steps only). Wait. If they skip, mark it skipped and go to the next step. If the file is already in this chat (they attached several at the start), use it and don't ask.
+- **Never mention, announce or ask for the next step's file until the current step is finished:** its work done in ReadyTeam (or skipped by the user's own choice), its result reported, and **Next step** clicked.
+- **A step is never done just because a question was answered.** For Brand setup, done means the logo is uploaded, the colours are filled in and **Update Company Profile** was clicked after the user said **Save it** (or the user chose to skip it).
+- Before each step, load that step's skill (installed, or read quietly in the background) and follow it, starting from its first step. Never do a step from this summary alone.
+
+
+1. **Explain it before doing anything.** Start every step with this block, using that step's lines from "What to tell the user at each step" below (plain words, you may adjust them to what you already know about the company):
+
+   > **Step N of 12: <step name>**
+   > **What:** <what this step sets up in ReadyTeam>
+   > **Why now:** <why it comes at this point>
+   > **What I need from you:** <the file or choice, or "nothing, I'll show you on screen">
+   > **What I'll do:** <what Claude does in ReadyTeam, in one line>
+
+   Mark the step **now** on the progress page. Then ask, as buttons: **Start this step** · **Skip this step** (optional steps only) · **Take a break**. Do nothing in ReadyTeam until they pick **Start this step**.
+2. **Ask for the file** (see "Files" above): first as buttons, "Do you have your <file> (<what it looks like, for example .xlsx or .csv with Code and Description columns>) ready?" Options: **Yes, I'll attach it** · **I don't have one** · **Skip this step** (optional steps only). On **Yes, I'll attach it**, tell them to tap **+**, **Upload a file**, pick the file and press **Send**, then end your turn and wait for the message with the file. If they skip, mark it skipped, say so in one line, and ask the step 7 **Move on** buttons. If the file is already in this chat, use it and don't ask.
 3. **Check the file:** read it and tell them what you found: number of rows, two or three example rows, and anything you had to change or could not use. Ask any question the step's skill needs answered, as buttons.
 4. **Get a yes, as buttons:** "I'll import N rows into <step name>." Options: **Go ahead** · **Show me the rows** · **Not now**. Wait for **Go ahead**.
-5. **Import:** follow the step's skill and do all the ReadyTeam work yourself. While it runs, give a short update at each stage (opening Import Your Data, entering the rows, checking for errors, importing).
-6. **Report:** say what was imported (rows, and the "Completed" status) or what went wrong, in plain words. Update the progress page (and the progress log).
+5. **Do it, saying what is happening:** follow the step's skill and do all the ReadyTeam work yourself. Before each stage, give one plain line of what you are doing and why (for example "Opening Import Your Data, where ReadyTeam takes in your cost codes." "Entering your 96 rows." "Checking ReadyTeam found no errors before importing."). Keep it to one line per stage.
+6. **Report:** say what was done (for an import: rows and the "Completed" status) or what went wrong, in plain words, and where they can see it in ReadyTeam (for example "Settings > Cost Code"). Then one line on what this unlocks for the next step. Update the progress page (and the progress log).
 7. **Move on, as buttons:** "Done: 1, 2. Next: 3 of 12, Catalogues." Options: **Next step** · **Take a break** · **Redo this step**. Wait for **Next step** before announcing the next step. **Take a break**: say they can come back any time and continue from the progress page.
 
 Steps 1, 5 and 7 to 12 are not imports, so for points 2 to 6 follow their own skills instead: Brand setup asks for the logo, shows the colours it picked and asks before saving; Quote Presentation asks for a cover page (or makes one), shows it and asks before uploading, then tours each page's settings on screen; the Create Project, Estimation, Allowance, Specification, Selection and Takeoff guides need no file from you (Takeoff uses the user's plan PDF, which they upload in ReadyTeam themselves): they put an on-screen guide in ReadyTeam and the user does the clicking. Points 1 and 7 still apply.
+
+## What to tell the user at each step
+
+Use these lines in each step's opening block (point 1 above). Keep them short and plain.
+
+| # | Step | What | Why now | What I need from you | What I'll do |
+|---|---|---|---|---|---|
+| 1 | Brand setup | Puts your logo and brand colours on ReadyTeam. | It goes first so everything made later (quotes, documents, your first project) already carries your brand. | Your logo image. | Upload the logo, pick your two brand colours from it, show you, and save when you say so. |
+| 2 | Cost Codes | Loads your list of cost codes, the codes every cost and budget is tracked against. | Everything after this (catalogues, estimates, jobs) refers to these codes. | Your cost code spreadsheet (code and description columns). | Check the file, show you what's in it, and import it when you say so. |
+| 3 | Catalogues (optional) | Loads your catalogue of products and materials with prices and suppliers. | Estimates can pick items from it, so it goes in before the Cost Assistant items. | Your catalogue spreadsheet, if you have one. | Check the file, show you what's in it, and import it when you say so. |
+| 4 | Cost Assistant | Loads your standard estimate items (groups, descriptions, quantities, unit costs). | It uses the cost codes from step 2, and it is what you'll build your quotes from. | Your Cost Assistant spreadsheet. | Check the file, show you what's in it, and import it when you say so. |
+| 5 | Quote Presentation | Sets up how your quote looks to clients: the cover page and each page's settings. | Your quote pages show the items from step 4, and new projects use this layout. | Your cover image, or nothing: I can make one from your logo and colours. | Put the cover on your quote layout, then show you each page and its settings on screen. |
+| 6 | Job Assistant | Loads your job template: the tasks, durations and order used to schedule a build. | It comes after the setup data, so tasks can link to your users and trade types. | Your job template spreadsheet. | Check the file, show you what's in it, and import it when you say so. |
+| 7 | Create Project | Shows you how to create your first project. | All your setup is in, so the project can use it. | Nothing. You click; I guide you on screen. | Put a guide on your ReadyTeam screen that shows each click. |
+| 8 | Estimation | Shows you how to start that project's estimate. | It needs the project from step 7 and the items from step 4. | Nothing. You choose how to start; I guide you. | Open Cost Assistant for the project and guide you through the three ways to start. |
+| 9 | Allowances | Shows you how to mark items as PC (Prime Cost) or PS (Provisional Sum). | It needs the estimate from step 8. | Nothing. | Guide you to an item's Allowance and the PC / PS choice. |
+| 10 | Specifications | Shows you how to add notes on what an item includes. | They appear in the quote, so they go on the estimate items. | Nothing. | Guide you to an item's Specification and its notes. |
+| 11 | Selections | Shows you how to give an item a product choice for your client. | It builds on the same estimate items. | Nothing. | Guide you through Selection, the question and the product. |
+| 12 | Takeoff | Shows you how to measure quantities straight from your plan. | Last, because it fills in the quantities of items you've set up. | Your plan PDF, which you upload in ReadyTeam yourself. | Guide you through uploading the plan and drawing an area on it. |
+
+Steps 7 to 12 run back to back on screen, so give their opening block together once (one short block listing the six), then let the on-screen guide lead.
 
 ## The order and why
 
 Run the steps strictly in this order. Later steps use what earlier steps created.
 
-1. **Brand setup** (skip if no logo) - `readyteam-brand-setup`. The company's logo and colours go on first, so everything made later (documents, estimates, the first project) already carries the brand. Ask for the logo; if the user has none to hand, skip it and offer it again at the end. Keep the logo file and the two colour codes: step 5 can reuse them for a cover page.
+1. **Brand setup** - `readyteam-brand-setup`. The company's logo and colours go on first, so everything made later (documents, estimates, the first project) already carries the brand. Follow `readyteam-brand-setup` from its step 1: it asks for the logo, then Claude uploads it, sets the two colours in Company Branding, shows the result and asks **Save it** before saving. Only when the user picks **I don't have one** and then **Skip branding for now**, skip it (say so, mark it skipped) and offer it again at the end. Keep the logo file and the two colour codes: step 5 can reuse them for a cover page.
 2. **Cost Code** - `readyteam-import-cost-code`. Everything after it refers to cost codes.
 3. **Catalogues** (optional) - `readyteam-import-catalogues`. Skip when the user has no catalogue file.
 4. **Cost Assistant** - `readyteam-import-cost-assistant`. After cost codes (and catalogues, if any).
