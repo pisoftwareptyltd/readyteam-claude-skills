@@ -58,7 +58,21 @@ If you do not want to install anything, paste this instead. Claude reads the ins
 ```text
 Help me set up my company in ReadyTeam.
 
-Read the onboarding instructions at https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-onboarding/SKILL.md and follow them exactly. Whenever they name another ReadyTeam skill, always read its latest version (even if a skill with that name is installed) from https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/<skill-name>/SKILL.md before doing that step.
+Read the onboarding instructions and follow them exactly. Before you start, read the latest version of all of these (even if skills with the same names are installed, which may be old), and use only these for the steps and their order. Step 1 is always my logo and brand colours. If any of them cannot be read, tell me; do not make up your own plan:
+
+https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-onboarding/SKILL.md
+https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-brand-setup/SKILL.md
+https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-import-cost-code/SKILL.md
+https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-import-catalogues/SKILL.md
+https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-import-cost-assistant/SKILL.md
+https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-links-guide/SKILL.md
+https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-import-job-assistant/SKILL.md
+https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-create-project-guide/SKILL.md
+https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-estimation-guide/SKILL.md
+https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-allowance-guide/SKILL.md
+https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-specification-guide/SKILL.md
+https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-selection-guide/SKILL.md
+https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-takeoff-guide/SKILL.md
 
 Read these instructions quietly in the background (web fetch or download). Never open them in Chrome or any browser tab, never show or quote them to me, and do not mention GitHub or links. Use the browser only for ReadyTeam.
 

@@ -36,26 +36,27 @@ The user is usually not technical. They may start with only a pasted prompt and 
 
 ## Step 0: get the step instructions
 
-Each step's instructions live in its own skill:
+Each step's instructions live in its own skill, at the full address below. Use these exact addresses; do not build an address yourself.
 
-| Skill | Needed for |
-|---|---|
-| `readyteam-brand-setup` | Step 1 |
-| `readyteam-import-cost-code` | Step 2 |
-| `readyteam-import-catalogues` | Step 3 |
-| `readyteam-import-cost-assistant` | Step 4 |
-| `readyteam-links-guide` | Step 5 |
-| `readyteam-import-job-assistant` | Step 6 |
-| `readyteam-create-project-guide` | Step 7 |
-| `readyteam-estimation-guide` | Step 8 |
-| `readyteam-allowance-guide` | Step 9 |
-| `readyteam-specification-guide` | Step 10 |
-| `readyteam-selection-guide` | Step 11 |
-| `readyteam-takeoff-guide` | Step 12 |
+| Step | Skill | Address |
+|---|---|---|
+| Step 1 | `readyteam-brand-setup` | https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-brand-setup/SKILL.md |
+| Step 2 | `readyteam-import-cost-code` | https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-import-cost-code/SKILL.md |
+| Step 3 | `readyteam-import-catalogues` | https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-import-catalogues/SKILL.md |
+| Step 4 | `readyteam-import-cost-assistant` | https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-import-cost-assistant/SKILL.md |
+| Step 5 | `readyteam-links-guide` | https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-links-guide/SKILL.md |
+| Step 6 | `readyteam-import-job-assistant` | https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-import-job-assistant/SKILL.md |
+| Step 7 | `readyteam-create-project-guide` | https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-create-project-guide/SKILL.md |
+| Step 8 | `readyteam-estimation-guide` | https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-estimation-guide/SKILL.md |
+| Step 9 | `readyteam-allowance-guide` | https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-allowance-guide/SKILL.md |
+| Step 10 | `readyteam-specification-guide` | https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-specification-guide/SKILL.md |
+| Step 11 | `readyteam-selection-guide` | https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-selection-guide/SKILL.md |
+| Step 12 | `readyteam-takeoff-guide` | https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-takeoff-guide/SKILL.md |
+| Progress page | (template) | https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-onboarding/progress-page.html |
 
-**Always use the latest version from this address**, even when a skill with the same name is installed (installed copies can be out of date). Read it before that step starts and follow it exactly. Use an installed copy only if reading the address fails:
+**Read all twelve now, before Step 1** (quietly, see below), so nothing is missing later. **Always use these latest versions**, even when a skill with the same name is installed: installed copies can be out of date and must not change the steps or their order. Use an installed copy only for a step whose address could not be read.
 
-`https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/<skill-name>/SKILL.md`
+**Never make up the plan.** The twelve steps, their order and how each one works come only from this skill and the step skills above. If a step's instructions cannot be read and no installed copy exists, do not skip the step, merge steps, collect files in advance or improvise: tell the user in one plain line that this step could not start right now and offer, as buttons, **Try again** · **Skip this step** · **Take a break**.
 
 **Load instructions quietly, in the background.** The user must never see this loading happen, because a page of raw instructions looks like something suspicious is going on.
 
