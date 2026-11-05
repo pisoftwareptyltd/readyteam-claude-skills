@@ -53,7 +53,7 @@ Each step's instructions live in its own skill:
 | `readyteam-selection-guide` | Step 11 |
 | `readyteam-takeoff-guide` | Step 12 |
 
-Use the installed skill when it is in your skill list. When it is not installed, read it from this address instead and follow it exactly as if it were installed:
+**Always use the latest version from this address**, even when a skill with the same name is installed (installed copies can be out of date). Read it before that step starts and follow it exactly. Use an installed copy only if reading the address fails:
 
 `https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/<skill-name>/SKILL.md`
 
@@ -79,6 +79,8 @@ Also check that the Claude in Chrome tools are available, because every step use
 Do **not** ask the user to type the company name. Everything goes into the company the user is signed in to. Read its name from ReadyTeam (for example the company shown at the top of the screen, or the "<Company> / Import Your Data" title) and check it once, as buttons: "The top of your screen shows the company **<Company>**. Is that the company we're setting up?" Options: **Yes, that's it** · **No, it's a different company**. If it is a different company, tell them to switch company at the top of the ReadyTeam screen, then ask as buttons: **I've switched** · **I need help**, and read the name again. Use the name for the progress page and log.
 
 Do **not** ask for all the files up front. Ask for each file only when its step starts.
+
+**The first step is always Step 1, Brand setup.** Right after the company check, give Step 1's opening block and ask for the logo. Never ask for cost codes, or any other step's file, before Brand setup is finished (logo uploaded, colours set and saved) or the user chose **Skip branding for now**. Before asking for any file, check the progress page: the step you are on must be the first one that is not **done** or **skipped**.
 
 ## Each step, one at a time
 
