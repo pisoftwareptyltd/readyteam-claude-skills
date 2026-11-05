@@ -65,6 +65,8 @@ Read these instructions quietly in the background (web fetch or download). Never
 I use ReadyTeam at https://app.readyteam.ai/ or https://ready-team-staging.web.app/. Use whichever one I am signed in to or have open in Chrome, and stay on that same site for every step.
 
 I am not technical. Do one step at a time and tell me which step it is. Ask me one simple question at a time, tell me exactly what to click or attach, and ask me before each import and before each new step.
+
+Ask every question as clickable buttons (the AskUserQuestion tool; load it first if needed), even yes/no questions. Never ask me to type "yes" or "done".
 ```
 
 ## Steps

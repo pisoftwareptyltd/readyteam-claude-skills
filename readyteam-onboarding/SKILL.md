@@ -9,7 +9,10 @@ This skill does not import anything itself. It runs the other ReadyTeam skills o
 
 ## Asking the user
 
-- **Buttons for every question with set answers.** When this chat has a multiple-choice question tool (for example `AskUserQuestion`, or an "ask the user" tool that shows options), use it for every question whose answers you can list: one question per call, 2 to 4 short options (a few words each, the recommended one first), each with a one-line description. The user can still type their own answer. Without such a tool, end the message with a short numbered list of the same options and say they can reply with the number.
+- **Every question is buttons. No exceptions.** Ask every question, including yes/no checks, "is this the right company?", "are you signed in?" and "ready for the next step?", with the chat's multiple-choice question tool (`AskUserQuestion`, or an "ask the user" tool that shows options). If that tool is listed but not loaded yet (deferred), load it with ToolSearch first (`select:AskUserQuestion`), before your first question. One question per call, 2 to 4 short options (a few words each, the recommended one first), each with a one-line description; the user can still type their own answer.
+  - Never ask in plain text. Never write "Reply yes", "reply done", "tell me the right name" or "type ..." as the way to answer. Put the question in the tool, not in your message.
+  - Example: "The top of your screen shows the company **Claude Testing**. Is that the company we're setting up?" Options: **Yes, that's it** · **No, it's a different company**. If they pick the second, ask them to switch company in ReadyTeam (top of the screen) and then ask, as buttons: **I've switched** · **I need help**.
+  - Only if this chat truly has no such tool: end the message with a short numbered list of the options and say they can reply with the number.
 - **Files: say exactly what and how.** When you need a file, say which file, what it looks like, and how to attach it: "Tap **+** below the message box, then **Upload a file**, and choose your <file> (.xlsx or .csv)." Ask it as a button question with options such as **I've attached it**, **I don't have one** and **Skip**. Claude cannot show an upload button in the chat; the **+** is the upload.
 - **Do the work yourself.** Once the user has given a file or a choice, do every ReadyTeam click, upload, typing and navigation yourself. Reuse what you already have in this chat (the logo, the brand colours, the company name, earlier answers) instead of asking again. Ask only for what you cannot get or decide: files only the user has, real choices, and one yes before anything is saved, imported or uploaded.
 - **One yes, as a button.** Before a save, import or upload, show what will change and ask once, with options such as **Go ahead**, **Show me first** and **Not now**.
@@ -53,7 +56,7 @@ Use the installed skill when it is in your skill list. When it is not installed,
 - Do not show, paste, quote or summarise the instructions to the user, and do not mention GitHub, links, files, skills or "loading instructions". If you need to say anything, say "Getting the next step ready."
 - If loading fails, try the other background way once. If it still fails, tell the user in one plain line that this step could not start right now and offer, as buttons, **Try again** · **Skip this step** · **Take a break**. Never do a step from memory.
 
-Also check that the Claude in Chrome tools are available, because every step uses them. If they are not, tell the user in simple steps to install the Claude in Chrome extension in Google Chrome, sign in to it with the same Claude account, keep Chrome open, and then reply "done". Do not continue until the tools work.
+Also check that the Claude in Chrome tools are available, because every step uses them. If they are not, tell the user in simple steps to install the Claude in Chrome extension in Google Chrome, sign in to it with the same Claude account, keep Chrome open, and then ask as buttons: **Done** · **I need help**. Do not continue until the tools work.
 
 ## Step 0b: start
 
@@ -65,7 +68,7 @@ Also check that the Claude in Chrome tools are available, because every step use
 
    Do not ask about the site. Remember it as **the ReadyTeam site** and use it for every step, every link and every new tab; never switch to the other site part way. Tell the other skills which site it is when they say to open ReadyTeam. Open ReadyTeam in a new Chrome tab on that site (or use the signed-in tab). If it shows a login page, ask the user to sign in there and reply, as buttons: **I've signed in** · **I need help signing in**.
 
-Do **not** ask for the company name. Everything goes into the company the user is signed in to. Read its name from ReadyTeam (for example the "<Company> / Import Your Data" title) and use it only for the progress log.
+Do **not** ask the user to type the company name. Everything goes into the company the user is signed in to. Read its name from ReadyTeam (for example the company shown at the top of the screen, or the "<Company> / Import Your Data" title) and check it once, as buttons: "The top of your screen shows the company **<Company>**. Is that the company we're setting up?" Options: **Yes, that's it** · **No, it's a different company**. If it is a different company, tell them to switch company at the top of the ReadyTeam screen, then ask as buttons: **I've switched** · **I need help**, and read the name again. Use the name for the progress page and log.
 
 Do **not** ask for all the files up front. Ask for each file only when its step starts.
 
