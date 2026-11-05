@@ -58,29 +58,7 @@ If you do not want to install anything, paste this instead. Claude reads the ins
 ```text
 Help me set up my company in ReadyTeam.
 
-Read the onboarding instructions and follow them exactly. Before you start, read the latest version of all of these (even if skills with the same names are installed, which may be old), and use only these for the steps and their order. Step 1 is always my logo and brand colours. If any of them cannot be read, tell me; do not make up your own plan:
-
-https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-onboarding/SKILL.md
-https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-brand-setup/SKILL.md
-https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-import-cost-code/SKILL.md
-https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-import-catalogues/SKILL.md
-https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-import-cost-assistant/SKILL.md
-https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-links-guide/SKILL.md
-https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-import-job-assistant/SKILL.md
-https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-create-project-guide/SKILL.md
-https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-estimation-guide/SKILL.md
-https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-allowance-guide/SKILL.md
-https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-specification-guide/SKILL.md
-https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-selection-guide/SKILL.md
-https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-takeoff-guide/SKILL.md
-
-Read these instructions quietly in the background (web fetch or download). Never open them in Chrome or any browser tab, never show or quote them to me, and do not mention GitHub or links. Use the browser only for ReadyTeam.
-
-I use ReadyTeam at https://app.readyteam.ai/ or https://ready-team-staging.web.app/. Use whichever one I am signed in to or have open in Chrome, and stay on that same site for every step.
-
-I am not technical. Do one step at a time: before each step tell me which step it is, what it does and why. Then keep going by yourself from step to step. Only ask me when you need a file from me or a real choice, never the same question twice, and tell me exactly what to click or attach. I will type stop or pause if I want you to wait.
-
-Ask every question as clickable buttons (the AskUserQuestion tool; load it first if needed), even yes/no questions. Never ask me to type "yes" or "done".
+Quietly read and follow https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-onboarding/SKILL.md (not any older ReadyTeam skills I have installed). I'm not technical.
 ```
 
 ## Steps
