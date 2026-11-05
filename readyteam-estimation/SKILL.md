@@ -25,7 +25,7 @@ One document = ONE project (not a project list; for lists use project-import). D
    - **Client** (optional). If the document has a client, note the name. If none, create the project without a client; the user adds it later.
 3. Extract the **estimate lines** (cost items: description, code/category, qty, unit, rate, totals, whatever the document has). Then remove the document's own item numbers from them (see **Item numbers** below).
 4. Tell the user a short summary: project name, address, client (or "none"), number of estimate lines, how many category and item names had a number removed (with two examples, before and after), then get a yes before clicking Create Project, unless they already said go ahead.
-5. Address: **https://app.readyteam.ai/** unless the user names another (test site https://ready-team-staging.web.app/dashboard only when the user says so). Load the Claude in Chrome tools in one ToolSearch call if deferred, call `tabs_context_mcp`, open a new tab and navigate there. Work in that tab.
+5. Address: **the ReadyTeam site the user is using**: either **https://app.readyteam.ai/** (live) or **https://ready-team-staging.web.app/** (test). Use the one from onboarding, or the one already open in a Chrome tab (check `tabs_context_mcp`), or the one the user names; if none, use https://app.readyteam.ai/. Stay on that same site for every step and never switch to the other one. Load the Claude in Chrome tools in one ToolSearch call if deferred, call `tabs_context_mcp`, open a new tab and navigate there. Work in that tab.
 
 ## Part 1: Create the project
 

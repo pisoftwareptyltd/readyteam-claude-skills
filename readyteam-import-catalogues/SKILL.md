@@ -7,7 +7,7 @@ description: Import a client's CATALOGUES spreadsheet (catalogue categories and 
 
 You operate the ReadyTeam web app in the user's Chrome (Claude in Chrome tools). The user must be signed in. Never type or ask for a password; if a login page appears, stop and ask the user to sign in.
 
-The ReadyTeam address is **https://app.readyteam.ai/** (use the test site https://ready-team-staging.web.app/dashboard only if the user says so).
+The ReadyTeam address is **the ReadyTeam site the user is using**: either **https://app.readyteam.ai/** (live) or **https://ready-team-staging.web.app/** (test). Use the one from onboarding, or the one already open in a Chrome tab (check `tabs_context_mcp`), or the one the user names; if none, use https://app.readyteam.ai/. Stay on that same site for every step and never switch to the other one.
 
 ## Asking the user
 

@@ -63,7 +63,7 @@ Go straight on: open Company Branding, upload the logo and fill in the two colou
 
 ### 4. Open Company Branding
 
-1. Load the Claude in Chrome tools in one ToolSearch call if they are deferred, including `find`, `read_page`, `form_input`, `file_upload` and `computer`. Use the ReadyTeam tab that is already open (for example from onboarding); otherwise call `tabs_context_mcp`, open a new tab and go to **https://app.readyteam.ai/** (the staging site only if the user says so). If a login page shows, ask the user to sign in and reply "done".
+1. Load the Claude in Chrome tools in one ToolSearch call if they are deferred, including `find`, `read_page`, `form_input`, `file_upload` and `computer`. Use the ReadyTeam tab that is already open (for example from onboarding); otherwise call `tabs_context_mcp`, open a new tab and go to **the ReadyTeam site the user is using**: either **https://app.readyteam.ai/** (live) or **https://ready-team-staging.web.app/** (test). Use the one from onboarding, or the one already open in a Chrome tab (check `tabs_context_mcp`), or the one the user names; if none, use https://app.readyteam.ai/. Stay on that same site for every step and never switch to the other one. If a login page shows, ask the user to sign in and reply "done".
 2. Click the **Settings** gear icon at the top right of the header (an image with the tooltip "Settings").
 3. In the System Setting panel, click **Company Profile**, then **Company Branding**.
 4. Take one screenshot and check the Company Branding page shows the logo circle, Primary Color, Secondary Color and Update Company Profile. Note the colours and logo already there, so you can tell the user what changes.

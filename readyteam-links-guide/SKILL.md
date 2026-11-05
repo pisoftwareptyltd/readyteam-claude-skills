@@ -41,7 +41,7 @@ Plain words, one question at a time. Never show file paths, code or tool names u
 
 ### 1. Open the template
 
-Load the Claude in Chrome tools in one ToolSearch call if they are deferred, including `find`, `computer`, `javascript_tool` and `file_upload`. In the ReadyTeam tab: Settings (gear) > Cost Assistant > **Links** > **Quote Presentation**, expand **Cover Section**, click **Cover Page**. Take one screenshot so you can describe the current cover. (If the user asked about one project's presentation, open it from that project instead.)
+Load the Claude in Chrome tools in one ToolSearch call if they are deferred, including `find`, `computer`, `javascript_tool` and `file_upload`. In the ReadyTeam tab (on whichever ReadyTeam site the user is using, https://app.readyteam.ai/ or https://ready-team-staging.web.app/; stay on that site): Settings (gear) > Cost Assistant > **Links** > **Quote Presentation**, expand **Cover Section**, click **Cover Page**. Take one screenshot so you can describe the current cover. (If the user asked about one project's presentation, open it from that project instead.)
 
 ### 2. The cover page
 

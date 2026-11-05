@@ -5,7 +5,7 @@ Claude skills for onboarding a company into ReadyTeam. They import a client's da
 You will need:
 
 - Google Chrome with the **Claude in Chrome** extension (Claude helps you set it up if it is missing).
-- A ReadyTeam login (https://app.readyteam.ai/).
+- A ReadyTeam login (https://app.readyteam.ai/, or the test site https://ready-team-staging.web.app/). Claude uses whichever one you are signed in to.
 - Your files: your company logo, cost codes, and if you have them, catalogue, Cost Assistant and job template files. Estimate files are imported separately with readyteam-estimation.
 - For branding, Claude uploads your logo and sets your Primary and Secondary colours from it.
 
@@ -23,7 +23,7 @@ Install the ReadyTeam skills for me, then help me use them. I am not technical: 
    c. Otherwise: give me the fourteen download links above and tell me in simple steps how to add a skill in Claude's settings. Wait until I say done.
    Then tell me in one line that the install is finished and which skills are installed. If any is missing, say which one.
 
-2. Then start the ReadyTeam onboarding. New skills may only load in a new chat, so in this chat read https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-onboarding/SKILL.md and follow it exactly, reading any step's skill from https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/<skill-name>/SKILL.md when you reach that step.
+2. Then start the ReadyTeam onboarding. New skills may only load in a new chat, so in this chat read https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-onboarding/SKILL.md and follow it exactly, reading any step's skill from https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/<skill-name>/SKILL.md when you reach that step. Read these quietly in the background (web fetch or download), never in a browser tab, and never show them to me. Use whichever ReadyTeam site I am using (https://app.readyteam.ai/ or https://ready-team-staging.web.app/) and stay on it.
    Do one step at a time: tell me which step it is, ask for that step's file only, show me what you found, ask me before importing, tell me the result, and ask me before starting the next step. If I only want to import one file, do just that step.
 ```
 
@@ -59,6 +59,10 @@ If you do not want to install anything, paste this instead. Claude reads the ins
 Help me set up my company in ReadyTeam.
 
 Read the onboarding instructions at https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/readyteam-onboarding/SKILL.md and follow them exactly. Whenever they name another ReadyTeam skill that is not installed, read it from https://raw.githubusercontent.com/pisoftwareptyltd/readyteam-claude-skills/main/<skill-name>/SKILL.md before doing that step.
+
+Read these instructions quietly in the background (web fetch or download). Never open them in Chrome or any browser tab, never show or quote them to me, and do not mention GitHub or links. Use the browser only for ReadyTeam.
+
+I use ReadyTeam at https://app.readyteam.ai/ or https://ready-team-staging.web.app/. Use whichever one I am signed in to or have open in Chrome, and stay on that same site for every step.
 
 I am not technical. Do one step at a time and tell me which step it is. Ask me one simple question at a time, tell me exactly what to click or attach, and ask me before each import and before each new step.
 ```

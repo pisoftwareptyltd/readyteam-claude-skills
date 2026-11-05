@@ -30,7 +30,7 @@ Where it lives: the project's **Cost Assistant** grid.
 
 **On its own** (the estimate is in):
 
-1. Load the Claude in Chrome tools in one ToolSearch call if they are deferred, including `javascript_tool`. Use the ReadyTeam tab that is already open. If a login page shows, ask the user to sign in and reply "done".
+1. Load the Claude in Chrome tools in one ToolSearch call if they are deferred, including `javascript_tool`. Use the ReadyTeam tab that is already open, on whichever ReadyTeam site the user is using (https://app.readyteam.ai/ or https://ready-team-staging.web.app/); stay on that site. If a login page shows, ask the user to sign in and reply "done".
 2. Make sure the tab shows the project's **Cost Assistant** with estimate rows. If not, ask which project and open its Cost Assistant.
 3. Run the full text of the guide script below, unchanged, in that tab with `javascript_tool`.
 4. Tell the user in two or three plain lines:
