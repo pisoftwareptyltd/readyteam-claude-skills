@@ -61,7 +61,7 @@ Where it lives: the project's **Cost Assistant** grid.
 5. **Plan file and name**: points at "Click to select a file" ("choose your plan PDF"), then puts the cursor in **Plan Name**, then points at **Process** (while the file is still loading, "wait until Process turns bright orange").
 6. **Wait**: "Uploading your plan..." while ReadyTeam shows "Your request is being processed", until the plan opens. The plan counts as open when the plan list on the left has an active entry with the plan's picture, or the zoom at the bottom reads more than 0 %.
 7. **Measurement and tool**: "Your plan is ready. You are measuring **<measurement>** (<unit>), shown on the right." It points at the tool that fits the unit: **Area** for m2 (Polygon for odd shapes), **Line** for m, **Count** for Each.
-8. **Draw, then Close**: explains how to draw with the chosen tool (**Area**: press and hold at one corner, drag to the opposite corner, let go; **Polygon**: click each corner; **Line**: click start, each turn and end; **Count**: click each thing). As soon as the user draws on the plan, it says "Drawn" and points at **Close** (top right) to save it to the item. When the takeoff screen closes, it finishes: the item's Qty shows the measured total.
+8. **Draw, then Close**: explains how to draw with the chosen tool (**Area**: click once at one corner, then click once at the opposite corner; after the first click it says "First corner set, now click the opposite corner"; **Polygon**: click each corner; **Line**: click start, each turn and end; **Count**: click each thing). As soon as the user draws on the plan, it says "Drawn" and points at **Close** (top right) to save it to the item. When the takeoff screen closes, it finishes: the item's Qty shows the measured total.
 
 Tips never cover the plan while drawing: they sit below the measurement panel on the right (or top right, under the toolbar, if there is no room).
 
@@ -73,7 +73,7 @@ Tips never cover the plan while drawing: they sit below the measurement panel on
 
 ## Status
 
-Plan upload to Close checked live on P1058 (Nov 2026, test plan, item 1.1, measurement in m2): after Process the plan is drawn on a full-screen canvas, so the old size-based check never saw it and the guide stayed on "Uploading" then "Upload Plan" (where users got stuck); the plan list entry `.item.active` with the uploaded image, and the zoom (`.zoom-slider span`, 0 before a plan, 100 after), are reliable. The measurement shows in the right panel (`.group-header`, name and unit); opened from an estimate it cannot be changed (ReadyTeam warns "You cannot change the takeoff group when accessing this from an estimate"), so the user does not pick it. Area is a press-and-drag rectangle. The panel total does **not** change while the screen is open (it updates after Close), so the guide notices drawing from mouse presses on the canvas while a drawing tool is on. After Close the item's Qty updated at once (47.98 then 93.70 m2). Not handled: in the Takeoff Measurement list, a measurement already ticked for the item may be scrolled out of view, so the guide can't always say to click Process instead of + Measurement. Scroll-to-Qty step checked live on P1059 (Nov 2026, window 1078 px wide): after opening a category, scrolling the grid fully right makes the guide see Qty as off to the left with no ruler icons in view; scrolling back shows Qty and 2 icons again. The bar is `.ag-body-horizontal-scroll-viewport` (650 px wide, beside the pinned Description column) and is hidden on a Mac until scrolled. Checked on a live estimate (P1058, item 1.1, Nov 2026), up to the Upload Plan popup: the Qty takeoff icon is an `img` whose file name contains "takeoff"; the popups are `lib-select-takeoff-group` (Takeoff Measurement), `lib-takeoff-group` (Create Measurement, UOM is an `ng-select`), `lib-takeoff-dialogue` (the takeoff screen), `lib-takeoff-plan-upload` (Upload Plan, `input[type=file][accept=.pdf]`, Plan Name input); toolbar tools are `a.item` and the active one's parent has the `active` class; the measurement's total is a number input in the right panel's row for that measurement. That run created a measurement "Home Owners Warranty Insurance" (m2) on item 1.1, which changed its UOM from m to m2. Also checked live with the guide on screen: steps 1 to 5 found their controls (ruler icon, + Measurement, UOM with the cursor in it and the tip to its left, Upload Plan, the file area); Process in Takeoff Measurement with the item's measurement ticked opens the takeoff screen. **Not yet seen:** the plan after upload and drawing with Area. The guide treats "a plan is showing" as a canvas, image or embedded page wider than 300px in the middle of the takeoff screen, or a plan in the left list; on the first real run, note whether it detects the upload and the total, and update the guide script if needed. `window.__rtTakeoffGuide.check()` lists what the guide can see.
+Plan upload to Close checked live on P1058 (Nov 2026, test plan, item 1.1, measurement in m2): after Process the plan is drawn on a full-screen canvas, so the old size-based check never saw it and the guide stayed on "Uploading" then "Upload Plan" (where users got stuck); the plan list entry `.item.active` with the uploaded image, and the zoom (`.zoom-slider span`, 0 before a plan, 100 after), are reliable. The measurement shows in the right panel (`.group-header`, name and unit); opened from an estimate it cannot be changed (ReadyTeam warns "You cannot change the takeoff group when accessing this from an estimate"), so the user does not pick it. Area is two clicks: the first click sets one corner, the second click at the opposite corner finishes it (owner, Nov 2026; a press-and-drag also finishes it). The panel total does **not** change while the screen is open (it updates after Close), so the guide notices drawing from mouse presses on the canvas while a drawing tool is on. After Close the item's Qty updated at once (47.98 then 93.70 m2). Not handled: in the Takeoff Measurement list, a measurement already ticked for the item may be scrolled out of view, so the guide can't always say to click Process instead of + Measurement. Scroll-to-Qty step checked live on P1059 (Nov 2026, window 1078 px wide): after opening a category, scrolling the grid fully right makes the guide see Qty as off to the left with no ruler icons in view; scrolling back shows Qty and 2 icons again. The bar is `.ag-body-horizontal-scroll-viewport` (650 px wide, beside the pinned Description column) and is hidden on a Mac until scrolled. Checked on a live estimate (P1058, item 1.1, Nov 2026), up to the Upload Plan popup: the Qty takeoff icon is an `img` whose file name contains "takeoff"; the popups are `lib-select-takeoff-group` (Takeoff Measurement), `lib-takeoff-group` (Create Measurement, UOM is an `ng-select`), `lib-takeoff-dialogue` (the takeoff screen), `lib-takeoff-plan-upload` (Upload Plan, `input[type=file][accept=.pdf]`, Plan Name input); toolbar tools are `a.item` and the active one's parent has the `active` class; the measurement's total is a number input in the right panel's row for that measurement. That run created a measurement "Home Owners Warranty Insurance" (m2) on item 1.1, which changed its UOM from m to m2. Also checked live with the guide on screen: steps 1 to 5 found their controls (ruler icon, + Measurement, UOM with the cursor in it and the tip to its left, Upload Plan, the file area); Process in Takeoff Measurement with the item's measurement ticked opens the takeoff screen. **Not yet seen:** the plan after upload and drawing with Area. The guide treats "a plan is showing" as a canvas, image or embedded page wider than 300px in the middle of the takeoff screen, or a plan in the left list; on the first real run, note whether it detects the upload and the total, and update the guide script if needed. `window.__rtTakeoffGuide.check()` lists what the guide can see.
 
 ## Guide script
 
@@ -164,7 +164,7 @@ Plan upload to Close checked live on P1058 (Nov 2026, test plan, item 1.1, measu
     ? 'click where the length starts, then click at each turn and where it ends'
     : name === 'count' ? 'click once on each thing you are counting'
     : name === 'polygon' ? 'click each corner of the shape, and finish back at the first corner'
-    : 'press and hold at one corner of the area, drag to the opposite corner, then let go';
+    : 'click once at one corner of the area, then click once at the opposite corner to finish';
   const drawTools = ['area', 'line', 'polygon', 'count', 'deduct', 'ruler', 'arc'];
   const activeTool = () => drawTools.find((n) => toolActive(n)) || '';
   // The measurement's total in the right panel (the newest / first one).
@@ -211,6 +211,7 @@ Plan upload to Close checked live on P1058 (Nov 2026, test plan, item 1.1, measu
   let drewAt = 0;        // when the user last drew on the plan with a drawing tool
   let drewCount = 0;
   let drewOnScreen = false; // drew during this visit to the takeoff screen
+  let areaStarted = false;  // Area: first corner clicked, waiting for the second
 
   function render(html, buttons) {
     const key = html + '|' + buttons.map((b) => b.label).join(',');
@@ -428,6 +429,15 @@ Plan upload to Close checked live on P1058 (Nov 2026, test plan, item 1.1, measu
         placeOnScreen();
         return;
       }
+      if (cur !== 'area') areaStarted = false;
+      if (areaStarted) {
+        go('draw-2');
+        spot.style.display = 'none';
+        render(head(8) + '<b>First corner set.</b> Now click once at the <b>opposite corner</b> of the area to finish it.' +
+          '<div style="margin-top:6px;color:#57606a">Made a mistake? Click <b>Undo</b>.</div>', [close]);
+        placeOnScreen();
+        return;
+      }
       go('draw');
       spot.style.display = 'none';
       render(head(8) + '<b>Draw on the plan</b> for ' + what + ': ' + drawHow(cur) + '.' +
@@ -504,27 +514,31 @@ Plan upload to Close checked live on P1058 (Nov 2026, test plan, item 1.1, measu
   }
 
   const onKey = (e) => { if (e.key === 'Escape' && !document.querySelector('mat-dialog-container')) stop(); };
-  // Notice drawing: a press and release on the plan canvas while a drawing tool is on.
+  // Notice drawing: clicks on the plan canvas while a drawing tool is on.
+  // Area is two clicks (first corner starts it, opposite corner ends it); a press-and-drag also ends it.
+  // The other tools count as drawn from the first click on the plan.
+  const EV = window.PointerEvent ? ['pointerdown', 'pointerup'] : ['mousedown', 'mouseup'];
   let downAt = null;
   const onDown = (e) => { const s = takeoffScreen(); downAt = (s && e.target && e.target.tagName === 'CANVAS' && s.contains(e.target) && activeTool()) ? { x: e.clientX, y: e.clientY, tool: activeTool() } : null; };
   const onUp = (e) => {
     if (!downAt) return;
     const moved = Math.hypot(e.clientX - downAt.x, e.clientY - downAt.y);
-    if (moved > 8 || downAt.tool !== 'area') { drewAt = Date.now(); drewCount++; drewOnScreen = true; shownKey = ''; }
+    const drawn = () => { drewAt = Date.now(); drewCount++; drewOnScreen = true; areaStarted = false; shownKey = ''; };
+    if (downAt.tool === 'area') {
+      if (moved > 8 || areaStarted) drawn();
+      else { areaStarted = true; shownKey = ''; }
+    } else drawn();
     downAt = null;
   };
-  addEventListener('pointerdown', onDown, true);
-  addEventListener('pointerup', onUp, true);
-  addEventListener('mousedown', onDown, true);
-  addEventListener('mouseup', onUp, true);
+  addEventListener(EV[0], onDown, true);
+  addEventListener(EV[1], onUp, true);
   const timer = setInterval(tick, 250);
   addEventListener('keydown', onKey, true);
 
   function stop() {
     clearInterval(timer);
     removeEventListener('keydown', onKey, true);
-    removeEventListener('pointerdown', onDown, true); removeEventListener('pointerup', onUp, true);
-    removeEventListener('mousedown', onDown, true); removeEventListener('mouseup', onUp, true);
+    removeEventListener(EV[0], onDown, true); removeEventListener(EV[1], onUp, true);
     style.remove(); spot.remove(); tip.remove();
     if (!finished) window.__rtTakeoffGuide.closedByUser = true;
   }

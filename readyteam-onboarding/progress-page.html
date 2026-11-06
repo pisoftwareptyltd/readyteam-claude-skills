@@ -159,7 +159,7 @@ section h2 small { font: 500 12px/1 var(--body); color: var(--muted); }
         <div>
           <div class="eyebrow" id="eyebrow"></div>
           <h1 id="headline">Getting you ready</h1>
-          <p class="lede">Your data goes in first, then your first project. One step at a time, and nothing moves until you accept it.</p>
+          <p class="lede">Your data goes in first, then your first project. One step at a time, explained before it starts. You're asked only when something is needed from you.</p>
         </div>
         <div class="stat" id="stat"></div>
       </div>
@@ -191,10 +191,37 @@ section h2 small { font: 500 12px/1 var(--body); color: var(--muted); }
   var skipped = steps.filter(function (s) { return s.state === 'skipped'; }).length;
   var allDone = steps.length && steps.every(function (s) { return s.state === 'done' || s.state === 'skipped'; });
 
+  // A short confetti shower when every step is done (once per viewer; not when motion is reduced).
+  function confetti() {
+    var seenKey = 'rt-setup-confetti-' + (D.company || '');
+    try { if (localStorage.getItem(seenKey)) return; localStorage.setItem(seenKey, '1'); } catch (e) {}
+    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var cv = document.createElement('canvas'), ctx = cv.getContext('2d');
+    if (!ctx) return;
+    cv.setAttribute('aria-hidden', 'true');
+    cv.style.cssText = 'position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:50';
+    document.body.appendChild(cv);
+    var W = cv.width = innerWidth, H = cv.height = innerHeight;
+    var cs = getComputedStyle(document.documentElement);
+    var cols = [cs.getPropertyValue('--coral').trim() || '#E8604C', '#FF7A00', cs.getPropertyValue('--ink').trim() || '#151515', '#B1B1B1', '#FFC38A'];
+    var ps = [];
+    for (var i = 0; i < 220; i++) ps.push({ x: Math.random() * W, y: -20 - Math.random() * H * 0.6, vx: (Math.random() - 0.5) * 2, vy: 2 + Math.random() * 3,
+      w: 6 + Math.random() * 6, h: 8 + Math.random() * 8, r: Math.random() * 3, vr: (Math.random() - 0.5) * 0.3, s: Math.random() * 6, c: cols[i % cols.length] });
+    var t0 = performance.now();
+    (function step(now) {
+      var age = now - t0;
+      ctx.clearRect(0, 0, W, H);
+      ctx.globalAlpha = age > 4500 ? Math.max(0, 1 - (age - 4500) / 1200) : 1;
+      ps.forEach(function (p) { p.vy = Math.min(p.vy + 0.12, 5); p.s += 0.05; p.x += p.vx + Math.sin(p.s) * 0.7; p.y += p.vy; p.r += p.vr;
+        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.fillStyle = p.c; ctx.fillRect(-p.w / 2, -p.h / 4, p.w, p.h / 2); ctx.restore(); });
+      if (age < 5700) requestAnimationFrame(step); else cv.remove();
+    })(t0);
+  }
+
   document.getElementById('company').textContent = D.company || '';
   document.getElementById('eyebrow').textContent = 'Onboarding' + (D.started ? ' · ' + D.started : '');
-  if (allDone) document.getElementById('headline').textContent = 'You\u2019re ready';
-  document.getElementById('foot').textContent = agent + '\u2019s onboarding you. Every step waits for your OK in the chat.';
+  if (allDone) { document.getElementById('headline').textContent = 'You\u2019re ready'; confetti(); }
+  document.getElementById('foot').textContent = agent + '\u2019s onboarding you, step by step. You\u2019ll be asked only when something is needed from you.';
   document.getElementById('stat').setAttribute('aria-label', done + ' of ' + steps.length + ' steps done');
   document.getElementById('stat').innerHTML = '<div class="big">' + done + '<span>/' + steps.length + '</span></div><div class="cap">steps done' + (skipped ? ' · ' + skipped + ' skipped' : '') + '</div>';
 

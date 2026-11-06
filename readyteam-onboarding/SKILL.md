@@ -189,6 +189,134 @@ When resuming, read the progress page or the log (or ask the user for it), confi
 
 ## Finish
 
-When all steps are done or skipped, give a short summary: each step with what was done (rows imported, colours set, cover page set, project created, how the estimate was started, allowances set, items given specifications or selections, area measured) or "skipped", and anything the user must follow up on (removed trade types, users left empty, items left out).
+**Celebrate first.** As soon as the last step is finished (the takeoff guide's Done, or the last remaining step done or skipped), in the ReadyTeam tab:
+
+1. Run the full text of the **Celebration script** below, unchanged, with `javascript_tool`.
+2. Then run `window.__rtCelebrate({ company: "<company name>", colors: ["<primary #hex>", "<secondary #hex>"], lines: [<3 to 5 short lines of what was set up>] })`. Use the brand colours from step 1 (leave `colors` out if branding was skipped). Lines are plain and short, for example "Logo and brand colours saved", "96 cost codes imported", "412 Cost Assistant items imported", "Quote cover page set", "First project created and measured". Leave skipped steps out of the lines.
+
+It shows a confetti shower over ReadyTeam and a "You're all set, <company>!" message with those lines and a **Start using ReadyTeam** button that closes it (Escape or a click outside also close it). If the user has reduced motion turned on, it shows the message without confetti. Mark every step on the progress page and republish it: when all steps are done or skipped, the progress page shows "You're ready" with its own confetti.
+
+Then, in the chat, give a short summary: each step with what was done (rows imported, colours set, cover page set, project created, how the estimate was started, allowances set, items given specifications or selections, area measured) or "skipped", and anything the user must follow up on (removed trade types, users left empty, items left out).
 
 If Brand setup was skipped, offer it once more: "Would you like to add your logo and brand colours now?" On a yes, use `readyteam-brand-setup` in the same tab.
+
+## Celebration script
+
+```js
+// ReadyTeam onboarding celebration: a confetti shower and a "You're all set" message on the ReadyTeam page.
+// Run once in the ReadyTeam tab, then call window.__rtCelebrate({ company, lines, colors }).
+(() => {
+  if (window.__rtCelebrateStop) window.__rtCelebrateStop();
+
+  window.__rtCelebrate = (opts = {}) => {
+    if (window.__rtCelebrateStop) window.__rtCelebrateStop();
+    const Z = 2147483600;
+    const CORAL = '#E8604C';
+    const colors = [...(opts.colors || []).filter((c) => /^#[0-9a-f]{3,8}$/i.test(c || '')), CORAL, '#FF7A00', '#151515', '#B1B1B1', '#FFC38A', '#FFFFFF'];
+    const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Confetti canvas over the whole page; clicks pass through it.
+    const cv = document.createElement('canvas');
+    Object.assign(cv.style, { position: 'fixed', inset: '0', width: '100vw', height: '100vh', zIndex: Z, pointerEvents: 'none' });
+    const ctx = cv.getContext('2d');
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    const size = () => { cv.width = innerWidth * dpr; cv.height = innerHeight * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); };
+    size();
+    addEventListener('resize', size);
+
+    const parts = [];
+    const burst = (n, fromTop) => {
+      for (let i = 0; i < n; i++) {
+        const side = Math.random() < 0.5 ? -1 : 1;
+        parts.push(fromTop ? {
+          x: Math.random() * innerWidth, y: -20 - Math.random() * innerHeight * 0.5,
+          vx: (Math.random() - 0.5) * 2, vy: 2 + Math.random() * 3,
+        } : {
+          // From the two bottom corners, up and inwards.
+          x: side < 0 ? -10 : innerWidth + 10, y: innerHeight * (0.65 + Math.random() * 0.2),
+          vx: -side * (6 + Math.random() * 8), vy: -(10 + Math.random() * 9),
+        });
+        Object.assign(parts[parts.length - 1], {
+          w: 6 + Math.random() * 7, h: 8 + Math.random() * 10, r: Math.random() * Math.PI, vr: (Math.random() - 0.5) * 0.3,
+          sway: Math.random() * Math.PI * 2, c: colors[Math.floor(Math.random() * colors.length)], round: Math.random() < 0.25,
+        });
+      }
+    };
+    let raf = 0;
+    const start = performance.now();
+    const frame = (now) => {
+      const age = now - start;
+      ctx.clearRect(0, 0, innerWidth, innerHeight);
+      for (const p of parts) {
+        p.vy = Math.min(p.vy + 0.18, 6);
+        p.vx *= 0.985;
+        p.sway += 0.05;
+        p.x += p.vx + Math.sin(p.sway) * 0.8;
+        p.y += p.vy;
+        p.r += p.vr;
+        if (p.y > innerHeight + 30) continue;
+        ctx.save();
+        ctx.globalAlpha = age > 6500 ? Math.max(0, 1 - (age - 6500) / 1500) : 1;
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.r);
+        ctx.fillStyle = p.c;
+        if (p.c.toUpperCase() === '#FFFFFF') { ctx.strokeStyle = '#E5E5E5'; ctx.lineWidth = 1; }
+        if (p.round) { ctx.beginPath(); ctx.arc(0, 0, p.w / 2, 0, Math.PI * 2); ctx.fill(); }
+        else { ctx.fillRect(-p.w / 2, -p.h / 4, p.w, p.h / 2 * (0.6 + Math.abs(Math.cos(p.r)) * 0.8)); }
+        ctx.restore();
+      }
+      if (age < 8000) raf = requestAnimationFrame(frame);
+      else cv.remove();
+    };
+    if (!calm) {
+      document.body.append(cv);
+      burst(150, false);
+      burst(120, true);
+      setTimeout(() => burst(110, true), 900);
+      setTimeout(() => burst(90, false), 1800);
+      raf = requestAnimationFrame(frame);
+    }
+
+    // The message card.
+    const wrap = document.createElement('div');
+    Object.assign(wrap.style, {
+      position: 'fixed', inset: '0', zIndex: Z - 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
+      background: 'rgba(21,21,21,.35)', padding: '16px', opacity: '0', transition: 'opacity .35s ease',
+      font: '15px/1.5 Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
+    });
+    const lines = (opts.lines || []).slice(0, 6);
+    wrap.innerHTML =
+      '<div role="dialog" aria-modal="true" aria-labelledby="rt-cel-h" style="background:#fff;color:#151515;max-width:440px;width:100%;border-radius:14px;' +
+      'box-shadow:0 20px 60px rgba(0,0,0,.3);border-top:6px solid ' + CORAL + ';padding:26px 26px 20px;transform:translateY(12px) scale(.97);transition:transform .35s ease">' +
+      '<div style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#6F6F6F;font-weight:600">ReadyTeam setup complete</div>' +
+      '<h2 id="rt-cel-h" style="margin:6px 0 8px;font:700 34px/1.1 \'Barlow Condensed\',\'Arial Narrow\',Arial,sans-serif;color:#151515">You’re all set' + (opts.company ? ',<br>' + esc(opts.company) : '') + '!</h2>' +
+      '<p style="margin:0 0 12px;color:#3a3a3a">' + esc(opts.message || 'Your company is set up in ReadyTeam and your first project is under way.') + '</p>' +
+      (lines.length ? '<ul style="margin:0 0 16px;padding:0;list-style:none">' + lines.map((l) =>
+        '<li style="display:flex;gap:10px;align-items:flex-start;padding:5px 0;border-top:1px solid #F0F0F0"><span style="flex:none;width:18px;height:18px;border-radius:50%;background:' + CORAL +
+        ';color:#fff;font-size:12px;line-height:18px;text-align:center;margin-top:2px">✓</span><span>' + esc(l) + '</span></li>').join('') + '</ul>' : '') +
+      '<div style="display:flex;justify-content:flex-end"><button type="button" style="font:inherit;font-weight:600;background:' + CORAL +
+      ';color:#fff;border:0;border-radius:8px;padding:9px 18px;cursor:pointer">' + esc(opts.button || 'Start using ReadyTeam') + '</button></div></div>';
+    document.body.append(wrap);
+    requestAnimationFrame(() => { wrap.style.opacity = '1'; wrap.firstChild.style.transform = 'none'; });
+
+    const stop = () => {
+      cancelAnimationFrame(raf);
+      removeEventListener('resize', size);
+      removeEventListener('keydown', onKey, true);
+      cv.remove();
+      wrap.remove();
+      window.__rtCelebrateStop = null;
+      window.__rtCelebrated = true;
+    };
+    const onKey = (e) => { if (e.key === 'Escape') stop(); };
+    addEventListener('keydown', onKey, true);
+    wrap.querySelector('button').onclick = stop;
+    wrap.addEventListener('click', (e) => { if (e.target === wrap) stop(); });
+    wrap.querySelector('button').focus();
+    window.__rtCelebrateStop = stop;
+    return 'Celebration showing';
+  };
+  return 'ReadyTeam celebration ready: call window.__rtCelebrate({ company, lines, colors })';
+})();
+```
