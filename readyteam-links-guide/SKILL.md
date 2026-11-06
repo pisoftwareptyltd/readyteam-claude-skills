@@ -1,6 +1,6 @@
 ---
 name: readyteam-links-guide
-description: Set up a company's quote presentation in ReadyTeam (Settings > Cost Assistant > Links > Quote Presentation template) using Claude in Chrome - set the cover page from the user's own image, or make one for them in the PROPOSAL style from their logo, brand colours and project photos, upload it with Cover Photo after a yes, then an on-screen tour of each section (Cover Section, Quote Section, Company Profile) and each page's settings. Use as onboarding step 5 (after the Cost Assistant import, before Job Assistant), or when the user asks about Links, quote presentations, the quote cover page or quote settings in ReadyTeam.
+description: Set up a company's quote presentation in ReadyTeam (Settings > Cost Assistant > Links > Quote Presentation template) using Claude in Chrome - set the cover page from the user's own image (asked for first), or only if they ask, make one for them in the PROPOSAL style from their logo, brand colours and project photos, upload it with Cover Photo after a yes, then an on-screen tour of each section (Cover Section, Quote Section, Company Profile) and each page's settings. Use as onboarding step 5 (after the Cost Assistant import, before Job Assistant), or when the user asks about Links, quote presentations, the quote cover page or quote settings in ReadyTeam.
 ---
 
 # ReadyTeam: quote presentation (Links) setup
@@ -56,19 +56,21 @@ Load the Claude in Chrome tools in one ToolSearch call if they are deferred, inc
 
 ### 2. The cover page
 
-Make it yourself first; don't start with a question.
+**Ask for the user's own cover first.** Uploading their image is quick; making one takes much longer, so only make one when they ask for it.
 
-1. **Gather what you have, without asking:**
-   - the **logo**: the file from brand setup if it is in this chat;
+1. **Ask once, as buttons:** "Your quote needs a cover page, the first page your client sees. Do you have a cover image to use? A4 portrait works best (about 1414 x 2000 pixels); a .png, .jpg or PDF is fine."
+   Options: **Yes, I'll attach it** · **Make one for me** · **Keep the current cover**.
+   - **Yes, I'll attach it**: tell them "Tap **+** below the message box, choose **Upload a file**, pick your cover image, then press **Send**. I'll wait for it." End your turn and wait. When the next message comes, check the image is really attached; if not, say "I didn't get the cover yet" and repeat that line. Use it as it is: a PDF, convert its first page to PNG; over about 5MB, resize to 1414 x 2000 or smaller. Go to step 3 (upload).
+   - **Make one for me**: go to point 2 below.
+   - **Keep the current cover**: change nothing and go to the tour (step 4).
+   If the user attached a cover image earlier in this chat, use it and don't ask.
+2. **Only when they asked you to make one:** gather what you have without asking:
+   - the **logo**: the file from brand setup if it is in this chat (if there is none, make it without a logo; it shows the company's initials);
    - the two **brand colours**: the codes from brand setup, or read them yourself from Settings > Company Profile > Company Branding (the values of the Primary Color and Secondary Color fields);
    - the **company name**: as shown in ReadyTeam (for example the company switcher at the bottom of the left sidebar).
-   Only if there is no logo in this chat, ask once, as buttons: "To make your quote cover I can use your logo. Do you have it ready?" Options: **Yes, I'll attach it** · **Make it without a logo** · **I have my own cover**. For **Yes, I'll attach it** or **I have my own cover**, tell them to tap **+**, choose **Upload a file**, pick the image and press **Send**, then end your turn and wait for the message with the file (check it is really attached before going on).
-2. **Make the cover** with the **Cover script** below (Python with Pillow; `pip install pillow` if missing):
+   Tell the user in one line "Making your cover now, this takes a minute." Then run the **Cover script** below (Python with Pillow; `pip install pillow` if missing):
    `python3 cover.py --out cover.png --company "<name>" --primary "<#hex>" --secondary "<#hex>" --logo <logo>` (leave out `--logo` if there is none). It makes an A4 portrait page: a white strip with the company name down the left, a brand-colour block with **PROPOSAL** (change with `--title`), the logo in a corner triangle, and three hexagons in brand-colour tints with a simple house outline. Leave out `--project`, `--client` and `--date` for the company template (it is used for every project).
-3. **Show it and carry on.** Send the cover image to the user with one line: "Here's the cover for your quotes, made from your logo and colours. I'm putting it on your quote now; tell me if you'd like your own cover, your project photos on it, or a change." Do not ask "Shall I use it?"; go straight to the upload.
-   - If they later ask for their own cover or photos: ask for the image once (see "Files"), use it as it is (a PDF: convert its first page to PNG; over about 5MB: resize to 1414 x 2000 or smaller), or run the script again with `--photo` for each photo, and upload again.
-   - If they say **no cover**: keep the current cover and go to the tour.
-   - Typed changes (another colour, another title such as QUOTE): make them and upload again.
+   Send the cover image to the user with one line ("Here's your cover. I'm putting it on your quote now; tell me if you'd like a change.") and go straight to step 3. Typed changes (another colour, another title such as QUOTE, their project photos with `--photo`): make them and upload again.
 
 ### 3. Upload the cover
 

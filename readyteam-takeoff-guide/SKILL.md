@@ -54,16 +54,16 @@ Where it lives: the project's **Cost Assistant** grid.
 
 ## The steps the guide shows
 
-1. **Takeoff icon**: opens the first category if none is open, then points at an item's ruler icon in **Qty**.
+1. **Takeoff icon**: if no category is open, points at a category's arrow. If the **Qty** column is scrolled out of view to the side, it highlights the grid's scroll bar and tells the user which way to scroll (a two-finger sideways swipe, Shift + mouse wheel, or the scroll bar, which a Mac hides until you scroll) until Qty shows. Then it points at an item's ruler icon in **Qty**.
 2. **+ Measurement**: points at **+ Measurement** in Takeoff Measurement. If the item already has a measurement ticked, it adds that **Process** opens it on the takeoff screen instead.
 3. **UOM**: in Create Measurement, the name is already filled in; puts the cursor in **UOM** ("m2 for areas like floors and walls, m for lengths, m3 for volumes, Each for counts"), then points at **Add**.
-4. **Upload Plan**: on the takeoff screen, points at **Upload Plan** (skipped if a plan is already showing).
-5. **Plan file and name**: points at "Click to select a file" ("choose your plan PDF"), then puts the cursor in **Plan Name**, then points at **Process**.
-6. **Wait**: "Uploading your plan..." until it shows.
-7. **Area**: points at **Area** in the toolbar.
-8. **Draw**: "Click each corner of the area on the plan to draw its shape"; when the measurement's total goes above 0, it shows the total and points at **Close**.
+4. **Upload Plan**: on the takeoff screen, points at **Upload Plan** (skipped if a plan is already open; if plans are listed on the left but none is open, it points at the plan to click).
+5. **Plan file and name**: points at "Click to select a file" ("choose your plan PDF"), then puts the cursor in **Plan Name**, then points at **Process** (while the file is still loading, "wait until Process turns bright orange").
+6. **Wait**: "Uploading your plan..." while ReadyTeam shows "Your request is being processed", until the plan opens. The plan counts as open when the plan list on the left has an active entry with the plan's picture, or the zoom at the bottom reads more than 0 %.
+7. **Measurement and tool**: "Your plan is ready. You are measuring **<measurement>** (<unit>), shown on the right." It points at the tool that fits the unit: **Area** for m2 (Polygon for odd shapes), **Line** for m, **Count** for Each.
+8. **Draw, then Close**: explains how to draw with the chosen tool (**Area**: press and hold at one corner, drag to the opposite corner, let go; **Polygon**: click each corner; **Line**: click start, each turn and end; **Count**: click each thing). As soon as the user draws on the plan, it says "Drawn" and points at **Close** (top right) to save it to the item. When the takeoff screen closes, it finishes: the item's Qty shows the measured total.
 
-Tips never cover the plan while drawing: they sit in the top-right corner, under the toolbar.
+Tips never cover the plan while drawing: they sit below the measurement panel on the right (or top right, under the toolbar, if there is no room).
 
 ## Rules
 
@@ -73,7 +73,7 @@ Tips never cover the plan while drawing: they sit in the top-right corner, under
 
 ## Status
 
-Checked on a live estimate (P1058, item 1.1, Nov 2026), up to the Upload Plan popup: the Qty takeoff icon is an `img` whose file name contains "takeoff"; the popups are `lib-select-takeoff-group` (Takeoff Measurement), `lib-takeoff-group` (Create Measurement, UOM is an `ng-select`), `lib-takeoff-dialogue` (the takeoff screen), `lib-takeoff-plan-upload` (Upload Plan, `input[type=file][accept=.pdf]`, Plan Name input); toolbar tools are `a.item` and the active one's parent has the `active` class; the measurement's total is a number input in the right panel's row for that measurement. That run created a measurement "Home Owners Warranty Insurance" (m2) on item 1.1, which changed its UOM from m to m2. Also checked live with the guide on screen: steps 1 to 5 found their controls (ruler icon, + Measurement, UOM with the cursor in it and the tip to its left, Upload Plan, the file area); Process in Takeoff Measurement with the item's measurement ticked opens the takeoff screen. **Not yet seen:** the plan after upload and drawing with Area. The guide treats "a plan is showing" as a canvas, image or embedded page wider than 300px in the middle of the takeoff screen, or a plan in the left list; on the first real run, note whether it detects the upload and the total, and update the guide script if needed. `window.__rtTakeoffGuide.check()` lists what the guide can see.
+Plan upload to Close checked live on P1058 (Nov 2026, test plan, item 1.1, measurement in m2): after Process the plan is drawn on a full-screen canvas, so the old size-based check never saw it and the guide stayed on "Uploading" then "Upload Plan" (where users got stuck); the plan list entry `.item.active` with the uploaded image, and the zoom (`.zoom-slider span`, 0 before a plan, 100 after), are reliable. The measurement shows in the right panel (`.group-header`, name and unit); opened from an estimate it cannot be changed (ReadyTeam warns "You cannot change the takeoff group when accessing this from an estimate"), so the user does not pick it. Area is a press-and-drag rectangle. The panel total does **not** change while the screen is open (it updates after Close), so the guide notices drawing from mouse presses on the canvas while a drawing tool is on. After Close the item's Qty updated at once (47.98 then 93.70 m2). Not handled: in the Takeoff Measurement list, a measurement already ticked for the item may be scrolled out of view, so the guide can't always say to click Process instead of + Measurement. Scroll-to-Qty step checked live on P1059 (Nov 2026, window 1078 px wide): after opening a category, scrolling the grid fully right makes the guide see Qty as off to the left with no ruler icons in view; scrolling back shows Qty and 2 icons again. The bar is `.ag-body-horizontal-scroll-viewport` (650 px wide, beside the pinned Description column) and is hidden on a Mac until scrolled. Checked on a live estimate (P1058, item 1.1, Nov 2026), up to the Upload Plan popup: the Qty takeoff icon is an `img` whose file name contains "takeoff"; the popups are `lib-select-takeoff-group` (Takeoff Measurement), `lib-takeoff-group` (Create Measurement, UOM is an `ng-select`), `lib-takeoff-dialogue` (the takeoff screen), `lib-takeoff-plan-upload` (Upload Plan, `input[type=file][accept=.pdf]`, Plan Name input); toolbar tools are `a.item` and the active one's parent has the `active` class; the measurement's total is a number input in the right panel's row for that measurement. That run created a measurement "Home Owners Warranty Insurance" (m2) on item 1.1, which changed its UOM from m to m2. Also checked live with the guide on screen: steps 1 to 5 found their controls (ruler icon, + Measurement, UOM with the cursor in it and the tip to its left, Upload Plan, the file area); Process in Takeoff Measurement with the item's measurement ticked opens the takeoff screen. **Not yet seen:** the plan after upload and drawing with Area. The guide treats "a plan is showing" as a canvas, image or embedded page wider than 300px in the middle of the takeoff screen, or a plan in the left list; on the first real run, note whether it detects the upload and the total, and update the guide script if needed. `window.__rtTakeoffGuide.check()` lists what the guide can see.
 
 ## Guide script
 
@@ -109,7 +109,25 @@ Checked on a live estimate (P1058, item 1.1, Nov 2026), up to the Upload Plan po
   const grid = () => [...document.querySelectorAll('.ag-root-wrapper')].find((g) => visible(g) && !g.closest('mat-dialog-container') && g.querySelector('.ag-cell[col-id="qty"], .ag-header-cell[col-id="qty"]')) || null;
   const rowsLoaded = () => { const g = grid(); return !!(g && g.querySelector('.ag-row')); };
   const isGroupRow = (row) => !!row && row.classList.contains('ag-row-group');
-  const takeoffIcons = () => { const g = grid(); return g ? [...g.querySelectorAll('.ag-row .ag-cell[col-id="qty"] img')].filter((i) => /takeoff/i.test(i.getAttribute('src') || '') && visible(i) && inView(i) && !isGroupRow(i.closest('.ag-row'))) : []; };
+  // The grid's scroll bar at the bottom, and the visible part of the scrolling columns.
+  // On a Mac the bar is hidden until you scroll (ag-scrollbar-invisible), so use its box, not its visibility.
+  const hScroll = () => { const g = grid(); const v = g && g.querySelector('.ag-body-horizontal-scroll-viewport'); return v && v.getBoundingClientRect().width > 20 ? v : null; };
+  const colsBox = () => { const g = grid(); const v = g && (g.querySelector('.ag-body-horizontal-scroll-viewport') || g.querySelector('.ag-center-cols-viewport') || g); return v.getBoundingClientRect(); };
+  // An element is really visible in the grid: on screen and not scrolled out sideways behind the grid's edge.
+  const inGrid = (el) => { const a = el.getBoundingClientRect(), b = colsBox(); return a.left >= b.left - 2 && a.right <= b.right + 2; };
+  const takeoffIcons = () => { const g = grid(); return g ? [...g.querySelectorAll('.ag-row .ag-cell[col-id="qty"] img')].filter((i) => /takeoff/i.test(i.getAttribute('src') || '') && visible(i) && inView(i) && inGrid(i) && !isGroupRow(i.closest('.ag-row'))) : []; };
+  // Items are showing (a category is open) on screen.
+  const itemRowsShown = () => { const g = grid(); return !!g && [...g.querySelectorAll('.ag-row')].some((r) => !isGroupRow(r) && visible(r) && inView(r)); };
+  // Where the Qty column is: 'in' (showing), 'left' or 'right' (scrolled out of view that way).
+  const qtyWhere = () => {
+    const g = grid();
+    const h = g && [...g.querySelectorAll('.ag-header-cell[col-id="qty"]')].find(visible);
+    if (!h) { const v = g && g.querySelector('.ag-body-horizontal-scroll-viewport'); return v && v.scrollLeft > 0 && v.scrollLeft + v.clientWidth >= v.scrollWidth - 2 ? 'left' : 'right'; }
+    const a = h.getBoundingClientRect(), b = colsBox();
+    if (a.left >= b.right - 20) return 'right';
+    if (a.right <= b.left + 20) return 'left';
+    return inGrid(h) ? 'in' : (a.right > b.right ? 'right' : 'left');
+  };
   const closedArrow = () => { const g = grid(); return g && [...g.querySelectorAll('.ag-row-group .ag-group-contracted')].find((e) => visible(e) && inView(e)); };
 
   // Create Measurement.
@@ -122,17 +140,33 @@ Checked on a live estimate (P1058, item 1.1, Nov 2026), up to the Upload Plan po
   const toolActive = (name) => { const t = tool(name); return !!(t && t.parentElement && t.parentElement.classList.contains('active')); };
   const toolbar = () => { const t = tool('area'); return t && (t.closest('.menu, ul') || t.parentElement); };
   const uploadPlanBtn = () => btnIn(takeoffScreen(), /upload plan/i);
+  // The plan is open: the plan list on the left has an active entry with the plan's picture,
+  // or the zoom at the bottom shows more than 0 %. (The plan itself is drawn on a full-screen canvas,
+  // so its size or position says nothing.)
   const planShowing = () => {
     const s = takeoffScreen();
     if (!s) return false;
-    const vw = innerWidth;
-    const big = [...s.querySelectorAll('canvas, img, svg, object, embed, iframe')].some((e) => {
-      if (!visible(e)) return false;
-      const r = e.getBoundingClientRect();
-      return r.width > 300 && r.height > 200 && r.left > 200 && r.right < vw - 200;
-    });
-    return big;
+    if ([...s.querySelectorAll('.item.active img')].some((i) => /\/uploads/.test(i.getAttribute('src') || '') && visible(i))) return true;
+    const z = s.querySelector('.zoom-slider span');
+    return !!(z && (parseFloat(z.textContent) || 0) > 0);
   };
+  // Plans are listed on the left but none is open.
+  const planListItems = () => { const s = takeoffScreen(); return s ? [...s.querySelectorAll('.item')].filter((e) => visible(e) && [...e.querySelectorAll('img')].some((i) => /\/uploads/.test(i.getAttribute('src') || ''))) : []; };
+  // ReadyTeam's "Your request is being processed" overlay while the plan uploads.
+  const processing = () => { const s = takeoffScreen(); return !!(s && /request is being processed/i.test(s.innerText)); };
+  // The measurement being measured (right panel): its row, name and unit.
+  const measureRow = () => { const s = takeoffScreen(); return s && [...s.querySelectorAll('.group-header')].find(visible); };
+  const measureName = () => { const r = measureRow(); return r ? clean(r.innerText).replace(/\s*\b(m2|m3|m|each|no|nr|lm)\s*$/i, '') : ''; };
+  const measureUom = () => { const r = measureRow(); const m = r && clean(r.innerText).match(/\b(m2|m3|m|each|no|nr|lm)\s*$/i); return m ? m[1].toLowerCase() : ''; };
+  // Which tool fits the unit, and how to draw with it.
+  const toolFor = (u) => (u === 'm' || u === 'lm') ? 'line' : (u === 'each' || u === 'no' || u === 'nr') ? 'count' : 'area';
+  const drawHow = (name) => name === 'line'
+    ? 'click where the length starts, then click at each turn and where it ends'
+    : name === 'count' ? 'click once on each thing you are counting'
+    : name === 'polygon' ? 'click each corner of the shape, and finish back at the first corner'
+    : 'press and hold at one corner of the area, drag to the opposite corner, then let go';
+  const drawTools = ['area', 'line', 'polygon', 'count', 'deduct', 'ruler', 'arc'];
+  const activeTool = () => drawTools.find((n) => toolActive(n)) || '';
   // The measurement's total in the right panel (the newest / first one).
   const totals = () => { const s = takeoffScreen(); return s ? [...s.querySelectorAll('.group-header input[type=number], input[type=number]')].filter((i) => visible(i) && i.getBoundingClientRect().left > innerWidth / 2) : []; };
   const total = () => { const t = totals(); return t.length ? Math.max(...t.map((i) => parseFloat(i.value) || 0)) : 0; };
@@ -174,6 +208,9 @@ Checked on a live estimate (P1058, item 1.1, Nov 2026), up to the Upload Plan po
   let focusUntil = 0;
   let lastTotal = 0;
   let lastUom = '';
+  let drewAt = 0;        // when the user last drew on the plan with a drawing tool
+  let drewCount = 0;
+  let drewOnScreen = false; // drew during this visit to the takeoff screen
 
   function render(html, buttons) {
     const key = html + '|' + buttons.map((b) => b.label).join(',');
@@ -216,14 +253,28 @@ Checked on a live estimate (P1058, item 1.1, Nov 2026), up to the Upload Plan po
 
   // On the takeoff screen: top right, under the toolbar and left of the measurements panel, away from the plan.
   function placeOnScreen() {
+    // Below the measurement panel on the right, so the plan stays clear; if there is no room, top-right under the toolbar.
     const t = tip.getBoundingClientRect(), gap = 12;
+    const s = takeoffScreen();
+    const search = s && [...s.querySelectorAll('input')].find((i) => /search measurement/i.test(i.placeholder || '') && visible(i));
+    if (search) {
+      const sr = search.getBoundingClientRect();
+      // The measurement and its shapes listed under the search box.
+      const rows = [...s.querySelectorAll('.group-header, .group-item, .item')].filter((e) => { const r = e.getBoundingClientRect(); return visible(e) && r.left > innerWidth / 2 && r.top >= sr.top && r.top < innerHeight * 0.7; });
+      const bottom = Math.max(sr.bottom, ...rows.map((r) => r.getBoundingClientRect().bottom));
+      if (bottom + gap + t.height < innerHeight - gap) {
+        tip.style.top = bottom + gap + 'px';
+        tip.style.left = Math.max(gap, Math.min(sr.left, innerWidth - t.width - gap)) + 'px';
+        return;
+      }
+    }
     const bar = toolbar();
     const top = bar ? bar.getBoundingClientRect().bottom + gap : 90;
-    const panel = takeoffScreen() && [...takeoffScreen().querySelectorAll('input')].find((i) => /search measurement/i.test(i.placeholder || ''));
-    const right = panel ? panel.getBoundingClientRect().left - gap - 40 : innerWidth - gap;
+    const right = search ? search.getBoundingClientRect().left - gap - 40 : innerWidth - gap;
     tip.style.top = top + 'px';
     tip.style.left = Math.max(gap, right - t.width) + 'px';
   }
+
 
   function highlight(el) {
     if (!el) { spot.style.display = 'none'; return; }
@@ -242,7 +293,9 @@ Checked on a live estimate (P1058, item 1.1, Nov 2026), up to the Upload Plan po
   function finish() {
     finished = true;
     spot.style.display = 'none';
-    render('<b>Done.</b> ' + (lastTotal ? 'You measured <b>' + lastTotal + (lastUom ? ' ' + lastUom : '') + '</b>, and the item\'s Qty follows it. ' : '') +
+    // The panel total only updates after the takeoff screen closes, so after drawing don't quote the old figure.
+    render('<b>Done.</b> ' + (drewCount ? 'Your measurement is saved, and the item\'s <b>Qty</b> now shows the measured total (it can take a few seconds to update). ' :
+      lastTotal ? 'You measured <b>' + lastTotal + (lastUom ? ' ' + lastUom : '') + '</b>, and the item\'s Qty follows it. ' : '') +
       'To measure more, click the ruler icon in an item\'s <b>Qty</b> again.', [{ label: 'Close', primary: true, onClick: stop }]);
     place(null);
     setTimeout(stop, 15000);
@@ -292,7 +345,7 @@ Checked on a live estimate (P1058, item 1.1, Nov 2026), up to the Upload Plan po
         go('process');
         const p = btnIn(up, /^process$/i);
         highlight(p);
-        render(head(5) + 'Click <b>Process</b> to upload your plan.', [close]);
+        render(head(5) + (p && p.disabled ? 'Your file is loading. Wait until <b>Process</b> turns bright orange, then click it.' : 'Click <b>Process</b> to upload your plan.'), [close]);
         place(up, 'left');
       }
       return;
@@ -327,42 +380,65 @@ Checked on a live estimate (P1058, item 1.1, Nov 2026), up to the Upload Plan po
     const s = takeoffScreen();
     if (s) {
       if (uploadSeen && !uploadClosedAt) uploadClosedAt = Date.now();
-      if (t > 0) {
-        go('drawn');
-        highlight(btnIn(s, /^close$/i));
-        render(head(8) + 'Measured <b>' + lastTotal + (lastUom ? ' ' + lastUom : '') + '</b>. Draw more shapes to add to it, or click <b>Close</b> (top right) to save it to the item.', [done, close]);
-        placeOnScreen();
-        return;
-      }
-      if (!planShowing()) {
-        if (uploadClosedAt && Date.now() - uploadClosedAt < 120000) {
+      const plan = planShowing();
+      if (!plan) {
+        if (processing() || (uploadClosedAt && Date.now() - uploadClosedAt < 120000)) {
           go('wait');
           spot.style.display = 'none';
           render(head(6) + '<b>Uploading your plan...</b> This can take a minute. It will show here when it\'s ready.', [close]);
           placeOnScreen();
           return;
         }
+        const items = planListItems();
+        if (items.length) {
+          go('open-plan');
+          highlight(items[0]);
+          render(head(6) + 'Your plan is in the list on the left. Click it to open it.', [close]);
+          place(items[0], 'right');
+          return;
+        }
         go('upload');
         const b = uploadPlanBtn();
         highlight(b);
-        render(head(4) + 'Click <b>Upload Plan</b> to add your plan PDF. If your plan is already in the list below, click it to open it.', [close]);
+        render(head(4) + 'Click <b>Upload Plan</b> to add your plan PDF.', [close]);
         place(b, 'right');
         return;
       }
-      if (!toolActive('area')) {
+      uploadClosedAt = 0;
+      const want = toolFor(measureUom());
+      const cur = activeTool();
+      const name = measureName();
+      const what = name ? '<b>' + name + '</b>' + (measureUom() ? ' (' + measureUom() + ')' : '') : 'this item';
+      // Drawn: show how to save it.
+      if (drewOnScreen && cur) {
+        go('drawn');
+        const c = btnIn(s, /^close$/i);
+        highlight(c);
+        render(head(8) + '<b>Drawn.</b> Draw more shapes to add to ' + what + ', or click <b>Close</b> (top right) to save the measurement to the item.' +
+          '<div style="margin-top:6px;color:#57606a">The total on the right updates after you close. Made a mistake? Click <b>Undo</b>.</div>', [close]);
+        placeOnScreen();
+        return;
+      }
+      if (!cur) {
         go('area');
-        highlight(tool('area'));
-        render(head(7) + 'Your plan is ready. Click <b>Area</b> in the toolbar at the top.' +
-          '<div style="margin-top:6px;color:#57606a">Measuring a length? Use <b>Line</b> instead.</div>', [close]);
+        const tl = tool(want);
+        highlight(tl);
+        render(head(7) + '<b>Your plan is ready.</b> You are measuring ' + what + ', shown on the right. Click <b>' + want.charAt(0).toUpperCase() + want.slice(1) + '</b> in the toolbar at the top.' +
+          (want === 'area' ? '<div style="margin-top:6px;color:#57606a">For an odd-shaped area, use <b>Polygon</b>. For a length, use <b>Line</b>.</div>' : ''), [close]);
         placeOnScreen();
         return;
       }
       go('draw');
       spot.style.display = 'none';
-      render(head(8) + '<b>Draw on the plan:</b> click each corner of the area, one after another, and finish back at the first corner. The total appears on the right.' +
-        '<div style="margin-top:6px;color:#57606a">Made a mistake? Use <b>Undo</b>.</div>', [close]);
+      render(head(8) + '<b>Draw on the plan</b> for ' + what + ': ' + drawHow(cur) + '.' +
+        '<div style="margin-top:6px;color:#57606a">Made a mistake? Click <b>Undo</b>.</div>', [close]);
       placeOnScreen();
       return;
+    }
+    // Left the takeoff screen after drawing: the measurement is saved to the item.
+    if (drewOnScreen) {
+      drewOnScreen = false;
+      return finish();
     }
     uploadSeen = false;
     uploadClosedAt = 0;
@@ -391,6 +467,27 @@ Checked on a live estimate (P1058, item 1.1, Nov 2026), up to the Upload Plan po
     go('icon');
     const icon = takeoffIcons()[0];
     const counter = lastTotal ? '<div style="margin-top:6px;color:#1a7f37">Last measurement: ' + lastTotal + (lastUom ? ' ' + lastUom : '') + '. Measure another, or click Done.</div>' : '';
+    if (!icon && itemRowsShown() && qtyWhere() !== 'in') {
+      // Items are open but the Qty column is off to the side: show the user how to scroll to it.
+      const dir = qtyWhere();
+      const bar = hScroll();
+      highlight(bar || grid());
+      render(head(1) + '<b>Now let\'s measure from your plan.</b> First scroll the grid to the <b>' + dir + '</b> until you see the <b>Qty</b> column.' +
+        '<div style="margin-top:6px;color:#57606a">Point at the item rows, then swipe ' + dir + ' with two fingers on your trackpad, or hold <b>Shift</b> and turn your mouse wheel. ' +
+        'You can also drag the scroll bar at the bottom of the grid (it appears when you move over it).</div>' + counter,
+        lastTotal ? [done, close] : [{ label: 'Skip', onClick: finish }, close]);
+      place(bar || grid(), 'above');
+      return;
+    }
+    if (!icon && itemRowsShown()) {
+      // Qty is showing but no item row with a ruler icon is on screen: scroll down to an item.
+      const h = grid() && grid().querySelector('.ag-header-cell[col-id="qty"]');
+      highlight(h);
+      render(head(1) + 'The <b>Qty</b> column is here. Scroll down to an item\'s row (not a category) to see its <b>ruler icon</b>.' + counter,
+        lastTotal ? [done, close] : [{ label: 'Skip', onClick: finish }, close]);
+      place(h, 'below');
+      return;
+    }
     if (!icon) {
       const arrow = closedArrow();
       highlight(arrow ? (arrow.closest('.ag-cell') || arrow) : null);
@@ -407,12 +504,27 @@ Checked on a live estimate (P1058, item 1.1, Nov 2026), up to the Upload Plan po
   }
 
   const onKey = (e) => { if (e.key === 'Escape' && !document.querySelector('mat-dialog-container')) stop(); };
+  // Notice drawing: a press and release on the plan canvas while a drawing tool is on.
+  let downAt = null;
+  const onDown = (e) => { const s = takeoffScreen(); downAt = (s && e.target && e.target.tagName === 'CANVAS' && s.contains(e.target) && activeTool()) ? { x: e.clientX, y: e.clientY, tool: activeTool() } : null; };
+  const onUp = (e) => {
+    if (!downAt) return;
+    const moved = Math.hypot(e.clientX - downAt.x, e.clientY - downAt.y);
+    if (moved > 8 || downAt.tool !== 'area') { drewAt = Date.now(); drewCount++; drewOnScreen = true; shownKey = ''; }
+    downAt = null;
+  };
+  addEventListener('pointerdown', onDown, true);
+  addEventListener('pointerup', onUp, true);
+  addEventListener('mousedown', onDown, true);
+  addEventListener('mouseup', onUp, true);
   const timer = setInterval(tick, 250);
   addEventListener('keydown', onKey, true);
 
   function stop() {
     clearInterval(timer);
     removeEventListener('keydown', onKey, true);
+    removeEventListener('pointerdown', onDown, true); removeEventListener('pointerup', onUp, true);
+    removeEventListener('mousedown', onDown, true); removeEventListener('mouseup', onUp, true);
     style.remove(); spot.remove(); tip.remove();
     if (!finished) window.__rtTakeoffGuide.closedByUser = true;
   }
@@ -427,10 +539,10 @@ Checked on a live estimate (P1058, item 1.1, Nov 2026), up to the Upload Plan po
       spot.style.display = 'none';
       return 'Takeoff guide waiting for the selection guide';
     },
-    status: () => ({ step, finished, waitingForSelections, total: lastTotal, uom: lastUom, closedByUser: window.__rtTakeoffGuide.closedByUser, url: location.href }),
+    status: () => ({ step, finished, waitingForSelections, total: lastTotal, uom: lastUom, drewShapes: drewCount, closedByUser: window.__rtTakeoffGuide.closedByUser, url: location.href }),
     check: () => 'grid:' + !!grid() + ' icons:' + takeoffIcons().length + ' list:' + !!listDlg() + ' create:' + !!createDlg() + ' uom:' + JSON.stringify(uomValue()) +
       ' screen:' + !!takeoffScreen() + ' uploadBtn:' + !!uploadPlanBtn() + ' plan:' + planShowing() + ' area:' + !!tool('area') + ' areaOn:' + toolActive('area') +
-      ' upload:' + !!uploadDlg() + ' file:' + fileChosen() + ' total:' + total(),
+      ' upload:' + !!uploadDlg() + ' file:' + fileChosen() + ' total:' + total() + ' tool:' + activeTool() + ' measuring:' + JSON.stringify(measureName() + ' ' + measureUom()) + ' drew:' + drewCount,
   };
   tick();
   return 'ReadyTeam takeoff guide started: ' + (rowsLoaded() ? 'estimate rows found' : 'waiting for Cost Assistant rows');
